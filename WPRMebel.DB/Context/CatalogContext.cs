@@ -3,7 +3,7 @@ using WPRMebel.DB.Entities.Catalog;
 
 namespace WPRMebel.DB.Context
 {
-    public abstract class DataDbContext : DbContext
+    public abstract class CatalogContext : DbContext
     {
         /// <summary> Секции каталога </summary>
         public DbSet<Section> Sections { get; set; }

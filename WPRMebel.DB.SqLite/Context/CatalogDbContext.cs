@@ -4,18 +4,12 @@ using WPRMebel.DB.Context;
 
 namespace WPRMebel.DB.SqLite.Context
 {
-    public class SqLiteDbContext : DataDbContext
+    public class CatalogDbContext : CatalogContext
     {
-        private readonly string _DbPath;
-
-        public SqLiteDbContext(string dbPath)
-        {
-            _DbPath = dbPath;
-        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite($"Data Source={_DbPath};Version=3;");
+            optionsBuilder.UseSqlite($"Data Source={Connection.CatalogDbPath};Version=3;");
             //optionsBuilder.UseLazyLoadingProxies();
             optionsBuilder.LogTo(message => Debug.WriteLine(message), Microsoft.Extensions.Logging.LogLevel.Information);
         }
