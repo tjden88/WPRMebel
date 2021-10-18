@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using WPRMebel.DB.Entities.Base;
 
 namespace WPRMebel.DB.Entities.Catalog
@@ -29,23 +28,5 @@ namespace WPRMebel.DB.Entities.Catalog
 
         /// <summary> Тип секции </summary>
         public CatalogSectionTypes SectionType { get; set; }
-    }
-
-    /// <summary>
-    /// Поставщик
-    /// </summary>
-    public class Vendor : NamedEntity
-    {
-        /// <summary>Описание поставщика</summary>
-        public string Description { get; set; }
-
-        /// <summary> Категории элементов поставщика </summary>
-        public IEnumerable<Category> Categories { get; set; }
-    }
-
-    public class Category : NamedEntity
-    {
-        /// <summary>Поставщик данной категории</summary>
-        public Vendor Vendor { get; set; }
     }
 }

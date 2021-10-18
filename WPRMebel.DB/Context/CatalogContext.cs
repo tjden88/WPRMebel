@@ -20,6 +20,14 @@ namespace WPRMebel.DB.Context
         /// <summary>Категории элементов в каталоге</summary>
         public DbSet<Category> Categories { get; set; }
 
+        protected override void OnModelCreating(ModelBuilder model)
+        {
+            //model.Entity<Vendor>()
+            //    .HasMany<Category>()
+            //    .WithOne(v => v.Vendor)
+            //    .OnDelete(DeleteBehavior.Cascade);
+        }
+
         public override async Task InitializeStartData(CancellationToken cancel = default)
         {
             if(Sections.Any())return;
