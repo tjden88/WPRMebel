@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using WPRMebel.Interfaces.Base.Entities;
 
 namespace WPRMebel.Interfaces.Base.Repositories
@@ -14,20 +15,20 @@ namespace WPRMebel.Interfaces.Base.Repositories
         /// </summary>
         /// <param name="name">Имя искомой сущности</param>
         /// <returns>null, если сущность не найдена</returns>
-        Task<TNamedEntity> GetByName(string name);
+        Task<TNamedEntity> GetByName(string name, CancellationToken cancel = default);
 
         /// <summary>
         /// Существует ли сущность в репозитории
         /// </summary>
         /// <param name="name">Имя искомой сущность</param>
         /// <returns>Истина, если сущность есть в репозитории</returns>
-        virtual Task<bool> Exist(string name) => Exist(GetByName(name).Id);
+        virtual Task<bool> Exist(string name, CancellationToken cancel = default) => Exist(GetByName(name, cancel).Id, cancel);
 
         /// <summary>
         /// Удалить сущность из репозитория
         /// </summary>
         /// <param name="name">имя удаляемой сущности</param>
         /// <returns>Истина, если удалось удалить</returns>
-        Task<bool> Delete(string name);
+        Task<bool> Delete(string name, CancellationToken cancel = default);
     }
 }
