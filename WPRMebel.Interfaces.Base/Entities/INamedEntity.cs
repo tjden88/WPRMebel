@@ -3,6 +3,6 @@
     public interface INamedEntity : IEntity
     {
         /// <summary>Наименование сущности</summary>
-        public string Name { get; }
+        public string Name { get; set; }
     }
 }
