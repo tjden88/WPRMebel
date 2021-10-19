@@ -78,28 +78,7 @@ namespace WPRMebel.DB.Context
                 }
             };
             await Sections.AddRangeAsync(sections, cancel).ConfigureAwait(false);
-
-            // ---------------- Test Data -----------------
-#if DEBUG
-            var vendors = new Collection<Vendor>();
-            for (var i = 0; i < 10; i++)
-            {
-                vendors.Add(new Vendor(){ Name = $"Поставщик {i}"});
-            }
-
-            var rnd = new Random();
-            var categories = new Collection<Category>();
-            for (var i = 0; i < 100; i++)
-            {
-                categories.Add(new Category() { Name = $"Категория {i}", Vendor = vendors[rnd.Next(vendors.Count)]});
-            }
-
-            await Vendors.AddRangeAsync(vendors, cancel).ConfigureAwait(false);
-            await Categories.AddRangeAsync(categories, cancel).ConfigureAwait(false);
-
-#endif
-            // ---------------- Test Data -----------------
-
+            
             await SaveChangesAsync(cancel).ConfigureAwait(false);
         }
     }
