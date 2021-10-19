@@ -4,9 +4,9 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using WPRMebel.DB.BaseEntities;
 using WPRMebel.DB.Context;
-using WPRMebel.Interfaces.Base.Entities;
 using WPRMebel.Interfaces.Base.Repositories;
 
 namespace WPRMebel.DB.Repositories
@@ -32,11 +32,23 @@ namespace WPRMebel.DB.Repositories
         }
 
         #region Transaction
+
+        private bool _TransactionMode;
+
         /// <summary> Начать транзакцию БД </summary>
-        public async Task BeginTransaction(CancellationToken cancel = default) => await _Context.Database.BeginTransactionAsync(cancel).ConfigureAwait(false);
+        public void BeginTransaction()
+        {
+            _TransactionMode = true;
+        }
 
         /// <summary> Завершить транзакцию БД </summary>
-        public async Task CommitTransaction(CancellationToken cancel = default) => await _Context.Database.CommitTransactionAsync(cancel).ConfigureAwait(false);
+        public async Task CommitTransaction(CancellationToken cancel = default)
+        {
+            if (!_TransactionMode) return;
+            await _Context.SaveChangesAsync(cancel).ConfigureAwait(false);
+            _TransactionMode = false;
+        }
+
         #endregion
 
         #region IRepository
@@ -46,14 +58,15 @@ namespace WPRMebel.DB.Repositories
 
         public async Task<int> GetCount(CancellationToken cancel = default) => await Items.CountAsync(cancel).ConfigureAwait(false);
 
-        public async Task<IEntity> GetById(int id, CancellationToken cancel = default) => await Items.SingleOrDefaultAsync(i => i.Id == id, cancel).ConfigureAwait(false);
+        public async Task<T> GetById(int id, CancellationToken cancel = default) => await Items.SingleOrDefaultAsync(i => i.Id == id, cancel).ConfigureAwait(false);
 
         public async Task<T> Add(T item, CancellationToken cancel = default)
         {
             if (item == null) throw new ArgumentNullException(nameof(item));
 
-            await _Context.AddAsync(item, cancel).ConfigureAwait(false);
-            await _Context.SaveChangesAsync(cancel).ConfigureAwait(false);
+            _Context.Entry(item).State = EntityState.Added;
+            //await _Context.AddAsync(item, cancel).ConfigureAwait(false);
+            if (!_TransactionMode) await _Context.SaveChangesAsync(cancel).ConfigureAwait(false);
             return item;
         }
 
@@ -61,8 +74,10 @@ namespace WPRMebel.DB.Repositories
         {
             if (item == null) throw new ArgumentNullException(nameof(item));
 
-            _Context.Update(item);
-            return await _Context.SaveChangesAsync(cancel).ConfigureAwait(false) > 0;
+            _Context.Entry(item).State = EntityState.Modified;
+            //_Context.Update(item);
+            if (!_TransactionMode) return await _Context.SaveChangesAsync(cancel).ConfigureAwait(false) > 0;
+            return true;
         }
 
         public async Task<bool> Delete(T item, CancellationToken cancel = default)
@@ -71,8 +86,10 @@ namespace WPRMebel.DB.Repositories
 
             if (!await Exist(item.Id, cancel).ConfigureAwait(false)) return false;
 
-            _Context.Remove(item);
-            return await _Context.SaveChangesAsync(cancel).ConfigureAwait(false) > 0;
+            //_Context.Remove(item);
+            _Context.Entry(item).State = EntityState.Deleted;
+            if (!_TransactionMode) return await _Context.SaveChangesAsync(cancel).ConfigureAwait(false) > 0;
+            return true;
         }
 
         public async Task<bool> Delete(int id, CancellationToken cancel = default)
@@ -84,7 +101,7 @@ namespace WPRMebel.DB.Repositories
                            .ConfigureAwait(false);
 
             return item != null && await Delete(item, cancel).ConfigureAwait(false);
-        } 
+        }
         #endregion
     }
 }

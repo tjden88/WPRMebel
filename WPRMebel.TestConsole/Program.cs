@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using WPRMebel.DB.Catalog.Entities;
@@ -11,11 +12,25 @@ namespace WPRMebel.TestConsole
     {
         static async Task Main(string[] args)
         {
+            var cdb = new CatalogDbContext();
+            await cdb.Database.MigrateAsync();
+            await cdb.InitializeStartData();
+
             var repo = new NamedRepository<Category>(new CatalogDbContext());
 
-          var item = await repo.GetByName("Категория 11");
-          var res = await repo.Delete(item);
-          var res2 = await repo.Delete(3);
+            var vendors = new NamedRepository<Vendor>(new CatalogDbContext());
+
+            var s = Stopwatch.StartNew();
+            repo.BeginTransaction();
+                var v = new Vendor() {Id = 1};
+            for (var i = 0; i < 500; i++)
+            {
+                var e= await repo.Add(new Category() { Name = "Test " + i, Vendor = v }).ConfigureAwait(false);
+                await repo.Delete(e).ConfigureAwait(false);
+            }
+            await repo.CommitTransaction().ConfigureAwait(false);
+
+            Console.WriteLine(s.ElapsedMilliseconds);
 
 
             Console.ReadLine();

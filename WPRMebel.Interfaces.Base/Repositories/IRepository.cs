@@ -36,7 +36,7 @@ namespace WPRMebel.Interfaces.Base.Repositories
         /// </summary>
         /// <param name="id">Id сущности</param>
         /// <returns>null, если сущность не найдена</returns>
-        Task<IEntity> GetById(int id, CancellationToken cancel = default);
+        Task<TEntity> GetById(int id, CancellationToken cancel = default);
 
         /// <summary>
         /// Добавить сущность в репозиторий
