@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
-using WPRMebel.DB.Entities.Base;
+using WPRMebel.DB.BaseEntities;
 
-namespace WPRMebel.DB.Entities.Catalog
+namespace WPRMebel.DB.Catalog.Entities
 {
     /// <summary> Список возможных типов секций </summary>
     public enum CatalogSectionTypes
