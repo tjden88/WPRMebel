@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using WPRMebel.DB.BaseEntities;
+using WPRMebel.Entityes.Base;
 
-namespace WPRMebel.DB.Catalog.Entities
+namespace WPRMebel.Entityes.Catalog
 {
     /// <summary>
     /// Поставщик

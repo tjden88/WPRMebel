@@ -3,9 +3,8 @@ using System.Collections.ObjectModel;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using WPRMebel.DB.Catalog;
-using WPRMebel.DB.Catalog.Entities;
 using WPRMebel.DB.Context;
+using WPRMebel.Entityes.Catalog;
 
 namespace WPRMebel.DB.TestSqlServer.Context
 {

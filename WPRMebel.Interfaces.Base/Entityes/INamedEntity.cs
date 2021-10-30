@@ -1,5 +1,9 @@
-﻿namespace WPRMebel.Interfaces.Base.Entities
+﻿namespace WPRMebel.Interfaces.Base.Entityes
 {
+    /// <summary>
+    /// Базовый интерфейс именованной сущности
+    /// </summary>
+
     public interface INamedEntity : IEntity
     {
         /// <summary>Наименование сущности</summary>

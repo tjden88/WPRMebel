@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using WPRMebel.Interfaces.Base.Entities;
+using WPRMebel.Interfaces.Base.Entityes;
 
-namespace WPRMebel.DB.BaseEntities
+namespace WPRMebel.Entityes.Base
 {
     /// <summary>
     /// Базовый класс именованной сущности

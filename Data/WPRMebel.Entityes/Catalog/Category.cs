@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using WPRMebel.DB.BaseEntities;
+using WPRMebel.Entityes.Base;
 
-namespace WPRMebel.DB.Catalog.Entities
+namespace WPRMebel.Entityes.Catalog
 {
     /// <summary>
     /// Категория элементов каталога

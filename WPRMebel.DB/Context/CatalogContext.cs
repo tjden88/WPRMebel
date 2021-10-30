@@ -4,9 +4,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using WPRMebel.DB.Catalog;
-using WPRMebel.DB.Catalog.Entities;
 using WPRMebel.DB.Context.Base;
+using WPRMebel.Entityes.Catalog;
 
 namespace WPRMebel.DB.Context
 {

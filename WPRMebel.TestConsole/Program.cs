@@ -2,9 +2,9 @@
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using WPRMebel.DB.Catalog.Entities;
 using WPRMebel.DB.Repositories;
 using WPRMebel.DB.TestSqlServer.Context;
+using WPRMebel.Entityes.Catalog;
 
 namespace WPRMebel.TestConsole
 {
@@ -16,9 +16,9 @@ namespace WPRMebel.TestConsole
             await cdb.Database.MigrateAsync();
             await cdb.InitializeStartData();
 
-            var repo = new NamedRepository<Category>(new CatalogDbContext());
+            var repo = new NamedDbRepository<Category>(new CatalogDbContext());
 
-            var vendors = new NamedRepository<Vendor>(new CatalogDbContext());
+            var vendors = new NamedDbRepository<Vendor>(new CatalogDbContext());
 
             var s = Stopwatch.StartNew();
             repo.BeginTransaction();
