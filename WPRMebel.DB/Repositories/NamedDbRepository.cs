@@ -20,26 +20,27 @@ namespace WPRMebel.DB.Repositories
         {
         }
 
-        public async Task<T> GetByName(string name, CancellationToken cancel = default)
+
+        public async Task<T> GetByName(string name, CancellationToken Cancel = default)
         {
             if (name == null) throw new ArgumentNullException(nameof(name));
-            return await Items.FirstOrDefaultAsync(i => i.Name == name, cancel).ConfigureAwait(false);
+            return await Items.FirstOrDefaultAsync(i => i.Name == name, Cancel).ConfigureAwait(false);
         }
 
-        public Task<bool> Exist(string name, CancellationToken Cancel = default)
-        {
-            throw new NotImplementedException();
-        }
 
-        public async Task<bool> Delete(string name, CancellationToken cancel = default)
+        public async Task<bool> Exist(string name, CancellationToken Cancel = default) => 
+            await Items.AnyAsync(i => i.Name == name, Cancel).ConfigureAwait(false);
+
+
+        public async Task<bool> Delete(string name, CancellationToken Cancel = default)
         {
             var item = Set.Local
                 .FirstOrDefault(i => i.Name == name) ?? await Set
-                .FirstOrDefaultAsync(i => i.Name == name, cancel)
+                .Select(i=> new T {Id = i.Id, Name = i.Name})
+                .FirstOrDefaultAsync(i => i.Name == name, Cancel)
                 .ConfigureAwait(false);
 
-            return item != null && await Delete(item, cancel).ConfigureAwait(false);
-
+            return item != null && await Delete(item, Cancel).ConfigureAwait(false);
         }
     }
 }

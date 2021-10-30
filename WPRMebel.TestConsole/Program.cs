@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using WPRMebel.DB.Repositories;
@@ -13,6 +14,7 @@ namespace WPRMebel.TestConsole
         static async Task Main(string[] args)
         {
             var cdb = new CatalogDbContext();
+            await cdb.Database.EnsureDeletedAsync();
             await cdb.Database.MigrateAsync();
             await cdb.InitializeStartData();
 
@@ -20,18 +22,19 @@ namespace WPRMebel.TestConsole
 
             var vendors = new NamedDbRepository<Vendor>(new CatalogDbContext());
 
-            var s = Stopwatch.StartNew();
-            repo.BeginTransaction();
-                var v = new Vendor() {Id = 1};
-            for (var i = 0; i < 500; i++)
-            {
-                var e= await repo.Add(new Category() { Name = "Test " + i, Vendor = v }).ConfigureAwait(false);
-                await repo.Delete(e).ConfigureAwait(false);
-            }
-            await repo.CommitTransaction().ConfigureAwait(false);
+            //var s = Stopwatch.StartNew();
+            //repo.BeginTransaction();
+            //    var v = new Vendor() {Id = 1};
+            //for (var i = 0; i < 1000; i++)
+            //{
+            //    var e= await repo.Add(new Category() { Name = "Test " + i, Vendor = v }).ConfigureAwait(false);
+            //}
+            //await repo.CommitTransaction().ConfigureAwait(false);
 
-            Console.WriteLine(s.ElapsedMilliseconds);
+            //Console.WriteLine(s.ElapsedMilliseconds);
 
+
+            var r = await repo.Delete("Категория 51");
 
             Console.ReadLine();
         }

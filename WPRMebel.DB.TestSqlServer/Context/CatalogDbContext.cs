@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +18,7 @@ namespace WPRMebel.DB.TestSqlServer.Context
         {
             await base.InitializeStartData(cancel).ConfigureAwait(false);
 #if DEBUG
+            if(Vendors.Any()) return;
             // ---------------- Test Data -----------------
             var vendors = new Collection<Vendor>();
             for (var i = 0; i < 10; i++)

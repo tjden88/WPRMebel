@@ -36,10 +36,8 @@ namespace WPRMebel.DB.Repositories
         /// <summary> Режим транзакуии </summary>
         public bool TransactionMode { get; set; }
 
-
         /// <summary> Начать транзакцию БД </summary>
         public void BeginTransaction() => TransactionMode = true;
-
 
         /// <summary> Завершить транзакцию БД </summary>
         public async Task CommitTransaction(CancellationToken Cancel = default)
@@ -101,16 +99,13 @@ namespace WPRMebel.DB.Repositories
 
         public async Task<bool> Delete(int id, CancellationToken Cancel = default)
         {
-            //var item = Set.Local
-            //               .FirstOrDefault(i => i.Id == id) ?? await Set
-            //               .Select(i => new T { Id = i.Id })
-            //               .FirstOrDefaultAsync(i => i.Id == id, Cancel)
-            //               .ConfigureAwait(false);
+            var item = Set.Local
+                           .FirstOrDefault(i => i.Id == id) ?? await Set
+                           .Select(i => new T { Id = i.Id })
+                           .FirstOrDefaultAsync(i => i.Id == id, Cancel)
+                           .ConfigureAwait(false);
 
-            var item = new T {Id = id};
-
-            //return item != null && await Delete(item, Cancel).ConfigureAwait(false);
-            return await Delete(item, Cancel).ConfigureAwait(false);
+            return item != null && await Delete(item, Cancel).ConfigureAwait(false);
         }
 
         #endregion
