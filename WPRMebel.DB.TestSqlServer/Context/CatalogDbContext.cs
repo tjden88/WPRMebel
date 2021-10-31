@@ -39,7 +39,7 @@ namespace WPRMebel.DB.TestSqlServer.Context
                 {
                     Name = $"Категория {i}", 
                     Vendor = vendors[rnd.Next(vendors.Count)],
-                    Section = await Sections.FindAsync(rnd.Next(sectionCount -1))
+                    Section = await Sections.FindAsync(rnd.Next(1, sectionCount+1))
                 });
             }
 
@@ -64,10 +64,26 @@ namespace WPRMebel.DB.TestSqlServer.Context
                 });
             }
 
+            var elementspropvalues = new Collection<ElementPropertyValue>(); //Значение Свойства элементов
+
+            foreach (var property in elementsprop)
+            {
+                for (var i = 0; i < 20; i++)
+                {
+                    elementspropvalues.Add(new ElementPropertyValue()
+                    {
+                        Name = $"Значение Свойства {property.Name} #{i}",
+                        ElementProperty = property
+                    });
+                }
+            }
+
+
             await Vendors.AddRangeAsync(vendors, Cancel).ConfigureAwait(false);
             await Categories.AddRangeAsync(categories, Cancel).ConfigureAwait(false);
             await Elements.AddRangeAsync(elements, Cancel).ConfigureAwait(false);
             await ElementProperties.AddRangeAsync(elementsprop, Cancel).ConfigureAwait(false);
+            await ElementPropertyValues.AddRangeAsync(elementspropvalues, Cancel).ConfigureAwait(false);
 
             await SaveChangesAsync(Cancel).ConfigureAwait(false);
             // ---------------- Test Data -----------------

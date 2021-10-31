@@ -2,7 +2,7 @@
 
 namespace WPRMebel.DB.TestSqlServer.Migrations
 {
-    public partial class Init : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -42,7 +42,7 @@ namespace WPRMebel.DB.TestSqlServer.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     VendorId = table.Column<int>(type: "int", nullable: false),
-                    SectionId = table.Column<int>(type: "int", nullable: true),
+                    SectionId = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
@@ -53,7 +53,7 @@ namespace WPRMebel.DB.TestSqlServer.Migrations
                         column: x => x.SectionId,
                         principalTable: "Sections",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Categories_Vendors_VendorId",
                         column: x => x.VendorId,
@@ -71,7 +71,6 @@ namespace WPRMebel.DB.TestSqlServer.Migrations
                     CategoryId = table.Column<int>(type: "int", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     ExtraPrice = table.Column<double>(type: "float", nullable: false),
-                    ElementId = table.Column<int>(type: "int", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
@@ -83,12 +82,6 @@ namespace WPRMebel.DB.TestSqlServer.Migrations
                         principalTable: "Categories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Elements_Elements_ElementId",
-                        column: x => x.ElementId,
-                        principalTable: "Elements",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -97,7 +90,7 @@ namespace WPRMebel.DB.TestSqlServer.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ElementId = table.Column<int>(type: "int", nullable: true),
+                    ElementId = table.Column<int>(type: "int", nullable: false),
                     PriceChanging = table.Column<double>(type: "float", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
@@ -109,7 +102,7 @@ namespace WPRMebel.DB.TestSqlServer.Migrations
                         column: x => x.ElementId,
                         principalTable: "Elements",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -118,7 +111,7 @@ namespace WPRMebel.DB.TestSqlServer.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ElementPropertyId = table.Column<int>(type: "int", nullable: true),
+                    ElementPropertyId = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
@@ -129,7 +122,7 @@ namespace WPRMebel.DB.TestSqlServer.Migrations
                         column: x => x.ElementPropertyId,
                         principalTable: "ElementProperties",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -156,11 +149,6 @@ namespace WPRMebel.DB.TestSqlServer.Migrations
                 name: "IX_Elements_CategoryId",
                 table: "Elements",
                 column: "CategoryId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Elements_ElementId",
-                table: "Elements",
-                column: "ElementId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

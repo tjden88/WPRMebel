@@ -11,13 +11,13 @@ namespace WPRMebel.Entityes.Catalog
     {
         /// <summary>Категория элемента</summary>
         [Required]
-        public Category Category { get; set; }
+        public virtual Category Category { get; set; }
 
         /// <summary> Стоимость </summary>
         public decimal Price { get; set; }
 
         /// <summary>Наценка</summary>
-        public double ExtraPrice { get; set; } = 1d;
+        public double ExtraPrice { get; set; } = 1.5d;
 
         /// <summary>Свойства элемента</summary>
         public virtual ICollection<ElementProperty> ElementProperties { get; set; }

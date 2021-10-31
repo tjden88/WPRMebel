@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using WPRMebel.Entityes.Base;
 
 namespace WPRMebel.Entityes.Catalog
@@ -9,6 +10,7 @@ namespace WPRMebel.Entityes.Catalog
     public class ElementProperty : NamedEntity
     {
         /// <summary>Элемент свойства</summary>
+        [Required]
         public Element Element { get; set; }
 
         /// <summary>Коэффициент изменения цены элемента</summary>

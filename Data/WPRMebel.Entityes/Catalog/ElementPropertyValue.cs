@@ -1,4 +1,5 @@
-﻿using WPRMebel.Entityes.Base;
+﻿using System.ComponentModel.DataAnnotations;
+using WPRMebel.Entityes.Base;
 
 namespace WPRMebel.Entityes.Catalog
 {
@@ -8,6 +9,7 @@ namespace WPRMebel.Entityes.Catalog
     public class ElementPropertyValue : NamedEntity
     {
         /// <summary>Свойство, к которому относится значение</summary>
-        public ElementProperty ElementProperty { get; set; }
+        [Required]
+        public virtual ElementProperty ElementProperty { get; set; }
     }
 }
