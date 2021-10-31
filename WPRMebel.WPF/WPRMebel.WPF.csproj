@@ -11,4 +11,8 @@
     <ProjectReference Include="..\WPRMebel.WpfAPI\WPRMebel.WpfAPI.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Themes\" />
+  </ItemGroup>
+
 </Project>

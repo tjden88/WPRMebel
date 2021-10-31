@@ -1,4 +1,5 @@
 ﻿using WPR.MVVM;
+using WPRMebel.WPF.ViewModels.MainPages;
 using WPRMebel.WPF.ViewModels.Windows;
 
 namespace WPRMebel.WPF.Services
@@ -6,7 +7,7 @@ namespace WPRMebel.WPF.Services
     /// <summary>
     /// Локатор сервисов и вьюмоделей
     /// </summary>
-    static class ServiceLocator
+    internal static class ServiceLocator
     {
         /// <summary> Зарегистрировать сервисы </summary>
         public static void RegisterServices()
@@ -17,7 +18,9 @@ namespace WPRMebel.WPF.Services
         /// <summary> Зарегистрировать модель-представления </summary>
         public static void RegisterViewModels()
         {
-            DependensyInjection.Registrator.AddSingleton<MainWindowViewModel>()
+            DependensyInjection.Registrator
+                .AddSingleton<MainWindowViewModel>()
+                .AddSingleton<CatalogViewModel>()
                 ;
         }
 
@@ -25,8 +28,9 @@ namespace WPRMebel.WPF.Services
         public static T Get<T>(params object[] parameters) where T : class => DependensyInjection.Get<T>(parameters);
     }
 
-    class ViewModelLocator
+    internal class ViewModelLocator
     {
         public MainWindowViewModel MainWindowViewModel => ServiceLocator.Get<MainWindowViewModel>();
+        public CatalogViewModel CatalogViewModel => ServiceLocator.Get<CatalogViewModel>();
     }
 }

@@ -10,6 +10,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source = "pack://application:,,,/WPR;component/Styles.xaml"/>
                 <ResourceDictionary Source="Styles/ButtonBaseStyles.xaml"/>
+                <ResourceDictionary Source="Controls/ControlsStyles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

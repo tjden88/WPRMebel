@@ -9,6 +9,8 @@
         xmlns:wpr="clr-namespace:WPR;assembly=WPR"
         xmlns:cnt="clr-namespace:WPR.Controls;assembly=WPR"
         xmlns:helpers="clr-namespace:WPR.Helpers;assembly=WPR"
+        xmlns:mainPages="clr-namespace:WPRMebel.WPF.Views.MainPages"
+        xmlns:controls="clr-namespace:WPRMebel.WPF.Controls"
         Style="{StaticResource ChromeWindow}"
         Title="{Binding Title}" Height="900" Width="1200">
     <helpers:WindowHelper.WindowHeaderContent>
@@ -44,7 +46,10 @@
                             <TextBlock Text="Заказы" Margin="5"/>
                         </StackPanel>
                     </RadioButton>
-                    <RadioButton x:Name="MenuCatalog" Style="{StaticResource MainMenuRadioButton}">
+                    <RadioButton x:Name="MenuCatalog" Style="{StaticResource MainMenuRadioButton}" Command="{Binding SetMainPageContentCommand}">
+                        <RadioButton.CommandParameter>
+                            <mainPages:CatalogView/>
+                        </RadioButton.CommandParameter>
                         <StackPanel>
                             <cnt:WPRIcon Source="Category"/>
                             <TextBlock Text="Каталог" Margin="5"/>
@@ -90,13 +95,7 @@
         </cnt:WPRCard>
 
 
-        <Grid>
-            <TextBlock Text="Привет!" 
-                   Foreground="{DynamicResource PrimaryColorBrush}"
-                   FontSize="60"
-                   HorizontalAlignment="Center" 
-                   VerticalAlignment="Center"/>
-        </Grid>
+        <controls:MainPageViewer/>
     </DockPanel>
 
 

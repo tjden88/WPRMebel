@@ -90,13 +90,18 @@
                             </MultiTrigger.ExitActions>
                         </MultiTrigger>
                         <Trigger Property="IsChecked" Value="True">
-                            <!--<Setter Property="Foreground" Value="{DynamicResource AccentColorBrush}"/>-->
                             <Trigger.EnterActions>
                                 <BeginStoryboard>
                                     <Storyboard>
                                         <extensions:BrushStyleDynamicAnimation Storyboard.TargetProperty="Foreground"
                                                                                Duration="0:0:0.3"
                                                                                ToStyleBrush="AccentColorBrush"/>
+                                        <DoubleAnimation Duration="0:0:0.18"
+                                                         EasingFunction="{StaticResource ExponentialEaseIn}"
+                                                         To ="0"
+                                                         AutoReverse="True"
+                                                         Storyboard.TargetProperty="ScaleX"
+                                                         Storyboard.TargetName="ScaleChecked"/>
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.EnterActions>
