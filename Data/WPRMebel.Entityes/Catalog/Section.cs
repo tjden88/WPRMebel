@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using WPRMebel.Entityes.Base;
 
 namespace WPRMebel.Entityes.Catalog
@@ -28,5 +29,9 @@ namespace WPRMebel.Entityes.Catalog
 
         /// <summary> Тип секции </summary>
         public CatalogSectionTypes SectionType { get; set; }
+
+        /// <summary> Категории секции </summary>
+        public virtual ICollection<Category> Categories { get; set; }
+
     }
 }

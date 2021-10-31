@@ -10,8 +10,8 @@ using WPRMebel.DB.TestSqlServer.Context;
 namespace WPRMebel.DB.TestSqlServer.Migrations
 {
     [DbContext(typeof(CatalogDbContext))]
-    [Migration("20211031021621_CatalogElementsAdded")]
-    partial class CatalogElementsAdded
+    [Migration("20211031031039_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -54,7 +54,7 @@ namespace WPRMebel.DB.TestSqlServer.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("CategoryId")
+                    b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
                     b.Property<int?>("ElementId")
@@ -66,6 +66,9 @@ namespace WPRMebel.DB.TestSqlServer.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -165,7 +168,7 @@ namespace WPRMebel.DB.TestSqlServer.Migrations
             modelBuilder.Entity("WPRMebel.Entityes.Catalog.Category", b =>
                 {
                     b.HasOne("WPRMebel.Entityes.Catalog.Section", "Section")
-                        .WithMany()
+                        .WithMany("Categories")
                         .HasForeignKey("SectionId");
 
                     b.HasOne("WPRMebel.Entityes.Catalog.Vendor", "Vendor")
@@ -182,8 +185,10 @@ namespace WPRMebel.DB.TestSqlServer.Migrations
             modelBuilder.Entity("WPRMebel.Entityes.Catalog.Element", b =>
                 {
                     b.HasOne("WPRMebel.Entityes.Catalog.Category", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId");
+                        .WithMany("Elements")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("WPRMebel.Entityes.Catalog.Element", null)
                         .WithMany("Elements")
@@ -210,6 +215,11 @@ namespace WPRMebel.DB.TestSqlServer.Migrations
                     b.Navigation("ElementProperty");
                 });
 
+            modelBuilder.Entity("WPRMebel.Entityes.Catalog.Category", b =>
+                {
+                    b.Navigation("Elements");
+                });
+
             modelBuilder.Entity("WPRMebel.Entityes.Catalog.Element", b =>
                 {
                     b.Navigation("ElementProperties");
@@ -220,6 +230,11 @@ namespace WPRMebel.DB.TestSqlServer.Migrations
             modelBuilder.Entity("WPRMebel.Entityes.Catalog.ElementProperty", b =>
                 {
                     b.Navigation("ElementPropertyValues");
+                });
+
+            modelBuilder.Entity("WPRMebel.Entityes.Catalog.Section", b =>
+                {
+                    b.Navigation("Categories");
                 });
 
             modelBuilder.Entity("WPRMebel.Entityes.Catalog.Vendor", b =>

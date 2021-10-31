@@ -14,13 +14,10 @@ namespace WPRMebel.Entityes.Catalog
         public Category Category { get; set; }
 
         /// <summary> Стоимость </summary>
-        private decimal Price { get; set; }
+        public decimal Price { get; set; }
 
         /// <summary>Наценка</summary>
-        public double ExtraPrice { get; set; }
-
-        /// <summary>Дочерние элементы</summary>
-        public virtual ICollection<Element> Elements { get; set; }
+        public double ExtraPrice { get; set; } = 1d;
 
         /// <summary>Свойства элемента</summary>
         public virtual ICollection<ElementProperty> ElementProperties { get; set; }

@@ -2,15 +2,65 @@
 
 namespace WPRMebel.DB.TestSqlServer.Migrations
 {
-    public partial class CatalogElementsAdded : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<int>(
-                name: "SectionId",
-                table: "Categories",
-                type: "int",
-                nullable: true);
+            migrationBuilder.CreateTable(
+                name: "Sections",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SectionType = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Sections", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Vendors",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Vendors", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Categories",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    VendorId = table.Column<int>(type: "int", nullable: false),
+                    SectionId = table.Column<int>(type: "int", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Categories", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Categories_Sections_SectionId",
+                        column: x => x.SectionId,
+                        principalTable: "Sections",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Categories_Vendors_VendorId",
+                        column: x => x.VendorId,
+                        principalTable: "Vendors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
 
             migrationBuilder.CreateTable(
                 name: "Elements",
@@ -18,7 +68,8 @@ namespace WPRMebel.DB.TestSqlServer.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CategoryId = table.Column<int>(type: "int", nullable: true),
+                    CategoryId = table.Column<int>(type: "int", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     ExtraPrice = table.Column<double>(type: "float", nullable: false),
                     ElementId = table.Column<int>(type: "int", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
@@ -31,7 +82,7 @@ namespace WPRMebel.DB.TestSqlServer.Migrations
                         column: x => x.CategoryId,
                         principalTable: "Categories",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Elements_Elements_ElementId",
                         column: x => x.ElementId,
@@ -87,6 +138,11 @@ namespace WPRMebel.DB.TestSqlServer.Migrations
                 column: "SectionId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Categories_VendorId",
+                table: "Categories",
+                column: "VendorId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ElementProperties_ElementId",
                 table: "ElementProperties",
                 column: "ElementId");
@@ -105,22 +161,10 @@ namespace WPRMebel.DB.TestSqlServer.Migrations
                 name: "IX_Elements_ElementId",
                 table: "Elements",
                 column: "ElementId");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Categories_Sections_SectionId",
-                table: "Categories",
-                column: "SectionId",
-                principalTable: "Sections",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Categories_Sections_SectionId",
-                table: "Categories");
-
             migrationBuilder.DropTable(
                 name: "ElementPropertyValues");
 
@@ -130,13 +174,14 @@ namespace WPRMebel.DB.TestSqlServer.Migrations
             migrationBuilder.DropTable(
                 name: "Elements");
 
-            migrationBuilder.DropIndex(
-                name: "IX_Categories_SectionId",
-                table: "Categories");
+            migrationBuilder.DropTable(
+                name: "Categories");
 
-            migrationBuilder.DropColumn(
-                name: "SectionId",
-                table: "Categories");
+            migrationBuilder.DropTable(
+                name: "Sections");
+
+            migrationBuilder.DropTable(
+                name: "Vendors");
         }
     }
 }

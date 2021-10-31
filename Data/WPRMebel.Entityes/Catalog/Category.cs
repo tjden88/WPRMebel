@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using WPRMebel.Entityes.Base;
 
 namespace WPRMebel.Entityes.Catalog
@@ -14,5 +15,8 @@ namespace WPRMebel.Entityes.Catalog
 
         /// <summary>Секция каталога категории</summary>
         public Section Section { get; set; }
+
+        /// <summary> Элементы категории </summary>
+        public virtual ICollection<Element> Elements { get; set; }
     }
 }
