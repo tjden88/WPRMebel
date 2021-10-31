@@ -40,7 +40,7 @@
                             <TextBlock Text="Рабочий стол" Margin="5"/>
                         </StackPanel>
                     </RadioButton>
-                    <RadioButton x:Name="MenuOrders" Style="{StaticResource MainMenuRadioButton}">
+                    <RadioButton x:Name="MenuOrders" Style="{StaticResource MainMenuRadioButton}" Command="{Binding SetMainPageContentCommand}">
                         <StackPanel>
                             <cnt:WPRIcon Source="HailCab"/>
                             <TextBlock Text="Заказы" Margin="5"/>
@@ -95,7 +95,7 @@
         </cnt:WPRCard>
 
 
-        <controls:MainPageViewer/>
+        <controls:MainPageViewer Content="{Binding MainPageContent}"/>
     </DockPanel>
 
 
