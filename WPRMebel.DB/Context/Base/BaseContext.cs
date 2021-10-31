@@ -11,7 +11,7 @@ namespace WPRMebel.DB.Context.Base
     public abstract class BaseContext : DbContext
     {
         /// <summary> Заполнение начальными данными. </summary>
-        public abstract Task InitializeStartData(CancellationToken cancel = default);
+        public abstract Task InitializeStartData(CancellationToken Cancel = default);
 
         /// <summary> Конфигурировать контекст БД. Вызывается базовым классом в переопределённом методе OnConfiguring </summary>
         protected abstract void Configure(DbContextOptionsBuilder optionsBuilder);

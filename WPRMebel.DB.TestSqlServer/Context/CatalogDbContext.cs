@@ -14,9 +14,9 @@ namespace WPRMebel.DB.TestSqlServer.Context
         protected override void Configure(DbContextOptionsBuilder optionsBuilder) =>
             optionsBuilder.UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=WPRMebel");
 
-        public override async Task InitializeStartData(CancellationToken cancel = default)
+        public override async Task InitializeStartData(CancellationToken Cancel = default)
         {
-            await base.InitializeStartData(cancel).ConfigureAwait(false);
+            await base.InitializeStartData(Cancel).ConfigureAwait(false);
 
 #if DEBUG
             if(Vendors.Any()) return;
@@ -34,10 +34,10 @@ namespace WPRMebel.DB.TestSqlServer.Context
                 categories.Add(new Category() { Name = $"Категория {i}", Vendor = vendors[rnd.Next(vendors.Count)] });
             }
 
-            await Vendors.AddRangeAsync(vendors, cancel).ConfigureAwait(false);
-            await Categories.AddRangeAsync(categories, cancel).ConfigureAwait(false);
+            await Vendors.AddRangeAsync(vendors, Cancel).ConfigureAwait(false);
+            await Categories.AddRangeAsync(categories, Cancel).ConfigureAwait(false);
 
-            await SaveChangesAsync(cancel).ConfigureAwait(false);
+            await SaveChangesAsync(Cancel).ConfigureAwait(false);
             // ---------------- Test Data -----------------
 #endif
         }
