@@ -11,8 +11,10 @@
         xmlns:helpers="clr-namespace:WPR.Helpers;assembly=WPR"
         xmlns:mainPages="clr-namespace:WPRMebel.WPF.Views.MainPages"
         xmlns:controls="clr-namespace:WPRMebel.WPF.Controls"
+        xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         Style="{StaticResource ChromeWindow}"
         Title="{Binding Title}" Height="900" Width="1200">
+
     <helpers:WindowHelper.WindowHeaderContent>
         <StackPanel Margin="3" Orientation="Horizontal" HorizontalAlignment="Left" Width="Auto" >
             <Button Content="?" Style="{StaticResource WindowTitleButton}" Click="ButtonBase_OnClick"/>
@@ -22,6 +24,12 @@
         <mainPages:DesktopView x:Key="DesktopView"/>
         <mainPages:CatalogView x:Key="CatalogView"/>
     </Window.Resources>
+    <b:Interaction.Triggers>
+        <b:EventTrigger EventName="Loaded">
+            <b:InvokeCommandAction Command="{Binding SetMainPageContentCommand}"
+                                   CommandParameter="{StaticResource DesktopView}"/>
+        </b:EventTrigger>
+    </b:Interaction.Triggers>
 
     <DockPanel>
         <cnt:WPRCard Margin="0,0,5,0" Panel.ZIndex="10">
