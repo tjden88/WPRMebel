@@ -3,11 +3,11 @@
 namespace WPRMebel.WPF.Views.MainPages
 {
     /// <summary>
-    /// Логика взаимодействия для CatalogView.xaml
+    /// Логика взаимодействия для DesktopView.xaml
     /// </summary>
-    public partial class CatalogView : UserControl
+    public partial class DesktopView : UserControl
     {
-        public CatalogView()
+        public DesktopView()
         {
             InitializeComponent();
         }

@@ -13,7 +13,6 @@
 
   <ItemGroup>
     <Folder Include="Properties\" />
-    <Folder Include="Themes\" />
   </ItemGroup>
 
   <ItemGroup>

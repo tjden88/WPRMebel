@@ -1,10 +1,13 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:controls="clr-namespace:WPR.Controls;assembly=WPR"
-                    xmlns:extensions="clr-namespace:WPR.Extensions;assembly=WPR">
+                    xmlns:extensions="clr-namespace:WPR.Extensions;assembly=WPR"
+                    xmlns:services="clr-namespace:WPRMebel.WPF.Services">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/WPR;component/Styles/Base.xaml"/>
     </ResourceDictionary.MergedDictionaries>
+
+    <services:ViewModelLocator x:Key="Locator"/>
 
     <!--Кнопки левого меню-->
     <Style x:Key="MainMenuRadioButton" TargetType="{x:Type RadioButton}" BasedOn="{StaticResource BaseControl}">
@@ -12,6 +15,7 @@
         <Setter Property="Foreground" Value="{DynamicResource DarkPrimaryColorBrush}"/>
         <Setter Property="Background" Value="{DynamicResource AccentColorBrush}"/>
         <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+        <Setter Property="Command" Value="{Binding MainWindowViewModel.SetMainPageContentCommand, Source={StaticResource Locator}}"/>
         <Setter Property="RenderTransform">
             <Setter.Value>
                 <ScaleTransform/>

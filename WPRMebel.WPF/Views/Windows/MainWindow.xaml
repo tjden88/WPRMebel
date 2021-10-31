@@ -18,6 +18,10 @@
             <Button Content="?" Style="{StaticResource WindowTitleButton}" Click="ButtonBase_OnClick"/>
         </StackPanel>
     </helpers:WindowHelper.WindowHeaderContent>
+    <Window.Resources>
+        <mainPages:DesktopView x:Key="DesktopView"/>
+        <mainPages:CatalogView x:Key="CatalogView"/>
+    </Window.Resources>
 
     <DockPanel>
         <cnt:WPRCard Margin="0,0,5,0" Panel.ZIndex="10">
@@ -34,22 +38,21 @@
                             <Setter Property="Margin" Value="5"/>
                         </Style>
                     </StackPanel.Resources>
-                    <RadioButton x:Name="MenuDesktop" Style="{StaticResource MainMenuRadioButton}">
+                    <RadioButton IsChecked="True" x:Name="MenuDesktop" Style="{StaticResource MainMenuRadioButton}"
+                                 CommandParameter="{StaticResource DesktopView}">
                         <StackPanel>
                             <cnt:WPRIcon Source="DeskLamp"/>
                             <TextBlock Text="Рабочий стол" Margin="5"/>
                         </StackPanel>
                     </RadioButton>
-                    <RadioButton x:Name="MenuOrders" Style="{StaticResource MainMenuRadioButton}" Command="{Binding SetMainPageContentCommand}">
+                    <RadioButton x:Name="MenuOrders" Style="{StaticResource MainMenuRadioButton}">
                         <StackPanel>
                             <cnt:WPRIcon Source="HailCab"/>
                             <TextBlock Text="Заказы" Margin="5"/>
                         </StackPanel>
                     </RadioButton>
-                    <RadioButton x:Name="MenuCatalog" Style="{StaticResource MainMenuRadioButton}" Command="{Binding SetMainPageContentCommand}">
-                        <RadioButton.CommandParameter>
-                            <mainPages:CatalogView/>
-                        </RadioButton.CommandParameter>
+                    <RadioButton x:Name="MenuCatalog" Style="{StaticResource MainMenuRadioButton}"
+                                 CommandParameter="{StaticResource CatalogView}">
                         <StackPanel>
                             <cnt:WPRIcon Source="Category"/>
                             <TextBlock Text="Каталог" Margin="5"/>

@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="WPRMebel.WPF.Views.MainPages.CatalogView"
+﻿<UserControl x:Class="WPRMebel.WPF.Views.MainPages.DesktopView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -6,9 +6,8 @@
              xmlns:local="clr-namespace:WPRMebel.WPF.Views.MainPages"
              xmlns:cnt="clr-namespace:WPR.Controls;assembly=WPR"
              mc:Ignorable="d" 
-             DataContext="{Binding CatalogViewModel, Source={StaticResource Locator}}"
              d:DesignHeight="450" d:DesignWidth="800">
     <cnt:WPRCard>
-        <TextBlock Text="Каталог" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="60"></TextBlock>
+            <TextBlock Text="Рабочий стол" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="60"></TextBlock>
     </cnt:WPRCard>
 </UserControl>
