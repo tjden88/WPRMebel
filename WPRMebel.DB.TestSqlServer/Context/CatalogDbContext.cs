@@ -17,6 +17,7 @@ namespace WPRMebel.DB.TestSqlServer.Context
         public override async Task InitializeStartData(CancellationToken cancel = default)
         {
             await base.InitializeStartData(cancel).ConfigureAwait(false);
+
 #if DEBUG
             if(Vendors.Any()) return;
             // ---------------- Test Data -----------------

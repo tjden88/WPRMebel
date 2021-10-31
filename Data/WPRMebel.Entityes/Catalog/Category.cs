@@ -11,5 +11,8 @@ namespace WPRMebel.Entityes.Catalog
         /// <summary>Поставщик данной категории</summary>
         [Required]
         public Vendor Vendor { get; set; }
+
+        /// <summary>Секция каталога категории</summary>
+        public Section Section { get; set; }
     }
 }

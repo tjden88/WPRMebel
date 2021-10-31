@@ -20,6 +20,15 @@ namespace WPRMebel.DB.Context
         /// <summary>Категории элементов в каталоге</summary>
         public DbSet<Category> Categories { get; set; }
 
+        /// <summary>Элементы каталога</summary>
+        public DbSet<Element> Elements { get; set; }
+
+        /// <summary>Свойства элементов</summary>
+        public DbSet<ElementProperty> ElementProperties { get; set; }
+
+        /// <summary>Значения свойств элементов</summary>
+        public DbSet<ElementPropertyValue> ElementPropertyValues { get; set; }
+
         protected override void OnModelCreating(ModelBuilder model)
         {
             //model.Entity<Vendor>()

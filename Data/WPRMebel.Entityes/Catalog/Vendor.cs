@@ -12,6 +12,6 @@ namespace WPRMebel.Entityes.Catalog
         public string Description { get; set; }
 
         /// <summary> Категории элементов поставщика </summary>
-        public IList<Category> Categories { get; }
+        public virtual ICollection<Category> Categories { get; }
     }
 }
