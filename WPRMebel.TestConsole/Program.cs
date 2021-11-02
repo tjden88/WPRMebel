@@ -13,13 +13,14 @@ namespace WPRMebel.TestConsole
         static async Task Main(string[] args)
         {
             var cdb = new CatalogDbContext();
-            await cdb.Database.EnsureDeletedAsync();
+            //await cdb.Database.EnsureDeletedAsync();
             await cdb.Database.MigrateAsync();
             await cdb.InitializeStartData();
 
-            var repo = new NamedDbRepository<Category>(new CatalogDbContext());
+            var repo = new NamedDbRepository<Category>(cdb);
 
-            var vendors = new NamedDbRepository<Vendor>(new CatalogDbContext());
+            var vendors = new NamedDbRepository<Vendor>(cdb);
+            var sections = new NamedDbRepository<Section>(cdb);
 
             //var s = Stopwatch.StartNew();
             //repo.BeginTransaction();
@@ -38,7 +39,9 @@ namespace WPRMebel.TestConsole
 
             var element = cdb.Fittings.First();
 
-            await vendors.Delete(5);
+             var r3 = await sections.Delete(1);
+
+            //await vendors.Delete(5);
 
             Console.WriteLine(r);
             Console.WriteLine(r2);

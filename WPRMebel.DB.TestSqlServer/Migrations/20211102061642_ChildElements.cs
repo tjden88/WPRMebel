@@ -2,7 +2,7 @@
 
 namespace WPRMebel.DB.TestSqlServer.Migrations
 {
-    public partial class ChildCatalogElement : Migration
+    public partial class ChildElements : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -14,37 +14,48 @@ namespace WPRMebel.DB.TestSqlServer.Migrations
                 defaultValue: false);
 
             migrationBuilder.CreateTable(
-                name: "ChildCatalogElement",
+                name: "ChildCatalogElements",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    OwnerElementId = table.Column<int>(type: "int", nullable: false),
-                    CatalogElementId = table.Column<int>(type: "int", nullable: false),
+                    OwnerCatalogElementId = table.Column<int>(type: "int", nullable: false),
+                    CatalogElementId = table.Column<int>(type: "int", nullable: true),
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ChildCatalogElement", x => x.Id);
+                    table.PrimaryKey("PK_ChildCatalogElements", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ChildCatalogElement_CatalogElement_CatalogElementId",
+                        name: "FK_ChildCatalogElements_CatalogElement_CatalogElementId",
                         column: x => x.CatalogElementId,
+                        principalTable: "CatalogElement",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ChildCatalogElements_CatalogElement_OwnerCatalogElementId",
+                        column: x => x.OwnerCatalogElementId,
                         principalTable: "CatalogElement",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ChildCatalogElement_CatalogElementId",
-                table: "ChildCatalogElement",
+                name: "IX_ChildCatalogElements_CatalogElementId",
+                table: "ChildCatalogElements",
                 column: "CatalogElementId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ChildCatalogElements_OwnerCatalogElementId",
+                table: "ChildCatalogElements",
+                column: "OwnerCatalogElementId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ChildCatalogElement");
+                name: "ChildCatalogElements");
 
             migrationBuilder.DropColumn(
                 name: "IsRequired",

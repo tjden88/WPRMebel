@@ -9,8 +9,9 @@ namespace WPRMebel.Domain.Base.Catalog
     /// </summary>
     public class ChildCatalogElement : NamedEntity
     {
-        /// <summary> Идентификатор элемента - владельца </summary>
-        public int OwnerElementId { get; set; }
+        /// <summary> Элемент - владелец </summary>
+        [Required]
+        public virtual CatalogElement OwnerCatalogElement { get; set; }
 
         /// <summary> Дочерний элемент владельца </summary>
         [Column]

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
 namespace WPRMebel.Domain.Base.Catalog.Abstract
@@ -24,9 +25,10 @@ namespace WPRMebel.Domain.Base.Catalog.Abstract
         public virtual Category Category { get; set; }
 
         /// <summary> Коллекция свойств элемента </summary>
-        public virtual ICollection<ElementProperty> ElementProperties { get; set; }
+        public virtual ICollection<ElementProperty> ElementProperties { get; set; } = new List<ElementProperty>();
 
         /// <summary> Коллекция дочерних элементов </summary>
+        [InverseProperty("OwnerCatalogElement")]
         public virtual ICollection<ChildCatalogElement> ChildCatalogElements { get; set; } = new List<ChildCatalogElement>();
 
         /// <summary> Цена комплекта </summary>
@@ -34,6 +36,6 @@ namespace WPRMebel.Domain.Base.Catalog.Abstract
 
         private decimal CalculateTotalPrice() => Price + ChildCatalogElements
             .Sum(childCatalogElement => childCatalogElement.CatalogElement?
-                .CalculateTotalPrice() * childCatalogElement.Quantity ?? 0);
+                .Price * childCatalogElement.Quantity ?? 0);
     }
 }

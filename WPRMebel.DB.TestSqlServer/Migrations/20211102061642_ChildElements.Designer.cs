@@ -10,8 +10,8 @@ using WPRMebel.DB.TestSqlServer.Context;
 namespace WPRMebel.DB.TestSqlServer.Migrations
 {
     [DbContext(typeof(CatalogDbContext))]
-    [Migration("20211102040155_ChildCatalogElement")]
-    partial class ChildCatalogElement
+    [Migration("20211102061642_ChildElements")]
+    partial class ChildElements
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -78,6 +78,35 @@ namespace WPRMebel.DB.TestSqlServer.Migrations
                     b.HasIndex("VendorId");
 
                     b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("WPRMebel.Domain.Base.Catalog.ChildCatalogElement", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("CatalogElementId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("OwnerCatalogElementId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CatalogElementId");
+
+                    b.HasIndex("OwnerCatalogElementId");
+
+                    b.ToTable("ChildCatalogElements");
                 });
 
             modelBuilder.Entity("WPRMebel.Domain.Base.Catalog.ElementProperty", b =>
@@ -163,33 +192,6 @@ namespace WPRMebel.DB.TestSqlServer.Migrations
                     b.ToTable("Vendors");
                 });
 
-            modelBuilder.Entity("WPRMebel.Domain.Base.ChildCatalogElement", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("CatalogElementId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("OwnerElementId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CatalogElementId");
-
-                    b.ToTable("ChildCatalogElement");
-                });
-
             modelBuilder.Entity("WPRMebel.Domain.Base.Catalog.Fitting", b =>
                 {
                     b.HasBaseType("WPRMebel.Domain.Base.Catalog.Abstract.CatalogElement");
@@ -256,6 +258,23 @@ namespace WPRMebel.DB.TestSqlServer.Migrations
                     b.Navigation("Vendor");
                 });
 
+            modelBuilder.Entity("WPRMebel.Domain.Base.Catalog.ChildCatalogElement", b =>
+                {
+                    b.HasOne("WPRMebel.Domain.Base.Catalog.Abstract.CatalogElement", "CatalogElement")
+                        .WithMany()
+                        .HasForeignKey("CatalogElementId");
+
+                    b.HasOne("WPRMebel.Domain.Base.Catalog.Abstract.CatalogElement", "OwnerCatalogElement")
+                        .WithMany("ChildCatalogElements")
+                        .HasForeignKey("OwnerCatalogElementId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CatalogElement");
+
+                    b.Navigation("OwnerCatalogElement");
+                });
+
             modelBuilder.Entity("WPRMebel.Domain.Base.Catalog.ElementProperty", b =>
                 {
                     b.HasOne("WPRMebel.Domain.Base.Catalog.Abstract.CatalogElement", "CatalogElement")
@@ -276,17 +295,6 @@ namespace WPRMebel.DB.TestSqlServer.Migrations
                         .IsRequired();
 
                     b.Navigation("ElementProperty");
-                });
-
-            modelBuilder.Entity("WPRMebel.Domain.Base.ChildCatalogElement", b =>
-                {
-                    b.HasOne("WPRMebel.Domain.Base.Catalog.Abstract.CatalogElement", "CatalogElement")
-                        .WithMany("ChildCatalogElements")
-                        .HasForeignKey("CatalogElementId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CatalogElement");
                 });
 
             modelBuilder.Entity("WPRMebel.Domain.Base.Catalog.Abstract.CatalogElement", b =>

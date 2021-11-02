@@ -79,12 +79,30 @@ namespace WPRMebel.DB.TestSqlServer.Context
                 }
             }
 
+            var childelements = new Collection<ChildCatalogElement>(); //Дочерние элементы
+
+            foreach (var fitting in elements)
+            {
+                for (var i = 0; i < 10; i++)
+                {
+                    childelements.Add(new ChildCatalogElement()
+                    {
+                        Name = $"Дочерний комплект {fitting.Name} #{i}",
+                        CatalogElement = fitting,
+                        Quantity = rnd.Next(20),
+                        OwnerCatalogElement = fitting
+
+                    });
+                }
+            }
+
 
             await Vendors.AddRangeAsync(vendors, Cancel).ConfigureAwait(false);
             await Categories.AddRangeAsync(categories, Cancel).ConfigureAwait(false);
             await Fittings.AddRangeAsync(elements, Cancel).ConfigureAwait(false);
             await ElementProperties.AddRangeAsync(elementsprop, Cancel).ConfigureAwait(false);
             await ElementPropertyValues.AddRangeAsync(elementspropvalues, Cancel).ConfigureAwait(false);
+            await ChildCatalogElements.AddRangeAsync(childelements, Cancel).ConfigureAwait(false);
 
             await SaveChangesAsync(Cancel).ConfigureAwait(false);
             // ---------------- Test Data -----------------

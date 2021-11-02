@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using WPRMebel.DB.Context.Base;
 using WPRMebel.DB.Initialization;
 using WPRMebel.Domain.Base.Catalog;
+using WPRMebel.Domain.Base.Catalog.Abstract;
 
 namespace WPRMebel.DB.Context
 {
@@ -37,6 +38,10 @@ namespace WPRMebel.DB.Context
         /// <summary>Значения свойств элементов</summary>
         public DbSet<ElementPropertyValue> ElementPropertyValues { get; set; }
 
+        /// <summary>Дочерние элементы комплекта</summary>
+        public DbSet<ChildCatalogElement> ChildCatalogElements { get; set; }
+
+
         protected override void OnModelCreating(ModelBuilder model)
         {
             //model.Entity<Vendor>()
@@ -48,6 +53,20 @@ namespace WPRMebel.DB.Context
                 .HasOne( c => c.Vendor)
                 .WithMany(v => v.Categories)
                 .OnDelete(DeleteBehavior.SetNull);
+
+            //model.Entity<ChildCatalogElement>()
+            //    .HasOne(child => child.CatalogElement).WithMany()
+            //    .OnDelete(DeleteBehavior.SetNull);
+
+            //model.Entity<ChildCatalogElement>()
+            //    .HasOne(child => child.OwnerCatalogElement)
+            //    .WithMany(e => e.ChildCatalogElements)
+            //    .OnDelete(DeleteBehavior.Cascade);
+
+            //model.Entity<CatalogElement>()
+            //    .HasMany(element => element.ChildCatalogElements)
+            //    .WithOne(child => child.OwnerCatalogElement)
+            //    .OnDelete(DeleteBehavior.Cascade);
         }
 
         public override async Task InitializeStartData(CancellationToken Cancel = default)
