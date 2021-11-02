@@ -7,7 +7,7 @@ namespace WPRMebel.Domain.Base.Catalog
     /// <summary>
     /// Дочерний элемент комплекта
     /// </summary>
-    public class ChildCatalogElement : NamedEntity
+    public class ChildCatalogElement : Entity
     {
         /// <summary> Элемент - владелец </summary>
         [Required]

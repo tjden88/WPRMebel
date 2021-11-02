@@ -91,7 +91,6 @@ namespace WPRMebel.DB.TestSqlServer.Context
                 {
                     childelements.Add(new ChildCatalogElement()
                     {
-                        Name = $"Дочерний комплект {fitting.Name} #{i}",
                         CatalogElement = fitting,
                         Quantity = rnd.Next(20),
                         OwnerCatalogElement = fitting

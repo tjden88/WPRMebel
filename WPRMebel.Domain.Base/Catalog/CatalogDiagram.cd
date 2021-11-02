@@ -134,7 +134,7 @@
   <Class Name="WPRMebel.Domain.Base.Catalog.ChildCatalogElement">
     <Position X="5.75" Y="6.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>QIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAA=</HashCode>
+      <HashCode>AIAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAgAAAAAA=</HashCode>
       <FileName>Catalog\ChildCatalogElement.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
-using WPRMebel.DB.TestSqlServer.Context;
 using WPRMebel.WPF.Services;
+using WPRMebel.WpfAPI.Services;
 
 namespace WPRMebel.WPF
 {
@@ -15,8 +15,10 @@ namespace WPRMebel.WPF
         {
             var serviceCollection = new ServiceCollection();
 
-            return serviceCollection.AddDbContext<CatalogDbContext>()
+            return serviceCollection
                 .AddServices()
+                .AddApiServices()
+                .AddDb()
                 .AddViewModels()
                 .BuildServiceProvider()
                 ;
