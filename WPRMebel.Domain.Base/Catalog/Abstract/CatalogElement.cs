@@ -25,11 +25,11 @@ namespace WPRMebel.Domain.Base.Catalog.Abstract
         public virtual Category Category { get; set; }
 
         /// <summary> Коллекция свойств элемента </summary>
-        public virtual ICollection<ElementProperty> ElementProperties { get; set; } = new List<ElementProperty>();
+        public virtual ICollection<ElementProperty> ElementProperties { get; set; } = new HashSet<ElementProperty>();
 
         /// <summary> Коллекция дочерних элементов </summary>
         [InverseProperty("OwnerCatalogElement")]
-        public virtual ICollection<ChildCatalogElement> ChildCatalogElements { get; set; } = new List<ChildCatalogElement>();
+        public virtual ICollection<ChildCatalogElement> ChildCatalogElements { get; set; } = new HashSet<ChildCatalogElement>();
 
         /// <summary> Цена комплекта </summary>
         public decimal TotalPrice => CalculateTotalPrice();

@@ -44,29 +44,11 @@ namespace WPRMebel.DB.Context
 
         protected override void OnModelCreating(ModelBuilder model)
         {
-            //model.Entity<Vendor>()
-            //    .HasMany<Category>()
-            //    .WithOne(v => v.Vendor)
-            //    .OnDelete(DeleteBehavior.Cascade);
 
             model.Entity<Category>()
                 .HasOne( c => c.Vendor)
                 .WithMany(v => v.Categories)
                 .OnDelete(DeleteBehavior.SetNull);
-
-            //model.Entity<ChildCatalogElement>()
-            //    .HasOne(child => child.CatalogElement).WithMany()
-            //    .OnDelete(DeleteBehavior.SetNull);
-
-            //model.Entity<ChildCatalogElement>()
-            //    .HasOne(child => child.OwnerCatalogElement)
-            //    .WithMany(e => e.ChildCatalogElements)
-            //    .OnDelete(DeleteBehavior.Cascade);
-
-            //model.Entity<CatalogElement>()
-            //    .HasMany(element => element.ChildCatalogElements)
-            //    .WithOne(child => child.OwnerCatalogElement)
-            //    .OnDelete(DeleteBehavior.Cascade);
         }
 
         public override async Task InitializeStartData(CancellationToken Cancel = default)

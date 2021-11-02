@@ -13,7 +13,7 @@ namespace WPRMebel.TestConsole
         static async Task Main(string[] args)
         {
             var cdb = new CatalogDbContext();
-            //await cdb.Database.EnsureDeletedAsync();
+            await cdb.Database.EnsureDeletedAsync();
             await cdb.Database.MigrateAsync();
             await cdb.InitializeStartData();
 

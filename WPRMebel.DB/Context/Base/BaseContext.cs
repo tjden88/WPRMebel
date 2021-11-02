@@ -18,7 +18,10 @@ namespace WPRMebel.DB.Context.Base
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.LogTo(message => Debug.WriteLine(message), Microsoft.Extensions.Logging.LogLevel.Information);
+            optionsBuilder
+                .LogTo(message => Debug.WriteLine(message), Microsoft.Extensions.Logging.LogLevel.Information)
+                .UseLazyLoadingProxies()
+                ;
             Configure(optionsBuilder);
         }
     }
