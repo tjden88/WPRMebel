@@ -15,15 +15,15 @@ namespace WPRMebel.DB.Repositories
     /// <typeparam name="T">Сущность БД</typeparam>
     public class DbRepository<T> : IRepository<T> where T : Entity, new()
     {
-        private readonly CatalogContext _Context; // Контекст БД
+        private readonly CatalogContextBase _ContextBase; // Контекст БД
 
         /// <summary> Набор данных БД </summary>
         protected DbSet<T> Set { get; }
 
-        public DbRepository(CatalogContext Context)
+        public DbRepository(CatalogContextBase ContextBase)
         {
-            _Context = Context;
-            Set = _Context.Set<T>();
+            _ContextBase = ContextBase;
+            Set = _ContextBase.Set<T>();
         }
 
 
@@ -39,7 +39,7 @@ namespace WPRMebel.DB.Repositories
         public async Task CommitTransaction(CancellationToken Cancel = default)
         {
             if (!TransactionMode) return;
-            await _Context.SaveChangesAsync(Cancel).ConfigureAwait(false);
+            await _ContextBase.SaveChangesAsync(Cancel).ConfigureAwait(false);
             TransactionMode = false;
         }
 
@@ -65,8 +65,8 @@ namespace WPRMebel.DB.Repositories
         {
             if (item == null) throw new ArgumentNullException(nameof(item));
 
-            _Context.Entry(item).State = EntityState.Added;
-            if (!TransactionMode) await _Context.SaveChangesAsync(Cancel).ConfigureAwait(false);
+            _ContextBase.Entry(item).State = EntityState.Added;
+            if (!TransactionMode) await _ContextBase.SaveChangesAsync(Cancel).ConfigureAwait(false);
             return item;
         }
 
@@ -75,8 +75,8 @@ namespace WPRMebel.DB.Repositories
         {
             if (item == null) throw new ArgumentNullException(nameof(item));
 
-            _Context.Entry(item).State = EntityState.Modified;
-            if (!TransactionMode) return await _Context.SaveChangesAsync(Cancel).ConfigureAwait(false) > 0;
+            _ContextBase.Entry(item).State = EntityState.Modified;
+            if (!TransactionMode) return await _ContextBase.SaveChangesAsync(Cancel).ConfigureAwait(false) > 0;
             return true;
         }
 
@@ -87,8 +87,8 @@ namespace WPRMebel.DB.Repositories
 
             if (!await ExistAsync(item.Id, Cancel).ConfigureAwait(false)) return false;
 
-            _Context.Entry(item).State = EntityState.Deleted;
-            if (!TransactionMode) return await _Context.SaveChangesAsync(Cancel).ConfigureAwait(false) > 0;
+            _ContextBase.Entry(item).State = EntityState.Deleted;
+            if (!TransactionMode) return await _ContextBase.SaveChangesAsync(Cancel).ConfigureAwait(false) > 0;
             return true;
         }
 

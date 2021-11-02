@@ -9,7 +9,7 @@ using WPRMebel.Domain.Base.Catalog;
 
 namespace WPRMebel.DB.TestSqlServer.Context
 {
-    public class CatalogDbContext : CatalogContext
+    public class CatalogDbContext : CatalogContextBase
     {
         protected override void Configure(DbContextOptionsBuilder optionsBuilder)
         {

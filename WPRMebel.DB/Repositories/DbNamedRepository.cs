@@ -16,7 +16,7 @@ namespace WPRMebel.DB.Repositories
 
     public class DbNamedRepository<T> : DbRepository<T>, INamedRepository<T> where T : NamedEntity, new()
     {
-        public DbNamedRepository(CatalogContext Context) : base(Context)
+        public DbNamedRepository(CatalogContextBase ContextBase) : base(ContextBase)
         {
         }
 

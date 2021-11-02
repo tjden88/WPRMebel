@@ -8,7 +8,7 @@ using WPRMebel.Domain.Base.Catalog;
 
 namespace WPRMebel.DB.Context
 {
-    public abstract class CatalogContext : BaseContext
+    public abstract class CatalogContextBase : BaseContext
     {
         /// <summary> Секции каталога </summary>
         public DbSet<Section> Sections { get; set; }
