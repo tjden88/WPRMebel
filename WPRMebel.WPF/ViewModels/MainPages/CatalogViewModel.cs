@@ -1,5 +1,9 @@
-﻿using WPR.MVVM.ViewModels;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using WPR.MVVM.ViewModels;
 using WPRMebel.Domain.Base.Catalog;
+using WPRMebel.Domain.Base.Catalog.Abstract;
 using WPRMebel.Interfaces.Base.Repositories;
 using WPRMebel.WpfAPI.Catalog.Interfaces;
 
@@ -14,6 +18,13 @@ namespace WPRMebel.WPF.ViewModels.MainPages
         {
             _SectionRepository = SectionRepository;
             _CatalogElementView = CatalogElementView;
+            OnPropertyChanged(nameof(Sections));
         }
+
+        public IEnumerable<Section> Sections => _SectionRepository.Items.ToArray();
+
+       // public IEnumerable<CatalogElement> CatalogElements =>;
+
+
     }
 }

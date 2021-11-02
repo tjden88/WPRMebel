@@ -29,11 +29,7 @@
                         </ListBoxItem>
                     </ListBox>
                     <Rectangle Height="1" Fill="{DynamicResource DividerColorBrush}"/>
-                    <ListBox Style="{StaticResource WPRMenuListBox}">
-                        <ListBoxItem>123</ListBoxItem>
-                        <ListBoxItem>456</ListBoxItem>
-                        <ListBoxItem>789</ListBoxItem>
-                    </ListBox>
+                    <ListBox Style="{StaticResource WPRMenuListBox}" ItemsSource="{Binding Sections}" DisplayMemberPath="Name"/>
                 </StackPanel>
             </cnt:WPRTitledCard>
         </cnt:WPRCard>

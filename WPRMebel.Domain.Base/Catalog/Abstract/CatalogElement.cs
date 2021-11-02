@@ -9,7 +9,7 @@ namespace WPRMebel.Domain.Base.Catalog.Abstract
     /// Сущность с ценой за единицу
     /// </summary>
     /// <remarks>Сущность с ценой за единицу</remarks>
-    public abstract class CatalogElement : NamedEntity
+    public class CatalogElement : NamedEntity
     {
         /// <summary>
         /// Базовая цена
