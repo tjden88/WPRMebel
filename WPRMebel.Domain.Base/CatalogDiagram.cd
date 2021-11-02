@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="WPRMebel.Domain.Base.SheetMaterial">
+    <Position X="1.25" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>SheetMaterial.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WPRMebel.Domain.Base.RunningMaterial">
+    <Position X="3.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>RunningMaterial.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WPRMebel.Domain.Base.NamedEntity">
+    <Position X="5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>NamedEntity.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WPRMebel.Domain.Base.CatalogElement">
+    <Position X="5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQAAAAAABAAAAAAAAAAAAAAAAAAAAAAACAA=</HashCode>
+      <FileName>PricedEntity.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Category" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="WPRMebel.Domain.Base.Entity">
+    <Position X="5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entity.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WPRMebel.Domain.Base.Fitting">
+    <Position X="6" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Fitting.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WPRMebel.Domain.Base.Service">
+    <Position X="8.25" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Service.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WPRMebel.Domain.Base.Vendor">
+    <Position X="10.5" Y="4" Width="1.5" />
+    <InheritanceLine Type="WPRMebel.Domain.Base.NamedEntity" ManuallyRouted="true">
+      <Path>
+        <Point X="5.75" Y="2.983" />
+        <Point X="5.75" Y="3.359" />
+        <Point X="8.229" Y="3.359" Type="JumpStart" />
+        <Point X="8.396" Y="3.359" Type="JumpEnd" />
+        <Point X="11.25" Y="3.359" />
+        <Point X="11.25" Y="4" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Vendor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WPRMebel.Domain.Base.Category">
+    <Position X="8" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAIAAAAA=</HashCode>
+      <FileName>Category.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Vendor" />
+      <Property Name="Section" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="WPRMebel.Domain.Base.Section">
+    <Position X="7.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Section.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
