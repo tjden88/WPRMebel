@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using WPRMebel.DB.Repositories;
 using WPRMebel.DB.TestSqlServer.Context;
-using WPRMebel.Entityes.Catalog;
+using WPRMebel.Domain.Base.Catalog;
 
 namespace WPRMebel.TestConsole
 {

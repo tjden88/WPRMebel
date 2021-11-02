@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using WPRMebel.DB.Context.Base;
 using WPRMebel.DB.Initialization;
-using WPRMebel.Entityes.Catalog;
+using WPRMebel.Domain.Base.Catalog;
 
 namespace WPRMebel.DB.Context
 {
@@ -19,8 +19,17 @@ namespace WPRMebel.DB.Context
         /// <summary>Категории элементов в каталоге</summary>
         public DbSet<Category> Categories { get; set; }
 
-        /// <summary>Элементы каталога</summary>
-        public DbSet<Element> Elements { get; set; }
+        /// <summary>Листовые материалы каталога</summary>
+        public DbSet<SheetMaterial> SheetMaterials { get; set; }
+
+        /// <summary>Погонные материалы каталога</summary>
+        public DbSet<RunningMaterial> RunningMaterials { get; set; }
+
+        /// <summary>Элементы фурнитуры каталога</summary>
+        public DbSet<Fitting> Fittings { get; set; }
+
+        /// <summary>Элементы услуг каталога</summary>
+        public DbSet<Service> Services { get; set; }
 
         /// <summary>Свойства элементов</summary>
         public DbSet<ElementProperty> ElementProperties { get; set; }

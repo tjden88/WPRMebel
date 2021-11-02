@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using WPRMebel.DB.Context;
-using WPRMebel.Entityes.Base;
+using WPRMebel.Domain.Base.Catalog.Abstract;
 using WPRMebel.Interfaces.Base.Repositories;
 
 namespace WPRMebel.DB.Repositories

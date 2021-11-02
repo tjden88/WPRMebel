@@ -1,5 +1,5 @@
 ﻿using System.Collections.ObjectModel;
-using WPRMebel.Entityes.Catalog;
+using WPRMebel.Domain.Base.Catalog;
 
 namespace WPRMebel.DB.Initialization
 {
@@ -13,44 +13,37 @@ namespace WPRMebel.DB.Initialization
             new()
             {
                 Name = "Листовой материал",
-                Description = "Основные листовые материалы для производства каркасов, фасадов и т.д.",
-                SectionType = CatalogSectionTypes.SheetMaterial
+                Description = "Основные листовые материалы для производства каркасов, фасадов и т.д."
             },
             new()
             {
                 Name = "Погонный материал",
-                Description = "Погонные материалы и фурнитура (профили, трубы, столешницы и т.д.)",
-                SectionType = CatalogSectionTypes.RunningMaterial
+                Description = "Погонные материалы и фурнитура (профили, трубы, столешницы и т.д.)"
             },
             new()
             {
                 Name = "Кромкооблицовочный материал",
-                Description = "Кромка и торцевые облицовочные материалы",
-                SectionType = CatalogSectionTypes.RunningMaterial
+                Description = "Кромка и торцевые облицовочные материалы"
             },
             new()
             {
                 Name = "Фурнитура",
-                Description = "Различные элементы фурнитуры для производства мебели",
-                SectionType = CatalogSectionTypes.General
+                Description = "Различные элементы фурнитуры для производства мебели"
             },
             new()
             {
                 Name = "Стяжки",
-                Description = "Стяжная фурнитура",
-                SectionType = CatalogSectionTypes.Consumable
+                Description = "Стяжная фурнитура"
             },
             new()
             {
                 Name = "Услуги, операции",
-                Description = "Работы мебельного цеха, услуги по доставке, сборке",
-                SectionType = CatalogSectionTypes.Service
+                Description = "Работы мебельного цеха, услуги по доставке, сборке"
             },
             new()
             {
                 Name = "Расходные материалы",
-                Description = "Картон, стрейч-плёнка и т.д.",
-                SectionType = CatalogSectionTypes.Consumable
+                Description = "Картон, стрейч-плёнка и т.д."
             }
         };
     }

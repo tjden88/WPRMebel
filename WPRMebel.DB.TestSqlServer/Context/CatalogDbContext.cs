@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using WPRMebel.DB.Context;
-using WPRMebel.Entityes.Catalog;
+using WPRMebel.Domain.Base.Catalog;
 
 namespace WPRMebel.DB.TestSqlServer.Context
 {
@@ -43,14 +43,15 @@ namespace WPRMebel.DB.TestSqlServer.Context
                 });
             }
 
-            var elements = new Collection<Element>(); // Элементы
+            var elements = new Collection<Fitting>(); // Элементы
             for (var i = 0; i < 1000; i++)
             {
-                elements.Add(new Element()
+                elements.Add(new Fitting()
                 {
                     Name = $"Элемент {i}",
                     Category = categories[rnd.Next(categories.Count)],
-                    Price = (decimal) (200 + rnd.NextDouble() * 5000)
+                    Price = (decimal)(200 + rnd.NextDouble() * 5000),
+                    Extra = (1 + rnd.NextDouble() * 3)
                 });
             }
 
@@ -60,7 +61,7 @@ namespace WPRMebel.DB.TestSqlServer.Context
                 elementsprop.Add(new ElementProperty()
                 {
                     Name = $"Свойство {i}",
-                    Element = elements[rnd.Next(elements.Count)]
+                    CatalogElement = elements[rnd.Next(elements.Count)]
                 });
             }
 
@@ -81,7 +82,7 @@ namespace WPRMebel.DB.TestSqlServer.Context
 
             await Vendors.AddRangeAsync(vendors, Cancel).ConfigureAwait(false);
             await Categories.AddRangeAsync(categories, Cancel).ConfigureAwait(false);
-            await Elements.AddRangeAsync(elements, Cancel).ConfigureAwait(false);
+            await Fittings.AddRangeAsync(elements, Cancel).ConfigureAwait(false);
             await ElementProperties.AddRangeAsync(elementsprop, Cancel).ConfigureAwait(false);
             await ElementPropertyValues.AddRangeAsync(elementspropvalues, Cancel).ConfigureAwait(false);
 
