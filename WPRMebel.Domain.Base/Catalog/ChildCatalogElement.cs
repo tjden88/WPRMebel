@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using WPRMebel.Domain.Base.Catalog.Abstract;
 
-namespace WPRMebel.Domain.Base
+namespace WPRMebel.Domain.Base.Catalog
 {
     /// <summary>
     /// Дочерний элемент комплекта

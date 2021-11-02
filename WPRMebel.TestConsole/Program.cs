@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using WPRMebel.DB.Repositories;
@@ -34,6 +35,8 @@ namespace WPRMebel.TestConsole
 
             var r = await repo.Delete("Категория 51");
             var r2 = await repo.Delete("Категория 52");
+
+            var element = cdb.Fittings.First();
 
             await vendors.Delete(5);
 

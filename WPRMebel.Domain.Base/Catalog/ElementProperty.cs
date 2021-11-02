@@ -17,17 +17,12 @@ namespace WPRMebel.Domain.Base.Catalog
         public double PriceChanging { get; set; } = 1d;
 
         /// <summary>Список значений свойства</summary>
-        public virtual ICollection<ElementPropertyValue> ElementPropertyValues { get; set; }
+        public virtual ICollection<ElementPropertyValue> ElementPropertyValues { get; set; } =
+            new List<ElementPropertyValue>();
 
         /// <summary>
         /// Указывает, что свойство обязательно для элемента
         /// </summary>
-        public bool IsRequired
-        {
-            get => default;
-            set
-            {
-            }
-        }
+        public bool IsRequired { get; set; }
     }
 }
