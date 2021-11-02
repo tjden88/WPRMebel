@@ -10,6 +10,9 @@ namespace WPRMebel.DB.Context.Base
     /// </summary>
     public abstract class BaseContext : DbContext
     {
+        /// <summary> Имя БД. Используется в строке подключения </summary>
+        public string DatabaseName { get; set; } = "WPRMebel";
+
         /// <summary> Заполнение начальными данными. </summary>
         public abstract Task InitializeStartData(CancellationToken Cancel = default);
 

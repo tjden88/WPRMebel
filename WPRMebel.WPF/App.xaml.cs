@@ -1,15 +1,26 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
+using Microsoft.Extensions.DependencyInjection;
+using WPRMebel.DB.TestSqlServer.Context;
 using WPRMebel.WPF.Services;
 
 namespace WPRMebel.WPF
 {
     public partial class App : Application
     {
-        protected override void OnStartup(StartupEventArgs e)
+
+        private static IServiceProvider _Services;
+        public static IServiceProvider Services => _Services ??= ConfigureServices();
+
+        private static IServiceProvider ConfigureServices()
         {
-            base.OnStartup(e);
-            ServiceLocator.RegisterServices();
-            ServiceLocator.RegisterViewModels();
+            var serviceCollection = new ServiceCollection();
+
+            return serviceCollection.AddDbContext<CatalogDbContext>()
+                .AddServices()
+                .AddViewModels()
+                .BuildServiceProvider()
+                ;
         }
     }
 }
