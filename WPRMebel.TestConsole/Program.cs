@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using WPRMebel.DB;
 using WPRMebel.DB.Repositories;
 using WPRMebel.DB.TestSqlServer.Context;
 using WPRMebel.Domain.Base.Catalog;
@@ -14,17 +15,16 @@ namespace WPRMebel.TestConsole
     {
         static async Task Main(string[] args)
         {
-            var s = Stopwatch.StartNew();
-            //var cdb = new CatalogDbContext();
-            var cdb = Services.GetRequiredService<CatalogDbContext>();
-            await cdb.Database.EnsureDeletedAsync();
-            await cdb.Database.MigrateAsync();
-            await cdb.InitializeStartData();
+            //var s = Stopwatch.StartNew();
+            //var cdb = Services.GetRequiredService<CatalogDbContext>();
+            //await cdb.Database.EnsureDeletedAsync();
+            //await cdb.Database.MigrateAsync();
+            ////await cdb.InitializeStartData();
 
-            var repo = new NamedDbRepository<Category>(cdb);
+            //var repo = new NamedDbRepository<Category>(cdb);
 
-            var vendors = new NamedDbRepository<Vendor>(cdb);
-            var sections = new NamedDbRepository<Section>(cdb);
+            //var vendors = new NamedDbRepository<Vendor>(cdb);
+            //var sections = new NamedDbRepository<Section>(cdb);
 
             //var s = Stopwatch.StartNew();
             //repo.BeginTransaction();
@@ -37,21 +37,51 @@ namespace WPRMebel.TestConsole
 
             //Console.WriteLine(s.ElapsedMilliseconds);
 
-            var r = await repo.Delete("Категория 51");
-            var r2 = await repo.Delete("Категория 52");
+            //var cdb2 = Services.GetRequiredService<CatalogDbContext>();
+            //var cdb2 = new CatalogDbContext();
+            //await cdb2.Database.EnsureCreatedAsync();
 
-            var element = cdb.Fittings.ToArray();
+            //var eq = Equals(cdb2, cdb);
 
 
-             var r3 = await sections.Delete(1);
+            //var r = await repo.Delete("Категория 51");
+            //var r2 = await repo.Delete("Категория 52");
 
-            //await vendors.Delete(5);
-            Console.WriteLine(s.ElapsedMilliseconds);
+            //var element = cdb.Fittings.ToArray();
 
-            Console.WriteLine(r);
-            Console.WriteLine(r2);
+
+            // var r3 = await sections.Delete(1);
+
+            ////await vendors.Delete(5);
+            //Console.WriteLine(s.ElapsedMilliseconds);
+
+            //Console.WriteLine(r);
+            //Console.WriteLine(r2);
             //Console.ReadLine();
+            using (var scope = Services.CreateScope())
+            {
+                var cdb = scope.ServiceProvider.GetRequiredService<CatalogDbContext>();
+                await cdb.Database.EnsureCreatedAsync();
+                cdb.Sections.Add(new Section() { Name = "Test" });
+                await cdb.SaveChangesAsync();
+            }
+
+
+
+            Connection.CatalogDbPath = "TestDB";
+
+            CreateDb();
         }
+
+
+        private static void CreateDb()
+        {
+            var cdb = Services.GetRequiredService<CatalogDbContext>();
+            cdb.Database.EnsureCreated();
+            cdb.Sections.Add(new Section() { Name = "Test2" });
+            cdb.SaveChanges();
+        }
+
 
         private static IServiceProvider _Services;
         public static IServiceProvider Services => _Services ??= ConfigureServices();

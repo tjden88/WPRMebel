@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using WPRMebel.DB.Context.Base;
 using WPRMebel.DB.Initialization;
 using WPRMebel.Domain.Base.Catalog;
-using WPRMebel.Domain.Base.Catalog.Abstract;
 
 namespace WPRMebel.DB.Context
 {

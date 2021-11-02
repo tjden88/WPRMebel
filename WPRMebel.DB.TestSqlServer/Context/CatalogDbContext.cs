@@ -13,8 +13,9 @@ namespace WPRMebel.DB.TestSqlServer.Context
     {
         protected override void Configure(DbContextOptionsBuilder optionsBuilder)
         {
-            if (DatabaseName is null) throw new ArgumentNullException(nameof(DatabaseName));
-            optionsBuilder.UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=WPRMebel");
+            if (Connection.CatalogDbPath is null) 
+                throw new ArgumentNullException(nameof(Connection.CatalogDbPath), "Имя БД каталога не указано");
+            optionsBuilder.UseSqlServer(@$"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog={Connection.CatalogDbPath}");
         }
 
         public override async Task InitializeStartData(CancellationToken Cancel = default)

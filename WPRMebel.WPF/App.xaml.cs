@@ -8,7 +8,6 @@ namespace WPRMebel.WPF
 {
     public partial class App : Application
     {
-
         private static IServiceProvider _Services;
         public static IServiceProvider Services => _Services ??= ConfigureServices();
 

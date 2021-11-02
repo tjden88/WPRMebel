@@ -6,6 +6,6 @@
     public static class Connection
     {
         /// <summary>Путь к файлу базы данных каталога</summary>
-        public static string CatalogDbPath { get; set; }
+        public static string CatalogDbPath { get; set; } = "WPRMebel";
     }
 }
