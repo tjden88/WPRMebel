@@ -37,7 +37,9 @@ namespace WPRMebel.TestConsole
             var r = await repo.Delete("Категория 51");
             var r2 = await repo.Delete("Категория 52");
 
-            var element = cdb.Fittings.First();
+            var element = cdb.Fittings.ToArray();
+
+            var s = await sections.GetAll();
 
              var r3 = await sections.Delete(1);
 

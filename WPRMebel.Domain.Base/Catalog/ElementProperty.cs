@@ -17,8 +17,7 @@ namespace WPRMebel.Domain.Base.Catalog
         public double PriceChanging { get; set; } = 1d;
 
         /// <summary>Список значений свойства</summary>
-        public virtual ICollection<ElementPropertyValue> ElementPropertyValues { get; set; } =
-            new List<ElementPropertyValue>();
+        public virtual ICollection<ElementPropertyValue> ElementPropertyValues { get; set; } = new HashSet<ElementPropertyValue>();
 
         /// <summary>
         /// Указывает, что свойство обязательно для элемента
