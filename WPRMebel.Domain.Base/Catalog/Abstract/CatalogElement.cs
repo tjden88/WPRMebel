@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace WPRMebel.Domain.Base.Catalog.Abstract
 {
@@ -26,5 +27,12 @@ namespace WPRMebel.Domain.Base.Catalog.Abstract
 
         /// <summary> Коллекция дочерних элементов </summary>
         public virtual ICollection<ChildCatalogElement> ChildCatalogElements { get; set; } = new List<ChildCatalogElement>();
+
+        /// <summary> Цена комплекта </summary>
+        public decimal TotalPrice => CalculateTotalPrice();
+
+        private decimal CalculateTotalPrice() => Price + ChildCatalogElements
+            .Sum(childCatalogElement => childCatalogElement.CatalogElement?
+                .CalculateTotalPrice() * childCatalogElement.Quantity ?? 0);
     }
 }

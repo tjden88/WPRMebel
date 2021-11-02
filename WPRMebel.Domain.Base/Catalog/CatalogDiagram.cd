@@ -20,13 +20,13 @@
     <Position X="14.25" Y="4.75" Width="1.5" />
     <AssociationLine Name="ChildCatalogElements" Type="WPRMebel.Domain.Base.ChildCatalogElement" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="14.438" Y="6.367" />
+        <Point X="14.438" Y="7.011" />
         <Point X="14.438" Y="7.301" />
         <Point X="8.25" Y="7.301" />
       </Path>
     </AssociationLine>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAQEAAAAADAAAAAAAAAAAAAAAAAAAAAAACAA=</HashCode>
+      <HashCode>AIAAAAAAAQEAAAAADAAAAAAAAAAAQAAAAAAAAAAACAA=</HashCode>
       <FileName>Catalog\Abstract\CatalogElement.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -127,8 +127,8 @@
       <Path>
         <Point X="8.25" Y="6.994" />
         <Point X="13.281" Y="6.994" />
-        <Point X="13.281" Y="6.062" />
-        <Point X="14.25" Y="6.062" />
+        <Point X="13.281" Y="6.585" />
+        <Point X="14.25" Y="6.585" />
       </Path>
     </AssociationLine>
     <TypeIdentifier>
