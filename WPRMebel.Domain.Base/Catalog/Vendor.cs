@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+using WPRMebel.Domain.Base.Catalog.Abstract;
 
-namespace WPRMebel.Domain.Base
+namespace WPRMebel.Domain.Base.Catalog
 {
     /// <summary>
     /// Поставщик

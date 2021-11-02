@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="WPRMebel.Domain.Base.Catalog.Abstract.Entity">
+    <Position X="12" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Catalog\Abstract\Entity.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WPRMebel.Domain.Base.Catalog.Abstract.NamedEntity">
+    <Position X="12" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Catalog\Abstract\NamedEntity.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WPRMebel.Domain.Base.Catalog.Abstract.CatalogElement">
+    <Position X="12" Y="4.75" Width="1.5" />
+    <AssociationLine Name="Category" Type="WPRMebel.Domain.Base.Catalog.Category" FixedToPoint="true">
+      <Path>
+        <Point X="13.5" Y="5.938" />
+        <Point X="17" Y="5.938" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQAAAAAABAAAAAAAAAAAAAAAAAAAAAAACAA=</HashCode>
+      <FileName>Catalog\Abstract\PricedEntity.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Category" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="WPRMebel.Domain.Base.Catalog.Category">
+    <Position X="17" Y="4.75" Width="1.5" />
+    <AssociationLine Name="Vendor" Type="WPRMebel.Domain.Base.Catalog.Vendor" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="18.5" Y="5.688" />
+        <Point X="19.743" Y="5.688" />
+        <Point X="19.743" Y="2.499" />
+        <Point X="17" Y="2.499" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAIAAAAA=</HashCode>
+      <FileName>Catalog\Category.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Section" />
+      <Property Name="Vendor" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="WPRMebel.Domain.Base.Catalog.Fitting">
+    <Position X="13" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Catalog\Fitting.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WPRMebel.Domain.Base.Catalog.RunningMaterial">
+    <Position X="10.75" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Catalog\RunningMaterial.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WPRMebel.Domain.Base.Catalog.Section">
+    <Position X="14" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Catalog\Section.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Categories" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="WPRMebel.Domain.Base.Catalog.Service">
+    <Position X="15" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Catalog\Service.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WPRMebel.Domain.Base.Catalog.SheetMaterial">
+    <Position X="8.5" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Catalog\SheetMaterial.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WPRMebel.Domain.Base.Catalog.Vendor">
+    <Position X="15.5" Y="2" Width="1.5" />
+    <AssociationLine Name="Categories" Type="WPRMebel.Domain.Base.Catalog.Category" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="17" Y="2.75" />
+        <Point X="19.168" Y="2.75" />
+        <Point X="19.168" Y="5.291" />
+        <Point X="18.5" Y="5.291" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Catalog\Vendor.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Categories" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

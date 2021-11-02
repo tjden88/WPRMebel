@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace WPRMebel.Domain.Base
+﻿namespace WPRMebel.Domain.Base.Catalog.Abstract
 {
     /// <summary>
     /// Сущность с ценой за единицу

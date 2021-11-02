@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using WPRMebel.Domain.Base.Catalog.Abstract;
 
-namespace WPRMebel.Domain.Base
+namespace WPRMebel.Domain.Base.Catalog
 {
     /// <summary>
     /// Листовой материал
