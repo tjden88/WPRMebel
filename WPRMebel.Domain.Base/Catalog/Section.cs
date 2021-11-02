@@ -11,20 +11,8 @@ namespace WPRMebel.Domain.Base.Catalog
         /// <summary>
         /// Описание раздела
         /// </summary>
-        public string Description
-        {
-            get => default;
-            set
-            {
-            }
-        }
+        public string Description { get; set; }
 
-        public ICollection<Category> Categories
-        {
-            get => default;
-            set
-            {
-            }
-        }
+        public virtual ICollection<Category> Categories { get; set; }
     }
 }

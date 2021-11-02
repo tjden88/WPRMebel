@@ -8,12 +8,6 @@ namespace WPRMebel.Domain.Base.Catalog
     /// </summary>
     public class Vendor : NamedEntity
     {
-        public virtual ICollection<Category> Categories
-        {
-            get => default;
-            set
-            {
-            }
-        }
+        public virtual ICollection<Category> Categories { get; set; }
     }
 }

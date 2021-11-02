@@ -6,6 +6,7 @@
       <HashCode>AAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Catalog\Abstract\Entity.cs</FileName>
     </TypeIdentifier>
+    <Lollipop Position="0.2" />
   </Class>
   <Class Name="WPRMebel.Domain.Base.Catalog.Abstract.NamedEntity">
     <Position X="12" Y="2" Width="1.5" />
@@ -13,13 +14,14 @@
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Catalog\Abstract\NamedEntity.cs</FileName>
     </TypeIdentifier>
+    <Lollipop Position="0.2" />
   </Class>
   <Class Name="WPRMebel.Domain.Base.Catalog.Abstract.CatalogElement">
     <Position X="12" Y="4.75" Width="1.5" />
     <AssociationLine Name="Category" Type="WPRMebel.Domain.Base.Catalog.Category" FixedToPoint="true">
       <Path>
-        <Point X="13.5" Y="5.938" />
-        <Point X="17" Y="5.938" />
+        <Point X="13.5" Y="5.961" />
+        <Point X="17" Y="5.961" />
       </Path>
     </AssociationLine>
     <TypeIdentifier>
@@ -31,11 +33,11 @@
     </ShowAsAssociation>
   </Class>
   <Class Name="WPRMebel.Domain.Base.Catalog.Category">
-    <Position X="17" Y="4.75" Width="1.5" />
+    <Position X="17" Y="5" Width="1.5" />
     <AssociationLine Name="Vendor" Type="WPRMebel.Domain.Base.Catalog.Vendor" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="18.5" Y="5.688" />
-        <Point X="19.743" Y="5.688" />
+        <Point X="18.5" Y="5.758" />
+        <Point X="19.743" Y="5.758" />
         <Point X="19.743" Y="2.499" />
         <Point X="17" Y="2.499" />
       </Path>
@@ -48,6 +50,9 @@
       <Property Name="Section" />
       <Property Name="Vendor" />
     </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="CatalogElements" />
+    </ShowAsCollectionAssociation>
   </Class>
   <Class Name="WPRMebel.Domain.Base.Catalog.Fitting">
     <Position X="13" Y="6.75" Width="1.5" />
@@ -93,8 +98,8 @@
       <Path>
         <Point X="17" Y="2.75" />
         <Point X="19.168" Y="2.75" />
-        <Point X="19.168" Y="5.291" />
-        <Point X="18.5" Y="5.291" />
+        <Point X="19.168" Y="5.437" />
+        <Point X="18.5" Y="5.437" />
       </Path>
     </AssociationLine>
     <TypeIdentifier>

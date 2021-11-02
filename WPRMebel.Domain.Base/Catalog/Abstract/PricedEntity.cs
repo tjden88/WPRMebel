@@ -1,4 +1,6 @@
-﻿namespace WPRMebel.Domain.Base.Catalog.Abstract
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace WPRMebel.Domain.Base.Catalog.Abstract
 {
     /// <summary>
     /// Сущность с ценой за единицу
@@ -9,31 +11,14 @@
         /// <summary>
         /// Базовая цена
         /// </summary>
-        public decimal Price
-        {
-            get => default;
-            set
-            {
-            }
-        }
+        public decimal Price { get; set; } = 0m;
 
         /// <summary>
         /// Коэффициент наценки
         /// </summary>
-        public double Extra
-        {
-            get => default;
-            set
-            {
-            }
-        }
+        public double Extra { get; set; } = 1d;
 
-        public Category Category
-        {
-            get => default;
-            set
-            {
-            }
-        }
+        [Required]
+        public virtual Category Category { get; set; }
     }
 }
