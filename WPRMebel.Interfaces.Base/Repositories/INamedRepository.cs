@@ -16,7 +16,7 @@ namespace WPRMebel.Interfaces.Base.Repositories
         /// <param name="name">Имя искомой сущности</param>
         /// <param name="Cancel">Токен отмены</param>
         /// <returns>null, если сущность не найдена</returns>
-        Task<TNamedEntity> GetByName(string name, CancellationToken Cancel = default);
+        Task<TNamedEntity> GetByNameAsync(string name, CancellationToken Cancel = default);
 
 
         /// <summary>
@@ -25,7 +25,7 @@ namespace WPRMebel.Interfaces.Base.Repositories
         /// <param name="name">Имя искомой сущность</param>
         /// <param name="Cancel">Токен отмены</param>
         /// <returns>Истина, если сущность есть в репозитории</returns>
-        Task<bool> Exist(string name, CancellationToken Cancel = default);
+        Task<bool> ExistAsync(string name, CancellationToken Cancel = default);
 
 
         /// <summary>
@@ -34,6 +34,6 @@ namespace WPRMebel.Interfaces.Base.Repositories
         /// <param name="name">имя удаляемой сущности</param>
         /// <param name="Cancel">Токен отмены</param>
         /// <returns>Истина, если удалось удалить</returns>
-        Task<bool> Delete(string name, CancellationToken Cancel = default);
+        Task<bool> DeleteAsync(string name, CancellationToken Cancel = default);
     }
 }

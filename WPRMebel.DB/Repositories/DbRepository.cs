@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -20,9 +19,6 @@ namespace WPRMebel.DB.Repositories
 
         /// <summary> Набор данных БД </summary>
         protected DbSet<T> Set { get; }
-
-        /// <summary> Переопределяемое свойство, с которым работают методы репозитория </summary>
-        protected virtual IQueryable<T> Items => Set;
 
         public DbRepository(CatalogContext Context)
         {
@@ -50,22 +46,22 @@ namespace WPRMebel.DB.Repositories
         #endregion
 
         #region IRepository
-        public async Task<IEnumerable<T>> GetAll(CancellationToken Cancel = default) => await Items.ToArrayAsync(Cancel).ConfigureAwait(false);
+        /// <summary> Переопределяемое свойство, с которым работают методы репозитория </summary>
+        public virtual IQueryable<T> Items => Set;
+
+        public async Task<int> GetCountAsync(CancellationToken Cancel = default) => await Items.CountAsync(Cancel).ConfigureAwait(false);
 
 
-        public async Task<int> GetCount(CancellationToken Cancel = default) => await Items.CountAsync(Cancel).ConfigureAwait(false);
+        public async Task<bool> ExistAsync(int id, CancellationToken Cancel = default) => await Items.AnyAsync(item => item.Id == id, Cancel).ConfigureAwait(false);
 
 
-        public async Task<bool> Exist(int id, CancellationToken Cancel = default) => await Items.AnyAsync(item => item.Id == id, Cancel).ConfigureAwait(false);
+        public async Task<bool> ExistAsync(T item, CancellationToken Cancel = default) => await ExistAsync(item.Id, Cancel);
 
 
-        public async Task<bool> Exist(T item, CancellationToken Cancel = default) => await Exist(item.Id, Cancel);
+        public async Task<T> GetByIdAsync(int id, CancellationToken Cancel = default) => await Items.SingleOrDefaultAsync(i => i.Id == id, Cancel).ConfigureAwait(false);
 
 
-        public async Task<T> GetById(int id, CancellationToken Cancel = default) => await Items.SingleOrDefaultAsync(i => i.Id == id, Cancel).ConfigureAwait(false);
-
-
-        public async Task<T> Add(T item, CancellationToken Cancel = default)
+        public async Task<T> AddAsync(T item, CancellationToken Cancel = default)
         {
             if (item == null) throw new ArgumentNullException(nameof(item));
 
@@ -75,7 +71,7 @@ namespace WPRMebel.DB.Repositories
         }
 
 
-        public async Task<bool> Update(T item, CancellationToken Cancel = default)
+        public async Task<bool> UpdateAsync(T item, CancellationToken Cancel = default)
         {
             if (item == null) throw new ArgumentNullException(nameof(item));
 
@@ -85,11 +81,11 @@ namespace WPRMebel.DB.Repositories
         }
 
 
-        public async Task<bool> Delete(T item, CancellationToken Cancel = default)
+        public async Task<bool> DeleteAsync(T item, CancellationToken Cancel = default)
         {
             if (item == null) throw new ArgumentNullException(nameof(item));
 
-            if (!await Exist(item.Id, Cancel).ConfigureAwait(false)) return false;
+            if (!await ExistAsync(item.Id, Cancel).ConfigureAwait(false)) return false;
 
             _Context.Entry(item).State = EntityState.Deleted;
             if (!TransactionMode) return await _Context.SaveChangesAsync(Cancel).ConfigureAwait(false) > 0;
@@ -97,7 +93,7 @@ namespace WPRMebel.DB.Repositories
         }
 
 
-        public async Task<bool> Delete(int id, CancellationToken Cancel = default)
+        public async Task<bool> DeleteAsync(int id, CancellationToken Cancel = default)
         {
             var item = Set.Local
                            .FirstOrDefault(i => i.Id == id) ?? await Set
@@ -105,7 +101,7 @@ namespace WPRMebel.DB.Repositories
                            .FirstOrDefaultAsync(i => i.Id == id, Cancel)
                            .ConfigureAwait(false);
 
-            return item != null && await Delete(item, Cancel).ConfigureAwait(false);
+            return item != null && await DeleteAsync(item, Cancel).ConfigureAwait(false);
         }
 
         #endregion

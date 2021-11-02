@@ -1,29 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using WPRMebel.Domain.Base.Catalog;
 using WPRMebel.Domain.Base.Catalog.Abstract;
+using WPRMebel.Interfaces.Base.Repositories;
 using WPRMebel.WpfAPI.Catalog.Interfaces;
 
 namespace WPRMebel.WpfAPI.Catalog
 {
     public class CatalogElementView : ICatalogElementView
     {
-        public CatalogElement GetById(int Id)
+        private readonly INamedRepository<CatalogElement> _Repository;
+
+        public CatalogElementView(INamedRepository<CatalogElement> Repository) => _Repository = Repository;
+
+        public async Task<CatalogElement> GetById(int Id, CancellationToken Cancel = default) => await _Repository.GetByIdAsync(Id, Cancel);
+        public async Task<CatalogElement> GetByName(string Name, CancellationToken Cancel = default) => await _Repository.GetByNameAsync(Name, Cancel);
+
+        public Task<IEnumerable<CatalogElement>> GetFromSection(Section Section, CancellationToken Cancel = default)
         {
             throw new NotImplementedException();
+            //var query = _Repository.Items.
         }
 
-        public CatalogElement GetByName(string Name)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<CatalogElement> GetFromSection(Section Section)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<CatalogElement> GetFromCategory(Category Category)
+        public Task<IEnumerable<CatalogElement>> GetFromCategory(Category Category, CancellationToken Cancel = default)
         {
             throw new NotImplementedException();
         }
@@ -31,22 +32,22 @@ namespace WPRMebel.WpfAPI.Catalog
 
     public class CatalogElementView<T> : ICatalogElementView<T> where T : CatalogElement
     {
-        public T GetById(int Id)
+        public Task<T> GetById(int Id, CancellationToken Cancel = default)
         {
             throw new NotImplementedException();
         }
 
-        public T GetByName(string Name)
+        public Task<T> GetByName(string Name, CancellationToken Cancel = default)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<T> GetFromSection(Section Section)
+        public Task<IEnumerable<T>> GetFromSection(Section Section, CancellationToken Cancel = default)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<T> GetFromCategory(Category Category)
+        public Task<IEnumerable<T>> GetFromCategory(Category Category, CancellationToken Cancel = default)
         {
             throw new NotImplementedException();
         }

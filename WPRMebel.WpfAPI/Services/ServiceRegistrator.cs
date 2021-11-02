@@ -10,6 +10,7 @@ namespace WPRMebel.WpfAPI.Services
         /// <summary> Зарегистрировать сервисы </summary>
         public static IServiceCollection AddApiServices(this IServiceCollection Services) => Services
             .AddScoped(typeof(IRepository<>), typeof(DbRepository<>))
+            .AddScoped(typeof(INamedRepository<>), typeof(DbNamedRepository<>))
         ;
 
         /// <summary> Зарегистрировать бд </summary>

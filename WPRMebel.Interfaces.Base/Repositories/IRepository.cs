@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using WPRMebel.Interfaces.Base.Entityes;
@@ -11,12 +11,12 @@ namespace WPRMebel.Interfaces.Base.Repositories
     /// <typeparam name="TEntity">Сущность</typeparam>
     public interface IRepository<TEntity> where TEntity : IEntity
     {
-        /// <summary> Получить все сущности из репозитория </summary>
-        Task<IEnumerable<TEntity>> GetAll(CancellationToken Cancel = default);
+        /// <summary> Коллекция сущностей </summary>
+        IQueryable<TEntity> Items { get; }
 
 
         /// <summary> Получить количество сущностей </summary>
-        Task<int> GetCount(CancellationToken Cancel = default);
+        Task<int> GetCountAsync(CancellationToken Cancel = default);
 
 
         /// <summary>
@@ -25,7 +25,7 @@ namespace WPRMebel.Interfaces.Base.Repositories
         /// <param name="id">идентификатор сущности</param>
         /// <param name="Cancel">Токен отмены</param>
         /// <returns>Истина, если сущность есть в репозитории</returns>
-        Task<bool> Exist(int id, CancellationToken Cancel = default);
+        Task<bool> ExistAsync(int id, CancellationToken Cancel = default);
 
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace WPRMebel.Interfaces.Base.Repositories
         /// <param name="item">Искомая сущность</param>
         /// <param name="Cancel">Токен отмены</param>
         /// <returns>Истина, если сущность есть в репозитории</returns>
-        Task<bool> Exist(TEntity item, CancellationToken Cancel = default);
+        Task<bool> ExistAsync(TEntity item, CancellationToken Cancel = default);
 
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace WPRMebel.Interfaces.Base.Repositories
         /// <param name="id">Id сущности</param>
         /// <param name="Cancel">Токен отмены</param>
         /// <returns>null, если сущность не найдена</returns>
-        Task<TEntity> GetById(int id, CancellationToken Cancel = default);
+        Task<TEntity> GetByIdAsync(int id, CancellationToken Cancel = default);
 
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace WPRMebel.Interfaces.Base.Repositories
         /// <param name="item">Добавляемая сущность</param>
         /// <param name="Cancel">Токен отмены</param>
         /// <returns>Добавленная сущность, или null, если добавить не удалось</returns>
-        Task<TEntity> Add(TEntity item, CancellationToken Cancel = default);
+        Task<TEntity> AddAsync(TEntity item, CancellationToken Cancel = default);
 
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace WPRMebel.Interfaces.Base.Repositories
         /// <param name="item">Изменяемая сущность</param>
         /// <param name="Cancel">Токен отмены</param>
         /// <returns>Истина, если удалось обновить</returns>
-        Task<bool> Update(TEntity item, CancellationToken Cancel = default);
+        Task<bool> UpdateAsync(TEntity item, CancellationToken Cancel = default);
 
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace WPRMebel.Interfaces.Base.Repositories
         /// <param name="item">Удаляемая сущность</param>
         /// <param name="Cancel">Токен отмены</param>
         /// <returns>Истина, если удалось удалить</returns>
-        Task<bool> Delete(TEntity item, CancellationToken Cancel = default);
+        Task<bool> DeleteAsync(TEntity item, CancellationToken Cancel = default);
 
 
         /// <summary>
@@ -79,6 +79,6 @@ namespace WPRMebel.Interfaces.Base.Repositories
         /// <param name="id">Id удаляемой сущности</param>
         /// <param name="Cancel">Токен отмены</param>
         /// <returns>Истина, если удалось удалить</returns>
-        Task<bool> Delete(int id, CancellationToken Cancel = default);
+        Task<bool> DeleteAsync(int id, CancellationToken Cancel = default);
     }
 }

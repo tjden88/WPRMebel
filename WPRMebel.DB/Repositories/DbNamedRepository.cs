@@ -14,25 +14,25 @@ namespace WPRMebel.DB.Repositories
     /// </summary>
     /// <typeparam name="T">Именованная сущность БД</typeparam>
 
-    public class NamedDbRepository<T> : DbRepository<T>, INamedRepository<T> where T : NamedEntity, new()
+    public class DbNamedRepository<T> : DbRepository<T>, INamedRepository<T> where T : NamedEntity, new()
     {
-        public NamedDbRepository(CatalogContext Context) : base(Context)
+        public DbNamedRepository(CatalogContext Context) : base(Context)
         {
         }
 
 
-        public async Task<T> GetByName(string name, CancellationToken Cancel = default)
+        public async Task<T> GetByNameAsync(string name, CancellationToken Cancel = default)
         {
             if (name == null) throw new ArgumentNullException(nameof(name));
             return await Items.FirstOrDefaultAsync(i => i.Name == name, Cancel).ConfigureAwait(false);
         }
 
 
-        public async Task<bool> Exist(string name, CancellationToken Cancel = default) => 
+        public async Task<bool> ExistAsync(string name, CancellationToken Cancel = default) => 
             await Items.AnyAsync(i => i.Name == name, Cancel).ConfigureAwait(false);
 
 
-        public async Task<bool> Delete(string name, CancellationToken Cancel = default)
+        public async Task<bool> DeleteAsync(string name, CancellationToken Cancel = default)
         {
             var item = Set.Local
                 .FirstOrDefault(i => i.Name == name) ?? await Set
@@ -40,7 +40,7 @@ namespace WPRMebel.DB.Repositories
                 .FirstOrDefaultAsync(i => i.Name == name, Cancel)
                 .ConfigureAwait(false);
 
-            return item != null && await Delete(item, Cancel).ConfigureAwait(false);
+            return item != null && await DeleteAsync(item, Cancel).ConfigureAwait(false);
         }
     }
 }
