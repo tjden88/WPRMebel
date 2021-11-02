@@ -23,5 +23,8 @@ namespace WPRMebel.Domain.Base.Catalog.Abstract
         public virtual Category Category { get; set; }
 
         public virtual ICollection<ElementProperty> ElementProperties { get; set; }
+
+        /// <summary> Коллекция дочерних элементов </summary>
+        public virtual ICollection<ChildCatalogElement> ChildCatalogElements { get; set; } = new List<ChildCatalogElement>();
     }
 }

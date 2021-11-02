@@ -19,5 +19,15 @@ namespace WPRMebel.Domain.Base.Catalog
         /// <summary>Список значений свойства</summary>
         public virtual ICollection<ElementPropertyValue> ElementPropertyValues { get; set; }
 
+        /// <summary>
+        /// Указывает, что свойство обязательно для элемента
+        /// </summary>
+        public bool IsRequired
+        {
+            get => default;
+            set
+            {
+            }
+        }
     }
 }

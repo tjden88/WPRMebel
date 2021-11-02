@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="WPRMebel.Domain.Base.Catalog.Abstract.Entity">
-    <Position X="12" Y="0.5" Width="1.5" />
+    <Position X="15.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Catalog\Abstract\Entity.cs</FileName>
@@ -9,7 +9,7 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="WPRMebel.Domain.Base.Catalog.Abstract.NamedEntity">
-    <Position X="12" Y="2" Width="1.5" />
+    <Position X="15.25" Y="2.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Catalog\Abstract\NamedEntity.cs</FileName>
@@ -17,31 +17,27 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="WPRMebel.Domain.Base.Catalog.Abstract.CatalogElement">
-    <Position X="12" Y="4.75" Width="1.5" />
-    <AssociationLine Name="Category" Type="WPRMebel.Domain.Base.Catalog.Category" FixedToPoint="true">
+    <Position X="14.25" Y="4.75" Width="1.5" />
+    <AssociationLine Name="ChildCatalogElements" Type="WPRMebel.Domain.Base.ChildCatalogElement" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="13.5" Y="5.961" />
-        <Point X="17" Y="5.961" />
+        <Point X="14.438" Y="6.367" />
+        <Point X="14.438" Y="7.301" />
+        <Point X="8.25" Y="7.301" />
       </Path>
     </AssociationLine>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAQEAAAAABAAAAAAAAAAAAAAAAAAAAAAACAA=</HashCode>
+      <HashCode>AAAAAAAAAQEAAAAADAAAAAAAAAAAAAAAAAAAAAAACAA=</HashCode>
       <FileName>Catalog\Abstract\CatalogElement.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Property Name="Category" />
     </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="ChildCatalogElements" />
+    </ShowAsCollectionAssociation>
   </Class>
   <Class Name="WPRMebel.Domain.Base.Catalog.Category">
-    <Position X="17" Y="5" Width="1.5" />
-    <AssociationLine Name="Vendor" Type="WPRMebel.Domain.Base.Catalog.Vendor" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="18.5" Y="5.758" />
-        <Point X="19.743" Y="5.758" />
-        <Point X="19.743" Y="2.499" />
-        <Point X="17" Y="2.499" />
-      </Path>
-    </AssociationLine>
+    <Position X="21.5" Y="5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AIAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAIAAAAA=</HashCode>
       <FileName>Catalog\Category.cs</FileName>
@@ -55,21 +51,21 @@
     </ShowAsCollectionAssociation>
   </Class>
   <Class Name="WPRMebel.Domain.Base.Catalog.Fitting">
-    <Position X="13" Y="6.75" Width="1.5" />
+    <Position X="15.25" Y="8" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Catalog\Fitting.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="WPRMebel.Domain.Base.Catalog.RunningMaterial">
-    <Position X="10.75" Y="6.75" Width="1.5" />
+    <Position X="13" Y="8" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Catalog\RunningMaterial.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="WPRMebel.Domain.Base.Catalog.Section">
-    <Position X="14" Y="4.25" Width="1.5" />
+    <Position X="17.75" Y="4.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAgAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAA=</HashCode>
       <FileName>Catalog\Section.cs</FileName>
@@ -79,29 +75,21 @@
     </ShowAsCollectionAssociation>
   </Class>
   <Class Name="WPRMebel.Domain.Base.Catalog.Service">
-    <Position X="15" Y="6.75" Width="1.5" />
+    <Position X="17.5" Y="8" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Catalog\Service.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="WPRMebel.Domain.Base.Catalog.SheetMaterial">
-    <Position X="8.5" Y="6.75" Width="1.5" />
+    <Position X="10.75" Y="8" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAABABAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Catalog\SheetMaterial.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="WPRMebel.Domain.Base.Catalog.Vendor">
-    <Position X="15.5" Y="2" Width="1.5" />
-    <AssociationLine Name="Categories" Type="WPRMebel.Domain.Base.Catalog.Category" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="17" Y="2.75" />
-        <Point X="19.168" Y="2.75" />
-        <Point X="19.168" Y="5.437" />
-        <Point X="18.5" Y="5.437" />
-      </Path>
-    </AssociationLine>
+    <Position X="24.5" Y="4.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAA=</HashCode>
       <FileName>Catalog\Vendor.cs</FileName>
@@ -111,17 +99,9 @@
     </ShowAsCollectionAssociation>
   </Class>
   <Class Name="WPRMebel.Domain.Base.Catalog.ElementProperty">
-    <Position X="9" Y="4.5" Width="1.5" />
-    <InheritanceLine Type="WPRMebel.Domain.Base.Catalog.Abstract.NamedEntity" ManuallyRouted="true" FixedFromPoint="true">
-      <Path>
-        <Point X="12.75" Y="3.233" />
-        <Point X="12.75" Y="3.612" />
-        <Point X="9.75" Y="3.612" />
-        <Point X="9.75" Y="4.5" />
-      </Path>
-    </InheritanceLine>
+    <Position X="10.75" Y="4.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AIAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAEAAAA=</HashCode>
+      <HashCode>AIAAAAAAAAAAAAAAAAAIAAAgAAAAAAAAAAAAAAEAAAA=</HashCode>
       <FileName>Catalog\ElementProperty.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -132,21 +112,31 @@
     </ShowAsCollectionAssociation>
   </Class>
   <Class Name="WPRMebel.Domain.Base.Catalog.ElementPropertyValue">
-    <Position X="6.25" Y="4.75" Width="1.5" />
-    <InheritanceLine Type="WPRMebel.Domain.Base.Catalog.Abstract.NamedEntity" ManuallyRouted="true">
-      <Path>
-        <Point X="12.75" Y="3.233" />
-        <Point X="12.75" Y="3.613" />
-        <Point X="7" Y="3.613" />
-        <Point X="7" Y="4.75" />
-      </Path>
-    </InheritanceLine>
+    <Position X="7.75" Y="4.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Catalog\ElementPropertyValue.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Property Name="ElementProperty" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="WPRMebel.Domain.Base.ChildCatalogElement">
+    <Position X="6" Y="6.75" Width="2.25" />
+    <AssociationLine Name="CatalogElement" Type="WPRMebel.Domain.Base.Catalog.Abstract.CatalogElement" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="8.25" Y="6.994" />
+        <Point X="13.281" Y="6.994" />
+        <Point X="13.281" Y="6.062" />
+        <Point X="14.25" Y="6.062" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>QIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAA=</HashCode>
+      <FileName>ElementGroup.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="CatalogElement" />
     </ShowAsAssociation>
   </Class>
   <Font Name="Segoe UI" Size="9" />
