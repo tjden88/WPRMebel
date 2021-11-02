@@ -11,7 +11,7 @@ namespace WPRMebel.Domain.Base.Catalog
     {
         /// <summary>Элемент свойства</summary>
         [Required]
-        public CatalogElement CatalogElement { get; set; }
+        public virtual CatalogElement CatalogElement { get; set; }
 
         /// <summary>Коэффициент изменения цены элемента</summary>
         public double PriceChanging { get; set; } = 1d;

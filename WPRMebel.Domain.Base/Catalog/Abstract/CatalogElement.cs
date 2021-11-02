@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace WPRMebel.Domain.Base.Catalog.Abstract
 {
@@ -20,5 +21,7 @@ namespace WPRMebel.Domain.Base.Catalog.Abstract
 
         [Required]
         public virtual Category Category { get; set; }
+
+        public virtual ICollection<ElementProperty> ElementProperties { get; set; }
     }
 }

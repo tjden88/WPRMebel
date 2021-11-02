@@ -8,5 +8,7 @@ namespace WPRMebel.Domain.Base.Catalog
     /// <remarks>Погонный материал</remarks>
     public class RunningMaterial : CatalogElement
     {
+        /// <summary>Длина хлыста, бухты</summary>
+        public int? Width { get; set; }
     }
 }

@@ -43,6 +43,11 @@ namespace WPRMebel.DB.Context
             //    .HasMany<Category>()
             //    .WithOne(v => v.Vendor)
             //    .OnDelete(DeleteBehavior.Cascade);
+
+            model.Entity<Category>()
+                .HasOne( c => c.Vendor)
+                .WithMany(v => v.Categories)
+                .OnDelete(DeleteBehavior.SetNull);
         }
 
         public override async Task InitializeStartData(CancellationToken Cancel = default)

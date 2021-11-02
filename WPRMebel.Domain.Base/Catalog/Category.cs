@@ -9,7 +9,6 @@ namespace WPRMebel.Domain.Base.Catalog
     /// </summary>
     public class Category : NamedEntity
     {
-
         public virtual Vendor Vendor { get; set; }
 
         [Required]

@@ -33,8 +33,13 @@ namespace WPRMebel.TestConsole
 
 
             var r = await repo.Delete("Категория 51");
+            var r2 = await repo.Delete("Категория 52");
 
-            Console.ReadLine();
+            await vendors.Delete(5);
+
+            Console.WriteLine(r);
+            Console.WriteLine(r2);
+            //Console.ReadLine();
         }
     }
 }

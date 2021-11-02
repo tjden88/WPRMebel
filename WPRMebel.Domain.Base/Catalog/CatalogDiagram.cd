@@ -25,8 +25,8 @@
       </Path>
     </AssociationLine>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAQAAAAAABAAAAAAAAAAAAAAAAAAAAAAACAA=</HashCode>
-      <FileName>Catalog\Abstract\PricedEntity.cs</FileName>
+      <HashCode>AAAAAAAAAQEAAAAABAAAAAAAAAAAAAAAAAAAAAAACAA=</HashCode>
+      <FileName>Catalog\Abstract\CatalogElement.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Property Name="Category" />
@@ -47,8 +47,8 @@
       <FileName>Catalog\Category.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
-      <Property Name="Section" />
       <Property Name="Vendor" />
+      <Property Name="Section" />
     </ShowAsAssociation>
     <ShowAsCollectionAssociation>
       <Property Name="CatalogElements" />
@@ -64,7 +64,7 @@
   <Class Name="WPRMebel.Domain.Base.Catalog.RunningMaterial">
     <Position X="10.75" Y="6.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Catalog\RunningMaterial.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -88,7 +88,7 @@
   <Class Name="WPRMebel.Domain.Base.Catalog.SheetMaterial">
     <Position X="8.5" Y="6.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAABABAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Catalog\SheetMaterial.cs</FileName>
     </TypeIdentifier>
   </Class>
