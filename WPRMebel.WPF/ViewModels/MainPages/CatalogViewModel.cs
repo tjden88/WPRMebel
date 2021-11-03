@@ -1,57 +1,72 @@
-﻿using System.Threading.Tasks;
-using System.Windows.Data;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using WPR.MVVM.Commands;
 using WPR.MVVM.ViewModels;
 using WPRMebel.Domain.Base.Catalog;
+using WPRMebel.Domain.Base.Catalog.Abstract;
 using WPRMebel.WpfAPI.Interfaces;
 
 namespace WPRMebel.WPF.ViewModels.MainPages
 {
     internal class CatalogViewModel : ViewModel
     {
-        private readonly ICatalogDbViewer<Section> _SectionViewer;
+        private readonly ICatalogDbRepository<Section> _SectionRepository;
+        private readonly ICatalogDbRepository<CatalogElement> _ElementRepository;
 
-        public CatalogViewModel(ICatalogDbViewer<Section> SectionViewer)
+        public CatalogViewModel(ICatalogDbRepository<Section> SectionRepository, ICatalogDbRepository<CatalogElement> ElementRepository)
         {
-            _SectionViewer = SectionViewer;
-            //RefreshDataCommand.Execute();
+            _SectionRepository = SectionRepository;
+            _ElementRepository = ElementRepository;
+            LoadDataCommand.Execute();
         }
 
-        #region SectionsView : CollectionViewSource - Секции каталога
+        #region ObservableCollections - Коллекции каталога
 
-        /// <summary>Секции каталога</summary>
-        private CollectionViewSource _SectionsView;
+        /// <summary>Разделы каталога</summary>
+        public ObservableCollection<Section> Sections { get; set; } = new();
 
-        /// <summary>Секции каталога</summary>
-        public CollectionViewSource SectionsView => _SectionsView ??= LoadData().Result;
+        #endregion
 
-        private async Task<CollectionViewSource> LoadData()
+        #region SelectedSection : Section - Выбранный раздел каталога
+
+        /// <summary>Выбранный раздел каталога</summary>
+        private Section _SelectedSection;
+
+        /// <summary>Выбранный раздел каталога</summary>
+        public Section SelectedSection
         {
-            var oc = await _SectionViewer.LoadItemsAsync().ConfigureAwait(false);
-            return new CollectionViewSource {Source = oc};
+            get => _SelectedSection;
+            set => Set(ref _SelectedSection, value);
         }
 
         #endregion
 
-        #region Command RefreshDataCommand - Обновить данные из БД
 
-        /// <summary>Обновить данные из БД</summary>
-        private Command _RefreshDataCommand;
+        #region AsyncCommand LoadDataCommand - Загрузить данные
 
-        /// <summary>Обновить данные из БД</summary>
-        public Command RefreshDataCommand => _RefreshDataCommand
-            ??= new Command(OnRefreshDataCommandExecuted, CanRefreshDataCommandExecute, "Обновить данные из БД");
+        /// <summary>Загрузить данные</summary>
+        private AsyncCommand _LoadDataCommand;
 
-        /// <summary>Проверка возможности выполнения - Обновить данные из БД</summary>
-        private bool CanRefreshDataCommandExecute() => true;
+        /// <summary>Загрузить данные</summary>
+        public AsyncCommand LoadDataCommand => _LoadDataCommand
+            ??= new AsyncCommand(OnLoadDataCommandExecutedAsync, CanLoadDataCommandExecute, "Загрузить данные");
 
-        /// <summary>Логика выполнения - Обновить данные из БД</summary>
-        private void OnRefreshDataCommandExecuted()
+        /// <summary>Проверка возможности выполнения - Загрузить данные</summary>
+        private bool CanLoadDataCommandExecute() => true;
+
+        /// <summary>Логика выполнения - Загрузить данные</summary>
+        private async void OnLoadDataCommandExecutedAsync(CancellationToken cancel)
         {
-            SectionsView.View.Refresh();
+            var array = await _SectionRepository.GetAllAsync(cancel);
+
+            Sections = new(array);
+            OnPropertyChanged(nameof(Sections));
+
         }
 
         #endregion
-
     }
 }
