@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Windows.Data;
-using Microsoft.EntityFrameworkCore;
 using WPR.MVVM.Commands;
 using WPR.MVVM.ViewModels;
 using WPRMebel.Domain.Base.Catalog;
@@ -12,7 +10,6 @@ using WPRMebel.WPF.Extensions;
 using WPRMebel.WPF.Services.Interfaces;
 using WPRMebel.WPF.ViewModels.Dialogs;
 using WPRMebel.WpfAPI.Catalog;
-using WPRMebel.WpfAPI.Interfaces;
 
 namespace WPRMebel.WPF.ViewModels.MainPages
 {
@@ -97,16 +94,13 @@ namespace WPRMebel.WPF.ViewModels.MainPages
                 Name = dialog.SectionName?.Trim(),
                 Description = dialog.SectionDescription?.Trim()
             };
-            try
+            var returned = await _CatalogViewer.AddSection(newSection);
+            if (returned == null)
             {
-                var returned = await _CatalogViewer.AddSection(newSection);
-                if (returned == null) throw new ArgumentNullException(nameof(returned));
-                Sections.Add(returned);
+                await _UserDialog.InformationAsync("Ошибка добавления раздела");
+                return;
             }
-            catch (Exception)
-            {
-                await _UserDialog.InformationAsync("Ошибка добавления секции");
-            }
+            Sections.Add(returned);
         }
 
         #endregion
@@ -140,17 +134,50 @@ namespace WPRMebel.WPF.ViewModels.MainPages
             SelectedSection.Name = dialog.SectionName?.Trim();
             SelectedSection.Description = dialog.SectionDescription?.Trim();
 
-            try
+            var returned = await _CatalogViewer.UpdateSection(SelectedSection);
+
+            if (!returned)
             {
-                var returned = await _CatalogViewer.UpdateSection(SelectedSection);
-                if (!returned) throw new ArgumentNullException(nameof(returned));
-            }
-            catch (Exception)
-            {
-                await _UserDialog.InformationAsync("Ошибка изменения секции");
+                await _UserDialog.InformationAsync("Ошибка изменения раздела");
+                return;
             }
 
             CollectionViewSource.GetDefaultView(Sections).Refresh();
+        }
+
+        #endregion
+
+        #region Command DeleteSectionCommand - Удалить секцию
+
+        /// <summary>Удалить секцию</summary>
+        private Command _DeleteSectionCommand;
+
+        /// <summary>Удалить секцию</summary>
+        public Command DeleteSectionCommand => _DeleteSectionCommand
+            ??= new Command(OnDeleteSectionCommandExecuted, CanEditSectionCommandExecute, "Удалить секцию");
+
+        /// <summary>Логика выполнения - Удалить секцию</summary>
+        private async void OnDeleteSectionCommandExecuted()
+        {
+            if (await _UserDialog.QuestionAsync($"Удалить раздел каталога {SelectedSection.Name}?\n" +
+                                                "Также будут удалены все связанные категории и элементы каталога в них!\n" +
+                                                "Это действие отменить нельзя.", "Внимание!"))
+            {
+                var result = await _CatalogViewer.DeleteSection(SelectedSection);
+                if (!result)
+                {
+                    await _UserDialog.InformationAsync("Ошибка удаления раздела");
+                    return;
+                }
+
+                var sIndex = Sections.IndexOf(SelectedSection);
+                Sections.Remove(SelectedSection);
+                SelectedSection = Sections.Count > 0
+                    ? sIndex > 0 
+                    ? Sections[sIndex-1] 
+                    : Sections[0]
+                    : null;
+            }
         }
 
         #endregion
@@ -208,7 +235,7 @@ namespace WPRMebel.WPF.ViewModels.MainPages
         #region SelectedSection : Section - Выбранный раздел каталога
 
         /// <summary>Выбранный раздел каталога</summary>
-        private Section _SelectedSection;
+        private Section _SelectedSection = new();
 
         /// <summary>Выбранный раздел каталога</summary>
         public Section SelectedSection
@@ -260,7 +287,7 @@ namespace WPRMebel.WPF.ViewModels.MainPages
 
         /// <summary>Фильтр элементов</summary>
         public CollectionViewSourceFilter ElementsFilter =>
-            _ElementsFilter ??= new CollectionViewSourceFilter(OnElementsFilter) {DelayBeforeRefresh = 200};
+            _ElementsFilter ??= new CollectionViewSourceFilter(OnElementsFilter) { DelayBeforeRefresh = 200 };
 
         #endregion
 
