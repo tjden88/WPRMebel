@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:WPRMebel.WPF.Views.MainPages"
              xmlns:cnt="clr-namespace:WPR.Controls;assembly=WPR"
              xmlns:helpers="clr-namespace:WPR.Helpers;assembly=WPR"
+             xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
              mc:Ignorable="d" 
              DataContext="{Binding CatalogViewModel, Source={StaticResource Locator}}"
              d:DesignHeight="450" d:DesignWidth="800">
@@ -21,16 +22,18 @@
                 </cnt:WPRTitledCard.PopupMenu>
                 <StackPanel>
                     <ListBox Style="{StaticResource WPRMenuListBox}">
-                        <ListBoxItem   Margin="0,-5,0,0">
-                            <ListBoxItem.Style>
-                                <Style TargetType="ListBoxItem" BasedOn="{StaticResource WPRListBoxMenuItem}">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding SelectedSection}" Value="{x:Null}">
-                                            <Setter Property="IsSelected" Value="True"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </ListBoxItem.Style>
+                        <ListBoxItem Margin="0,-8,0,-3" Name="AllCatalog">
+                            <ListBoxItem.InputBindings>
+                                <MouseBinding MouseAction="LeftClick" Command="{Binding ShowAllCatalogCommand}"/>
+                            </ListBoxItem.InputBindings>
+                            <b:Interaction.Triggers>
+                                <b:DataTrigger Binding="{Binding SelectedSection}" Comparison="NotEqual" Value="{x:Null}">
+                                    <b:ChangePropertyAction PropertyName="IsSelected" Value="False"/>
+                                </b:DataTrigger>
+                                <b:DataTrigger Binding="{Binding SelectedSection}" Value="{x:Null}">
+                                    <b:ChangePropertyAction PropertyName="IsSelected" Value="True"/>
+                                </b:DataTrigger>
+                            </b:Interaction.Triggers>
                             <StackPanel Orientation="Horizontal">
                                 <cnt:WPRIcon Foreground="{DynamicResource DarkPrimaryColorBrush}" Source="ExpandAllOutline" Margin="5"/>
                                 <TextBlock Text="Весь каталог" Margin="5"/>
@@ -39,8 +42,18 @@
                     </ListBox>
                     <Rectangle Height="1" Fill="{DynamicResource DividerColorBrush}"/>
                     <ListBox Style="{StaticResource WPRMenuListBox}" ItemsSource="{Binding Sections}"
-                             SelectedItem="{Binding SelectedSection}"
-                             DisplayMemberPath="Name"/>
+                             HorizontalContentAlignment="Stretch"
+                             SelectedItem="{Binding SelectedSection}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <DockPanel Background="{StaticResource TransparentBrush}"
+                                           ToolTip="{Binding Description}">
+                                    <cnt:WPRIcon Foreground="{DynamicResource DarkPrimaryColorBrush}" Source="LayersOutline" Margin="5"/>
+                                    <TextBlock Text="{Binding Name}" Margin="5"/>
+                                </DockPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
                 </StackPanel>
             </cnt:WPRTitledCard>
         </cnt:WPRCard>

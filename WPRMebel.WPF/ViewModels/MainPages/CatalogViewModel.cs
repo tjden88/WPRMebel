@@ -26,6 +26,7 @@ namespace WPRMebel.WPF.ViewModels.MainPages
         }
 
         #region Commands
+
         #region AsyncCommand LoadDataCommand - Загрузить данные
 
         /// <summary>Загрузить данные</summary>
@@ -44,7 +45,28 @@ namespace WPRMebel.WPF.ViewModels.MainPages
             Sections = await _SectionRepository.GetAllAsync(cancel);
         }
 
-        #endregion 
+        #endregion
+
+        #region Command ShowAllCatalogCommand - Показать весь каталог
+
+        /// <summary>Показать весь каталог</summary>
+        private Command _ShowAllCatalogCommand;
+
+        /// <summary>Показать весь каталог</summary>
+        public Command ShowAllCatalogCommand => _ShowAllCatalogCommand
+            ??= new Command(OnShowAllCatalogCommandExecuted, CanShowAllCatalogCommandExecute, "Показать весь каталог");
+
+        /// <summary>Проверка возможности выполнения - Показать весь каталог</summary>
+        private bool CanShowAllCatalogCommandExecute() => true;
+
+        /// <summary>Логика выполнения - Показать весь каталог</summary>
+        private void OnShowAllCatalogCommandExecuted()
+        {
+            SelectedSection = null;
+        }
+
+        #endregion
+
         #endregion
 
         #region Lists
