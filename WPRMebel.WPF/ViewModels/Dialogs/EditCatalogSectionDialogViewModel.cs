@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Windows.Controls;
+using System.Linq;
 using WPR;
 using WPR.MVVM.Commands;
 using WPR.MVVM.ViewModels;
@@ -12,6 +11,8 @@ namespace WPRMebel.WPF.ViewModels.Dialogs
     internal class EditCatalogSectionDialogViewModel : DataValidationViewModel, IWPRDialog
     {
         private readonly bool _CreateNewSection;
+        private readonly IEnumerable<string> _ExistingSections;
+
         public Action<bool> DialogResult { get; set; }
         public object DialogContent { get; set; }
 
@@ -19,18 +20,19 @@ namespace WPRMebel.WPF.ViewModels.Dialogs
         public EditCatalogSectionDialogViewModel()
         {
         }
-        public EditCatalogSectionDialogViewModel(bool CreateNewSection)
+        public EditCatalogSectionDialogViewModel(bool CreateNewSection, string[] ExistingSections)
         {
             _CreateNewSection = CreateNewSection;
+            _ExistingSections = ExistingSections;
             DialogContent = new EditCatalogSectionDialog {DataContext = this};
 
-            var nameValidation = new List<Error>
-            {
-                new(() => string.IsNullOrEmpty(SectionName), "Необходимо задать имя раздела"),
-                new(() => Text == "111", "Такой раздел уже существует"),
-            };
+            ErrorInfo.Add(new Error(nameof(SectionName), () =>
+                string.IsNullOrEmpty(SectionName),
+                "Необходимо задать имя раздела"));
 
-            ErrorInfo.Add(nameof(SectionName), nameValidation);
+            ErrorInfo.Add(new Error(nameof(SectionName), () =>
+                ExistingSections.Any(s=> string.Equals(SectionName?.Trim(), s, StringComparison.OrdinalIgnoreCase)),
+                "Такой раздел уже существует"));
         }
 
         #region Command OkCommand - Подтвердить результат диалога
@@ -43,7 +45,7 @@ namespace WPRMebel.WPF.ViewModels.Dialogs
             ??= new Command(OnOkCommandExecuted, CanOkCommandExecute, "Подтвердить результат диалога");
 
         /// <summary>Проверка возможности выполнения - Подтвердить результат диалога</summary>
-        private bool CanOkCommandExecute() => true;
+        private bool CanOkCommandExecute() => !HasErrors;
 
         /// <summary>Логика выполнения - Подтвердить результат диалога</summary>
         private void OnOkCommandExecuted() => DialogResult?.Invoke(true);
@@ -84,21 +86,6 @@ namespace WPRMebel.WPF.ViewModels.Dialogs
         {
             get => _SectionDescription;
             set => Set(ref _SectionDescription, value);
-        }
-
-        #endregion
-
-
-        #region Text : string - Test
-
-        /// <summary>Test</summary>
-        private string _Text;
-
-        /// <summary>Test</summary>
-        public string Text
-        {
-            get => _Text;
-            set => Set(ref _Text, value);
         }
 
         #endregion

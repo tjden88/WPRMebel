@@ -30,11 +30,11 @@
 
                 <TextBox Margin="5,7,0,0"
                          Name="DescriptionText"
-                         Text="{Binding Text}"
+                         Text="{Binding SectionDescription, UpdateSourceTrigger=PropertyChanged}"
                          helpers:TextHelper.Description="Необязательно"
                          helpers:TextHelper.Hint="Описание раздела"/>
             </DockPanel>
-            <Button MinWidth="60" HorizontalAlignment="Right">OK</Button>
+            <Button MinWidth="60" HorizontalAlignment="Right" Command="{Binding OkCommand}">OK</Button>
 
         </StackPanel>
     </controls:WPRTitledCard>

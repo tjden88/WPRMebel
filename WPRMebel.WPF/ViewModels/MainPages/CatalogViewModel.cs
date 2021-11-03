@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Windows;
 using System.Windows.Data;
 using Microsoft.EntityFrameworkCore;
 using WPR.MVVM.Commands;
@@ -22,7 +21,7 @@ namespace WPRMebel.WPF.ViewModels.MainPages
         private readonly ICatalogDbRepository<Category> _CategoriesRepository;
         private readonly IUserDialog _UserDialog;
 
-        public CatalogViewModel(ICatalogDbRepository<Section> SectionRepository, 
+        public CatalogViewModel(ICatalogDbRepository<Section> SectionRepository,
             ICatalogDbRepository<CatalogElement> ElementRepository,
             ICatalogDbRepository<Category> CategoriesRepository,
             IUserDialog UserDialog)
@@ -91,9 +90,24 @@ namespace WPRMebel.WPF.ViewModels.MainPages
         /// <summary>Логика выполнения - Создать секцию каталога</summary>
         private async void OnCreateNewSectionCommandExecuted()
         {
-            var dialog = new EditCatalogSectionDialogViewModel(true);
-            var dialogResult = await _UserDialog.ShowCustomDialogAsync(dialog, false);
+            var dialog = new EditCatalogSectionDialogViewModel(true, Sections.Select(s => s.Name).ToArray());
+            if (!await _UserDialog.ShowCustomDialogAsync(dialog, false)) return;
 
+            var newSection = new Section
+            {
+                Name = dialog.SectionName?.Trim(),
+                Description = dialog.SectionDescription?.Trim()
+            };
+            try
+            {
+                var returned = await _SectionRepository.AddAsync(newSection);
+                if (returned == null) throw new ArgumentNullException(nameof(returned));
+                Sections.Add(returned);
+            }
+            catch (Exception)
+            {
+                await _UserDialog.InformationAsync("Ошибка добавления секции");
+            }
         }
 
         #endregion
@@ -144,7 +158,7 @@ namespace WPRMebel.WPF.ViewModels.MainPages
 
         #endregion
 
-        
+
 
 
         #endregion

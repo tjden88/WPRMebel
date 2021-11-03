@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="..\..\WPR\.editorconfig" Link=".editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\WPRMebel.Domain.Base\WPRMebel.Domain.Base.csproj" />
   </ItemGroup>
 
