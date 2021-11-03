@@ -91,16 +91,25 @@ namespace WPRMebel.WpfAPI.Catalog
         private async Task<T> GrudEntity<T>(Task<T> task)
         {
             if (IsNowDataLoading) return default;
-            IsNowDataLoading = true;
-            var result = await task;
-            IsNowDataLoading = false;
-            return result;
+            try
+            {
+                IsNowDataLoading = true;
+                var result = await task;
+                IsNowDataLoading = false;
+                return result;
+            }
+            catch (Exception)
+            {
+                IsNowDataLoading = false;
+                return default;
+            }
         }
 
         #region Sections
 
         public Task<Section> AddSection(Section NewSection) => GrudEntity(_SectionRepository.AddAsync(NewSection));
         public Task<bool> UpdateSection(Section ChangedSection) => GrudEntity(_SectionRepository.UpdateAsync(ChangedSection));
+        public Task<bool> DeleteSection(Section DeletedSection) => GrudEntity(_SectionRepository.DeleteAsync(DeletedSection));
 
         #endregion
     }

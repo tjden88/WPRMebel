@@ -21,7 +21,7 @@
                         <MenuItem Command="{Binding EditSectionCommand}"
                                   Visibility="{Binding SelectedSectionIsNotNull, Converter={StaticResource Bool2VisibilityConverter}}"
                                   Header="Изменить"/>
-                        <MenuItem Command="{Binding EditSectionCommand}"
+                        <MenuItem Command="{Binding DeleteSectionCommand}"
                                   Visibility="{Binding SelectedSectionIsNotNull, Converter={StaticResource Bool2VisibilityConverter}}"
                                   Header="Удалить"/>
                     </Menu>
