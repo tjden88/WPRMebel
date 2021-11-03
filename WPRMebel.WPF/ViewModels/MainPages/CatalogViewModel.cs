@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text;
 using System.Windows.Data;
 using Microsoft.EntityFrameworkCore;
 using WPR.MVVM.Commands;
@@ -51,6 +52,7 @@ namespace WPRMebel.WPF.ViewModels.MainPages
         private async void OnLoadDataCommandExecutedAsync()
         {
             Sections.AddClear(await _SectionRepository.GetAllAsync());
+            LoadCategories(SelectedSection);
         }
 
         #endregion
@@ -111,6 +113,7 @@ namespace WPRMebel.WPF.ViewModels.MainPages
         }
 
         #endregion
+
 
         #endregion
 
@@ -193,6 +196,7 @@ namespace WPRMebel.WPF.ViewModels.MainPages
 
         #endregion
 
+
         // Загрузить категории в зависимости от выбранного раздела
         private async void LoadCategories(Section s)
         {
@@ -239,7 +243,7 @@ namespace WPRMebel.WPF.ViewModels.MainPages
 
         /// <summary>Фильтр элементов</summary>
         public CollectionViewSourceFilter ElementsFilter =>
-            _ElementsFilter ??= new CollectionViewSourceFilter(OnElementsFilter);
+            _ElementsFilter ??= new CollectionViewSourceFilter(OnElementsFilter) {DelayBeforeRefresh = 200};
 
         #endregion
 
@@ -252,8 +256,9 @@ namespace WPRMebel.WPF.ViewModels.MainPages
                 return;
             }
 
-            e.Accepted = element.Name.Contains(text, StringComparison.OrdinalIgnoreCase) ||
-                         element.Category.Name.Contains(text, StringComparison.OrdinalIgnoreCase);
+            var checkString = string.Join(";", element.Name, element.Category.Name);
+
+            e.Accepted = checkString.Contains(text, StringComparison.OrdinalIgnoreCase);
         }
 
         #endregion

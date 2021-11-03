@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Threading;
 
 namespace WPRMebel.WPF.Extensions
 {
@@ -10,18 +11,43 @@ namespace WPRMebel.WPF.Extensions
     public class CollectionViewSourceFilter
     {
         private readonly Action<FilterEventArgs> _OnFilterAction;
+        private readonly DispatcherTimer _DelayTimer = new(DispatcherPriority.Background);
 
         private CollectionViewSource _CollectionViewSource;
+
+        /// <summary> Установить задержку перед вызовом обновления View </summary>
+        public int DelayBeforeRefresh
+        {
+            get => (int) _DelayTimer.Interval.TotalMilliseconds;
+            set => _DelayTimer.Interval = TimeSpan.FromMilliseconds(value);
+        }
 
         /// <summary>
         /// Класс - посредник для обработки фильтрации CollectionViewSource внутри ViewModel
         /// </summary>
         /// <param name="OnFilterAction">Действие фильтрации CollectionViewSource</param>
-        public CollectionViewSourceFilter(Action<FilterEventArgs> OnFilterAction) => _OnFilterAction = OnFilterAction;
+        public CollectionViewSourceFilter(Action<FilterEventArgs> OnFilterAction)
+        {
+            _OnFilterAction = OnFilterAction;
+            _DelayTimer.Tick += DelayTimerElapsed;
+        }
 
         /// <summary> Обновить представление коллекции </summary>
-        public void RefreshSource() => _CollectionViewSource?.View.Refresh();
-
+        public void RefreshSource()
+        {
+            if (DelayBeforeRefresh < 1)
+            {
+                _CollectionViewSource?.View.Refresh();
+                return;
+            }
+            _DelayTimer.Stop();
+            _DelayTimer.Start();
+        }
+        private void DelayTimerElapsed(object Sender, EventArgs EventArgs)
+        {
+            _CollectionViewSource?.View.Refresh();
+            _DelayTimer.Stop();
+        }
 
         private void DoFilter(object S, FilterEventArgs e) => _OnFilterAction?.Invoke(e);
 

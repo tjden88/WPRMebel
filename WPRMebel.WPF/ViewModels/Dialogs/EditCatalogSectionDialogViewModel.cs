@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using WPR;
 using WPR.MVVM.Commands;
@@ -8,10 +7,9 @@ using WPRMebel.WPF.Views.Dialogs;
 
 namespace WPRMebel.WPF.ViewModels.Dialogs
 {
-    internal class EditCatalogSectionDialogViewModel : DataValidationViewModel, IWPRDialog
+    internal sealed class EditCatalogSectionDialogViewModel : DataValidationViewModel, IWPRDialog
     {
         private readonly bool _CreateNewSection;
-        private readonly IEnumerable<string> _ExistingSections;
 
         public Action<bool> DialogResult { get; set; }
         public object DialogContent { get; set; }
@@ -23,7 +21,6 @@ namespace WPRMebel.WPF.ViewModels.Dialogs
         public EditCatalogSectionDialogViewModel(bool CreateNewSection, string[] ExistingSections)
         {
             _CreateNewSection = CreateNewSection;
-            _ExistingSections = ExistingSections;
             DialogContent = new EditCatalogSectionDialog {DataContext = this};
 
             ErrorInfo.Add(new Error(nameof(SectionName), () =>
@@ -33,6 +30,8 @@ namespace WPRMebel.WPF.ViewModels.Dialogs
             ErrorInfo.Add(new Error(nameof(SectionName), () =>
                 ExistingSections.Any(s=> string.Equals(SectionName?.Trim(), s, StringComparison.OrdinalIgnoreCase)),
                 "Такой раздел уже существует"));
+
+            OnPropertyChanged(nameof(HeaderText));
         }
 
         #region Command OkCommand - Подтвердить результат диалога
