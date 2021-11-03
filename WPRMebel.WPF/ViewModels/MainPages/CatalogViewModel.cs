@@ -1,9 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using WPR.MVVM.Commands;
 using WPR.MVVM.ViewModels;
@@ -17,11 +15,13 @@ namespace WPRMebel.WPF.ViewModels.MainPages
     {
         private readonly ICatalogDbRepository<Section> _SectionRepository;
         private readonly ICatalogDbRepository<CatalogElement> _ElementRepository;
+        private readonly ICatalogDbRepository<Category> _CategoriesRepository;
 
-        public CatalogViewModel(ICatalogDbRepository<Section> SectionRepository, ICatalogDbRepository<CatalogElement> ElementRepository)
+        public CatalogViewModel(ICatalogDbRepository<Section> SectionRepository, ICatalogDbRepository<CatalogElement> ElementRepository, ICatalogDbRepository<Category> CategoriesRepository)
         {
             _SectionRepository = SectionRepository;
             _ElementRepository = ElementRepository;
+            _CategoriesRepository = CategoriesRepository;
             LoadDataCommand.Execute();
         }
 
@@ -99,6 +99,22 @@ namespace WPRMebel.WPF.ViewModels.MainPages
 
         #endregion
 
+        #region Categories : ObservableCollection<Category> - Список отображаемых категорий
+
+        /// <summary>Список отображаемых категорий</summary>
+        private ObservableCollection<Category> _Categories = new();
+
+        /// <summary>Список отображаемых категорий</summary>
+        public ObservableCollection<Category> Categories
+        {
+            get => _Categories;
+            set => Set(ref _Categories, value);
+        }
+
+        #endregion
+
+        
+
 
         #endregion
 
@@ -112,11 +128,9 @@ namespace WPRMebel.WPF.ViewModels.MainPages
         {
             get => _SelectedSection;
             set => IfSet(ref _SelectedSection, value)
-                .Then(LoadElements)
+                .Then(LoadCategories)
             ;
         }
-
-
 
         #endregion
 
@@ -134,16 +148,29 @@ namespace WPRMebel.WPF.ViewModels.MainPages
 
         #endregion
 
-        private async void LoadElements(Section s)
+        // Загрузить категории в зависимости от выбранного раздела
+        private async void LoadCategories(Section s)
         {
             IsNowDataLoading = true;
-            var query = s != null
-                ? _ElementRepository.Items
-                    .Where(e => e.Category.Section == s)
-                    .OrderBy(e => e.Name)
-                : _ElementRepository.Items;
+            //var query = s != null
+            //    ? _ElementRepository.Items
+            //        .Where(e => e.Category.Section == s)
+            //        .OrderBy(e => e.Name)
+            //    : _ElementRepository.Items;
 
-            ElementsView = await query.ToArrayAsync().ConfigureAwait(false);
+            //ElementsView = await query.ToArrayAsync().ConfigureAwait(false);
+
+            var query = s != null
+                ? _CategoriesRepository.Items
+                    .Where(cat => cat.Section == s)
+                : _CategoriesRepository.Items;
+
+            var result = await query.ToArrayAsync().ConfigureAwait(true);
+            Categories.Clear();
+            foreach (var category in result)
+                Categories.Add(category);
+
+
             IsNowDataLoading = false;
         }
     }

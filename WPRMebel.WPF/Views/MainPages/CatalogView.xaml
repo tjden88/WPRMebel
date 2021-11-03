@@ -7,6 +7,7 @@
              xmlns:cnt="clr-namespace:WPR.Controls;assembly=WPR"
              xmlns:helpers="clr-namespace:WPR.Helpers;assembly=WPR"
              xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:cm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
              mc:Ignorable="d" 
              DataContext="{Binding CatalogViewModel, Source={StaticResource Locator}}"
              d:DesignHeight="450" d:DesignWidth="800">
@@ -102,15 +103,23 @@
                 </Grid>
                 <!--Таблица данных-->
                 <Grid>
+                    <Grid.Resources>
+                        <CollectionViewSource x:Key="ViewSource" Source="{Binding Categories}">
+                            <CollectionViewSource.SortDescriptions>
+                                <cm:SortDescription PropertyName="Name"/>
+                            </CollectionViewSource.SortDescriptions>
+                        </CollectionViewSource>
+                    </Grid.Resources>
                     <DataGrid x:Name="CatalogViewGrid"
                               IsReadOnly="True"
                               Margin="5"
                               BorderThickness="0"
-                              ItemsSource="{Binding ElementsView}"
+                              ItemsSource="{Binding Source={StaticResource ViewSource}}"
                               CanUserAddRows="True"
                               CanUserDeleteRows="True">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Имя" Binding="{Binding Name}"/>
+                            <DataGridTextColumn SortDirection="Ascending" Header="Имя" Width="*" Binding="{Binding Name}"/>
+                            <DataGridTextColumn Header="Элементов" Binding="{Binding CatalogElements.Count}"/>
                         </DataGrid.Columns>
                     </DataGrid>
                     <Border Background="{StaticResource TransparentBrush}"
