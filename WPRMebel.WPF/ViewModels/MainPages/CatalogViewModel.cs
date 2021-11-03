@@ -11,22 +11,27 @@ using WPRMebel.Domain.Base.Catalog.Abstract;
 using WPRMebel.WPF.Extensions;
 using WPRMebel.WPF.Services.Interfaces;
 using WPRMebel.WPF.ViewModels.Dialogs;
+using WPRMebel.WpfAPI.Catalog;
 using WPRMebel.WpfAPI.Interfaces;
 
 namespace WPRMebel.WPF.ViewModels.MainPages
 {
     internal class CatalogViewModel : ViewModel
     {
+        private readonly CatalogViewer _CatalogViewer;
         private readonly ICatalogDbRepository<Section> _SectionRepository;
         private readonly ICatalogDbRepository<CatalogElement> _ElementRepository;
         private readonly ICatalogDbRepository<Category> _CategoriesRepository;
         private readonly IUserDialog _UserDialog;
 
-        public CatalogViewModel(ICatalogDbRepository<Section> SectionRepository,
+        public CatalogViewModel(CatalogViewer CatalogViewer, ICatalogDbRepository<Section> SectionRepository,
             ICatalogDbRepository<CatalogElement> ElementRepository,
             ICatalogDbRepository<Category> CategoriesRepository,
             IUserDialog UserDialog)
         {
+            _CatalogViewer = CatalogViewer;
+            _CatalogViewer.IsNowDataLoadingChanged += _ => OnPropertyChanged(nameof(IsNowDataLoading));
+
             _SectionRepository = SectionRepository;
             _ElementRepository = ElementRepository;
             _CategoriesRepository = CategoriesRepository;
@@ -51,8 +56,9 @@ namespace WPRMebel.WPF.ViewModels.MainPages
         /// <summary>Логика выполнения - Загрузить данные</summary>
         private async void OnLoadDataCommandExecutedAsync()
         {
-            Sections.AddClear(await _SectionRepository.GetAllAsync());
-            LoadCategories(SelectedSection);
+            Sections.AddClear(await _CatalogViewer.LoadSections());
+            //Sections.AddClear(await _SectionRepository.GetAllAsync());
+            //LoadCategories(SelectedSection);
         }
 
         #endregion
@@ -114,10 +120,55 @@ namespace WPRMebel.WPF.ViewModels.MainPages
 
         #endregion
 
+        #region Command EditSectionCommand - Редактировать секцию
+
+        /// <summary>Редактировать секцию</summary>
+        private Command _EditSectionCommand;
+
+        /// <summary>Редактировать секцию</summary>
+        public Command EditSectionCommand => _EditSectionCommand
+            ??= new Command(OnEditSectionCommandExecuted, CanEditSectionCommandExecute, "Редактировать секцию");
+
+        /// <summary>Проверка возможности выполнения - Редактировать секцию</summary>
+        private bool CanEditSectionCommandExecute() => SelectedSectionIsNotNull;
+
+        /// <summary>Логика выполнения - Редактировать секцию</summary>
+        private async void OnEditSectionCommandExecuted()
+        {
+            var dialog = new EditCatalogSectionDialogViewModel(false, Sections
+                .Select(s => s.Name)
+                .Where(str => str != SelectedSection.Name)
+                .ToArray())
+            {
+                SectionName = SelectedSection.Name,
+                SectionDescription = SelectedSection.Description
+            };
+
+            if (!await _UserDialog.ShowCustomDialogAsync(dialog, false)) return;
+
+            SelectedSection.Name = dialog.SectionName?.Trim();
+            SelectedSection.Description = dialog.SectionDescription?.Trim();
+
+            try
+            {
+                var returned = await _SectionRepository.UpdateAsync(SelectedSection);
+                if (!returned) throw new ArgumentNullException(nameof(returned));
+            }
+            catch (Exception)
+            {
+                await _UserDialog.InformationAsync("Ошибка изменения секции");
+            }
+
+            CollectionViewSource.GetDefaultView(Sections).Refresh();
+        }
+
+        #endregion
 
         #endregion
 
         #region Lists
+
+        public bool SelectedSectionIsNotNull => SelectedSection != null;
 
         #region Sections : ObservableCollection<Section> - Секции каталога
 
@@ -161,9 +212,6 @@ namespace WPRMebel.WPF.ViewModels.MainPages
 
         #endregion
 
-
-
-
         #endregion
 
         #region SelectedSection : Section - Выбранный раздел каталога
@@ -176,6 +224,7 @@ namespace WPRMebel.WPF.ViewModels.MainPages
         {
             get => _SelectedSection;
             set => IfSet(ref _SelectedSection, value)
+                .CallPropertyChanged(nameof(SelectedSectionIsNotNull))
                 .Then(LoadCategories)
             ;
         }
@@ -183,16 +232,8 @@ namespace WPRMebel.WPF.ViewModels.MainPages
         #endregion
 
         #region IsNowDataLoading : bool - Индикатор загрузки данных
-
         /// <summary>Индикатор загрузки данных</summary>
-        private bool _IsNowDataLoading;
-
-        /// <summary>Индикатор загрузки данных</summary>
-        public bool IsNowDataLoading
-        {
-            get => _IsNowDataLoading;
-            set => Set(ref _IsNowDataLoading, value);
-        }
+        public bool IsNowDataLoading => _CatalogViewer.IsNowDataLoading;
 
         #endregion
 
@@ -200,23 +241,8 @@ namespace WPRMebel.WPF.ViewModels.MainPages
         // Загрузить категории в зависимости от выбранного раздела
         private async void LoadCategories(Section s)
         {
-            IsNowDataLoading = true;
-            var query = s != null
-                ? _ElementRepository.Items
-                    .Where(e => e.Category.Section == s)
-                : _ElementRepository.Items;
-
-            //Elements = await query.ToArrayAsync().ConfigureAwait(false);
-
-            //var query = s != null
-            //    ? _CategoriesRepository.Items
-            //        .Where(cat => cat.Section == s)
-            //    : _CategoriesRepository.Items;
-
-            var result = await query.ToArrayAsync().ConfigureAwait(true);
-
+            var result = await _CatalogViewer.LoadCatalogElements(s);
             Elements.AddClear(result);
-            IsNowDataLoading = false;
         }
 
         #region ElementsFilter

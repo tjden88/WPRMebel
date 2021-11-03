@@ -6,9 +6,9 @@ using WPRMebel.WpfAPI.Interfaces;
 
 namespace WPRMebel.WpfAPI.Services
 {
-    public class CatalogCatalogDbRepository<T> : DbRepository<T>, ICatalogDbRepository<T> where T : Entity, new()
+    public class CatalogDbRepository<T> : DbRepository<T>, ICatalogDbRepository<T> where T : Entity, new()
     {
-        public CatalogCatalogDbRepository(CatalogDbContext ContextBase) : base(ContextBase)
+        public CatalogDbRepository(CatalogDbContext ContextBase) : base(ContextBase)
         {
         }
 

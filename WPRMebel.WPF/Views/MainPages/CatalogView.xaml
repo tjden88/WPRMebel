@@ -18,8 +18,12 @@
                 <cnt:WPRTitledCard.PopupMenu>
                     <Menu Style="{StaticResource WPRVerticalMenu}">
                         <MenuItem Command="{Binding CreateNewSectionCommand}" Header="Добавить" />
-                        <MenuItem Header="Изменить"/>
-                        <MenuItem Header="Удалить"/>
+                        <MenuItem Command="{Binding EditSectionCommand}"
+                                  Visibility="{Binding SelectedSectionIsNotNull, Converter={StaticResource Bool2VisibilityConverter}}"
+                                  Header="Изменить"/>
+                        <MenuItem Command="{Binding EditSectionCommand}"
+                                  Visibility="{Binding SelectedSectionIsNotNull, Converter={StaticResource Bool2VisibilityConverter}}"
+                                  Header="Удалить"/>
                     </Menu>
                 </cnt:WPRTitledCard.PopupMenu>
                 <StackPanel>

@@ -14,10 +14,10 @@ namespace WPRMebel.WPF.ViewModels.Dialogs
         public Action<bool> DialogResult { get; set; }
         public object DialogContent { get; set; }
 
-
         public EditCatalogSectionDialogViewModel()
         {
         }
+
         public EditCatalogSectionDialogViewModel(bool CreateNewSection, string[] ExistingSections)
         {
             _CreateNewSection = CreateNewSection;
@@ -88,7 +88,5 @@ namespace WPRMebel.WPF.ViewModels.Dialogs
         }
 
         #endregion
-
-        
     }
 }
