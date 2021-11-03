@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
-using System.Threading;
 using Microsoft.EntityFrameworkCore;
 using WPR.MVVM.Commands;
 using WPR.MVVM.ViewModels;
@@ -27,22 +25,22 @@ namespace WPRMebel.WPF.ViewModels.MainPages
 
         #region Commands
 
-        #region AsyncCommand LoadDataCommand - Загрузить данные
+        #region Command LoadDataCommand - Загрузить данные
 
         /// <summary>Загрузить данные</summary>
-        private AsyncCommand _LoadDataCommand;
+        private Command _LoadDataCommand;
 
         /// <summary>Загрузить данные</summary>
-        public AsyncCommand LoadDataCommand => _LoadDataCommand
-            ??= new AsyncCommand(OnLoadDataCommandExecutedAsync, CanLoadDataCommandExecute, "Загрузить данные");
+        public Command LoadDataCommand => _LoadDataCommand
+            ??= new Command(OnLoadDataCommandExecutedAsync, CanLoadDataCommandExecute, "Загрузить данные");
 
         /// <summary>Проверка возможности выполнения - Загрузить данные</summary>
         private bool CanLoadDataCommandExecute() => true;
 
         /// <summary>Логика выполнения - Загрузить данные</summary>
-        private async void OnLoadDataCommandExecutedAsync(CancellationToken cancel)
+        private async void OnLoadDataCommandExecutedAsync()
         {
-            Sections = await _SectionRepository.GetAllAsync(cancel);
+            Sections.AddClear(await _SectionRepository.GetAllAsync());
         }
 
         #endregion
@@ -71,13 +69,13 @@ namespace WPRMebel.WPF.ViewModels.MainPages
 
         #region Lists
 
-        #region Sections : IEnumerable<Section> - Секции каталога
+        #region Sections : ObservableCollection<Section> - Секции каталога
 
         /// <summary>Секции каталога</summary>
-        private IEnumerable<Section> _Sections;
+        private ObservableCollection<Section> _Sections = new();
 
         /// <summary>Секции каталога</summary>
-        public IEnumerable<Section> Sections
+        public ObservableCollection<Section> Sections
         {
             get => _Sections;
             set => Set(ref _Sections, value);
@@ -85,13 +83,13 @@ namespace WPRMebel.WPF.ViewModels.MainPages
 
         #endregion
 
-        #region ElementsView : IEnumerable<CatalogElement> - Отображаемая коллекция элементов
+        #region ElementsView : ObservableCollection<CatalogElement> - Отображаемая коллекция элементов
 
         /// <summary>Отображаемая коллекция элементов</summary>
-        private IEnumerable<CatalogElement> _ElementsView;
+        private ObservableCollection<CatalogElement> _ElementsView = new();
 
         /// <summary>Отображаемая коллекция элементов</summary>
-        public IEnumerable<CatalogElement> ElementsView
+        public ObservableCollection<CatalogElement> ElementsView
         {
             get => _ElementsView;
             set => Set(ref _ElementsView, value);
@@ -166,11 +164,8 @@ namespace WPRMebel.WPF.ViewModels.MainPages
                 : _CategoriesRepository.Items;
 
             var result = await query.ToArrayAsync().ConfigureAwait(true);
-            Categories.Clear();
-            foreach (var category in result)
-                Categories.Add(category);
 
-
+            Categories.AddClear(result);
             IsNowDataLoading = false;
         }
     }
