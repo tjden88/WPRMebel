@@ -19,22 +19,13 @@ namespace WPRMebel.WPF.ViewModels.MainPages
     internal class CatalogViewModel : ViewModel
     {
         private readonly CatalogViewer _CatalogViewer;
-        private readonly ICatalogDbRepository<Section> _SectionRepository;
-        private readonly ICatalogDbRepository<CatalogElement> _ElementRepository;
-        private readonly ICatalogDbRepository<Category> _CategoriesRepository;
         private readonly IUserDialog _UserDialog;
 
-        public CatalogViewModel(CatalogViewer CatalogViewer, ICatalogDbRepository<Section> SectionRepository,
-            ICatalogDbRepository<CatalogElement> ElementRepository,
-            ICatalogDbRepository<Category> CategoriesRepository,
-            IUserDialog UserDialog)
+        public CatalogViewModel(CatalogViewer CatalogViewer, IUserDialog UserDialog)
         {
             _CatalogViewer = CatalogViewer;
             _CatalogViewer.IsNowDataLoadingChanged += _ => OnPropertyChanged(nameof(IsNowDataLoading));
 
-            _SectionRepository = SectionRepository;
-            _ElementRepository = ElementRepository;
-            _CategoriesRepository = CategoriesRepository;
             _UserDialog = UserDialog;
             LoadDataCommand.Execute();
         }
@@ -108,7 +99,7 @@ namespace WPRMebel.WPF.ViewModels.MainPages
             };
             try
             {
-                var returned = await _SectionRepository.AddAsync(newSection);
+                var returned = await _CatalogViewer.AddSection(newSection);
                 if (returned == null) throw new ArgumentNullException(nameof(returned));
                 Sections.Add(returned);
             }
@@ -151,7 +142,7 @@ namespace WPRMebel.WPF.ViewModels.MainPages
 
             try
             {
-                var returned = await _SectionRepository.UpdateAsync(SelectedSection);
+                var returned = await _CatalogViewer.UpdateSection(SelectedSection);
                 if (!returned) throw new ArgumentNullException(nameof(returned));
             }
             catch (Exception)

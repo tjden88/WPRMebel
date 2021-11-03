@@ -21,6 +21,7 @@
 
                 <TextBox Margin="5,7,0,0"
                          Name="NameText"
+                         TextWrapping="Wrap"
                          helpers:TextHelper.Hint="Название раздела" Text="{Binding SectionName, UpdateSourceTrigger=PropertyChanged}">
                 </TextBox>
             </DockPanel>
@@ -29,12 +30,13 @@
                 <controls:WPRIcon  Source="CommentOutline" Foreground="{Binding BorderBrush, ElementName=DescriptionText}"/>
 
                 <TextBox Margin="5,7,0,0"
+                         TextWrapping="Wrap"
                          Name="DescriptionText"
                          Text="{Binding SectionDescription, UpdateSourceTrigger=PropertyChanged}"
                          helpers:TextHelper.Description="Необязательно"
                          helpers:TextHelper.Hint="Описание раздела"/>
             </DockPanel>
-            <Button MinWidth="60" HorizontalAlignment="Right" Command="{Binding OkCommand}">OK</Button>
+            <Button IsDefault="True" MinWidth="60" HorizontalAlignment="Right" Command="{Binding OkCommand}">OK</Button>
 
         </StackPanel>
     </controls:WPRTitledCard>

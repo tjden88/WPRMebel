@@ -44,7 +44,7 @@ namespace WPRMebel.WPF.ViewModels.Dialogs
             ??= new Command(OnOkCommandExecuted, CanOkCommandExecute, "Подтвердить результат диалога");
 
         /// <summary>Проверка возможности выполнения - Подтвердить результат диалога</summary>
-        private bool CanOkCommandExecute() => !HasErrors;
+        private bool CanOkCommandExecute() => !CheckAllErrors;
 
         /// <summary>Логика выполнения - Подтвердить результат диалога</summary>
         private void OnOkCommandExecuted() => DialogResult?.Invoke(true);

@@ -50,8 +50,10 @@ namespace WPRMebel.WpfAPI.Catalog
 
         #endregion
 
+        #region LoadData
+
         // Потокобезопасный метод загрузки данных из БД
-        private async Task<IEnumerable<T>> LoadData<T>(IQueryable<T> query) where T: IEntity
+        private async Task<IEnumerable<T>> LoadData<T>(IQueryable<T> query) where T : IEntity
         {
             if (IsNowDataLoading) return Enumerable.Empty<T>();
             IsNowDataLoading = true;
@@ -82,5 +84,24 @@ namespace WPRMebel.WpfAPI.Catalog
                 : _ElementRepository.Items;
             return LoadData(query);
         }
+
+        #endregion
+
+
+        private async Task<T> GrudEntity<T>(Task<T> task)
+        {
+            if (IsNowDataLoading) return default;
+            IsNowDataLoading = true;
+            var result = await task;
+            IsNowDataLoading = false;
+            return result;
+        }
+
+        #region Sections
+
+        public Task<Section> AddSection(Section NewSection) => GrudEntity(_SectionRepository.AddAsync(NewSection));
+        public Task<bool> UpdateSection(Section ChangedSection) => GrudEntity(_SectionRepository.UpdateAsync(ChangedSection));
+
+        #endregion
     }
 }
