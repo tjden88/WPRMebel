@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using WPRMebel.WPF.Services.Interfaces;
 using WPRMebel.WPF.ViewModels.MainPages;
 using WPRMebel.WPF.ViewModels.Windows;
 
@@ -11,14 +12,14 @@ namespace WPRMebel.WPF.Services
     {
         /// <summary> Зарегистрировать сервисы </summary>
         public static IServiceCollection AddServices(this IServiceCollection Services) => Services
-        
-            ;
+            .AddTransient<IUserDialog, UserDialogService>()
+        ;
 
         /// <summary> Зарегистрировать модель-представления </summary>
         public static IServiceCollection AddViewModels(this IServiceCollection Services) => Services
-                .AddSingleton<MainWindowViewModel>()
-                .AddSingleton<CatalogViewModel>()
-                ;
+            .AddSingleton<MainWindowViewModel>()
+            .AddSingleton<CatalogViewModel>()
+        ;
     }
 
     internal class ViewModelLocator

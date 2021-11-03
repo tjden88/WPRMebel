@@ -9,6 +9,8 @@ using WPR.MVVM.ViewModels;
 using WPRMebel.Domain.Base.Catalog;
 using WPRMebel.Domain.Base.Catalog.Abstract;
 using WPRMebel.WPF.Extensions;
+using WPRMebel.WPF.Services.Interfaces;
+using WPRMebel.WPF.ViewModels.Dialogs;
 using WPRMebel.WpfAPI.Interfaces;
 
 namespace WPRMebel.WPF.ViewModels.MainPages
@@ -18,12 +20,17 @@ namespace WPRMebel.WPF.ViewModels.MainPages
         private readonly ICatalogDbRepository<Section> _SectionRepository;
         private readonly ICatalogDbRepository<CatalogElement> _ElementRepository;
         private readonly ICatalogDbRepository<Category> _CategoriesRepository;
+        private readonly IUserDialog _UserDialog;
 
-        public CatalogViewModel(ICatalogDbRepository<Section> SectionRepository, ICatalogDbRepository<CatalogElement> ElementRepository, ICatalogDbRepository<Category> CategoriesRepository)
+        public CatalogViewModel(ICatalogDbRepository<Section> SectionRepository, 
+            ICatalogDbRepository<CatalogElement> ElementRepository,
+            ICatalogDbRepository<Category> CategoriesRepository,
+            IUserDialog UserDialog)
         {
             _SectionRepository = SectionRepository;
             _ElementRepository = ElementRepository;
             _CategoriesRepository = CategoriesRepository;
+            _UserDialog = UserDialog;
             LoadDataCommand.Execute();
         }
 
@@ -65,6 +72,28 @@ namespace WPRMebel.WPF.ViewModels.MainPages
         private void OnShowAllCatalogCommandExecuted()
         {
             SelectedSection = null;
+        }
+
+        #endregion
+
+        #region Command CreateNewSectionCommand - Создать секцию каталога
+
+        /// <summary>Создать секцию каталога</summary>
+        private Command _CreateNewSectionCommand;
+
+        /// <summary>Создать секцию каталога</summary>
+        public Command CreateNewSectionCommand => _CreateNewSectionCommand
+            ??= new Command(OnCreateNewSectionCommandExecuted, CanCreateNewSectionCommandExecute, "Создать секцию каталога");
+
+        /// <summary>Проверка возможности выполнения - Создать секцию каталога</summary>
+        private bool CanCreateNewSectionCommandExecute() => true;
+
+        /// <summary>Логика выполнения - Создать секцию каталога</summary>
+        private async void OnCreateNewSectionCommandExecuted()
+        {
+            var dialog = new EditCatalogSectionDialogViewModel(true);
+            var dialogResult = await _UserDialog.ShowCustomDialogAsync(dialog, false);
+
         }
 
         #endregion

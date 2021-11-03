@@ -1,0 +1,41 @@
+﻿<UserControl x:Class="WPRMebel.WPF.Views.Dialogs.EditCatalogSectionDialog"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WPRMebel.WPF.Views.Dialogs"
+             Width="280"
+             xmlns:controls="clr-namespace:WPR.Controls;assembly=WPR"
+             xmlns:dialogs="clr-namespace:WPRMebel.WPF.ViewModels.Dialogs"
+             xmlns:helpers="clr-namespace:WPR.Helpers;assembly=WPR"
+             xmlns:validation="clr-namespace:WPR.MVVM.Validation;assembly=WPR"
+             mc:Ignorable="d">
+    <d:UserControl.DataContext>
+        <dialogs:EditCatalogSectionDialogViewModel/>
+    </d:UserControl.DataContext>
+
+    <controls:WPRTitledCard IconSource="ViewSplitVertical" Header="{Binding HeaderText, TargetNullValue='Создать раздела каталога'}">
+        <StackPanel Margin="5">
+            <DockPanel>
+                <controls:WPRIcon  Source="PlaylistEdit" Foreground="{Binding BorderBrush, ElementName=NameText}"/>
+
+                <TextBox Margin="5,7,0,0"
+                         Name="NameText"
+                         helpers:TextHelper.Hint="Название раздела" Text="{Binding SectionName, UpdateSourceTrigger=PropertyChanged}">
+                </TextBox>
+            </DockPanel>
+
+            <DockPanel>
+                <controls:WPRIcon  Source="CommentOutline" Foreground="{Binding BorderBrush, ElementName=DescriptionText}"/>
+
+                <TextBox Margin="5,7,0,0"
+                         Name="DescriptionText"
+                         Text="{Binding Text}"
+                         helpers:TextHelper.Description="Необязательно"
+                         helpers:TextHelper.Hint="Описание раздела"/>
+            </DockPanel>
+            <Button MinWidth="60" HorizontalAlignment="Right">OK</Button>
+
+        </StackPanel>
+    </controls:WPRTitledCard>
+</UserControl>

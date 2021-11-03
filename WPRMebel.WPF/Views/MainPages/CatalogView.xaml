@@ -17,7 +17,7 @@
             <cnt:WPRTitledCard IconSource="CircleExpand" Header="Разделы каталога" ShowMenuButton="True">
                 <cnt:WPRTitledCard.PopupMenu>
                     <Menu Style="{StaticResource WPRVerticalMenu}">
-                        <MenuItem Header="Добавить" />
+                        <MenuItem Command="{Binding CreateNewSectionCommand}" Header="Добавить" />
                         <MenuItem Header="Изменить"/>
                         <MenuItem Header="Удалить"/>
                     </Menu>
