@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using WPRMebel.Interfaces.Base.Entityes;
@@ -12,7 +13,7 @@ namespace WPRMebel.Interfaces.Base.Repositories
     public interface IRepository<TEntity> where TEntity : IEntity
     {
         /// <summary> Коллекция сущностей </summary>
-        IQueryable<TEntity> Items { get; }
+        Task<IEnumerable<TEntity>> GetAllAsync(CancellationToken Cancel = default);
 
 
         /// <summary> Получить количество сущностей </summary>

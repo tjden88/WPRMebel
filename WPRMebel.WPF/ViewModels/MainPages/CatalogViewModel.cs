@@ -1,30 +1,57 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using System.Windows.Data;
+using WPR.MVVM.Commands;
 using WPR.MVVM.ViewModels;
 using WPRMebel.Domain.Base.Catalog;
-using WPRMebel.Domain.Base.Catalog.Abstract;
-using WPRMebel.Interfaces.Base.Repositories;
-using WPRMebel.WpfAPI.Catalog.Interfaces;
+using WPRMebel.WpfAPI.Interfaces;
 
 namespace WPRMebel.WPF.ViewModels.MainPages
 {
     internal class CatalogViewModel : ViewModel
     {
-        private readonly IRepository<Section> _SectionRepository;
-        private readonly ICatalogElementView _CatalogElementView;
+        private readonly ICatalogDbViewer<Section> _SectionViewer;
 
-        public CatalogViewModel(IRepository<Section> SectionRepository, ICatalogElementView CatalogElementView)
+        public CatalogViewModel(ICatalogDbViewer<Section> SectionViewer)
         {
-            _SectionRepository = SectionRepository;
-            _CatalogElementView = CatalogElementView;
-            OnPropertyChanged(nameof(Sections));
+            _SectionViewer = SectionViewer;
+            //RefreshDataCommand.Execute();
         }
 
-        public IEnumerable<Section> Sections => _SectionRepository.Items.ToArray();
+        #region SectionsView : CollectionViewSource - Секции каталога
 
-       // public IEnumerable<CatalogElement> CatalogElements =>;
+        /// <summary>Секции каталога</summary>
+        private CollectionViewSource _SectionsView;
 
+        /// <summary>Секции каталога</summary>
+        public CollectionViewSource SectionsView => _SectionsView ??= LoadData().Result;
+
+        private async Task<CollectionViewSource> LoadData()
+        {
+            var oc = await _SectionViewer.LoadItemsAsync().ConfigureAwait(false);
+            return new CollectionViewSource {Source = oc};
+        }
+
+        #endregion
+
+        #region Command RefreshDataCommand - Обновить данные из БД
+
+        /// <summary>Обновить данные из БД</summary>
+        private Command _RefreshDataCommand;
+
+        /// <summary>Обновить данные из БД</summary>
+        public Command RefreshDataCommand => _RefreshDataCommand
+            ??= new Command(OnRefreshDataCommandExecuted, CanRefreshDataCommandExecute, "Обновить данные из БД");
+
+        /// <summary>Проверка возможности выполнения - Обновить данные из БД</summary>
+        private bool CanRefreshDataCommandExecute() => true;
+
+        /// <summary>Логика выполнения - Обновить данные из БД</summary>
+        private void OnRefreshDataCommandExecuted()
+        {
+            SectionsView.View.Refresh();
+        }
+
+        #endregion
 
     }
 }

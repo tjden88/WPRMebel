@@ -1,9 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using WPRMebel.DB.Context;
 using WPRMebel.Domain.Base.Catalog.Abstract;
 using WPRMebel.Interfaces.Base.Repositories;
 
@@ -15,17 +15,19 @@ namespace WPRMebel.DB.Repositories
     /// <typeparam name="T">Сущность БД</typeparam>
     public class DbRepository<T> : IRepository<T> where T : Entity, new()
     {
-        private readonly CatalogContextBase _ContextBase; // Контекст БД
+        private readonly DbContext _ContextBase; // Контекст БД
 
         /// <summary> Набор данных БД </summary>
         protected DbSet<T> Set { get; }
 
-        public DbRepository(CatalogContextBase ContextBase)
+        public DbRepository(DbContext ContextBase)
         {
             _ContextBase = ContextBase;
             Set = _ContextBase.Set<T>();
         }
 
+         /// <summary> Переопределяемое свойство, с которым работают методы репозитория </summary>
+       protected virtual IQueryable<T> Items => Set;
 
         #region Transaction
 
@@ -46,8 +48,7 @@ namespace WPRMebel.DB.Repositories
         #endregion
 
         #region IRepository
-        /// <summary> Переопределяемое свойство, с которым работают методы репозитория </summary>
-        public virtual IQueryable<T> Items => Set;
+        public virtual async  Task<IEnumerable<T>> GetAllAsync(CancellationToken Cancel = default) => await Items.ToArrayAsync(Cancel).ConfigureAwait(false);
 
         public async Task<int> GetCountAsync(CancellationToken Cancel = default) => await Items.CountAsync(Cancel).ConfigureAwait(false);
 
