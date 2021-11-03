@@ -87,7 +87,7 @@ namespace WPRMebel.WpfAPI.Catalog
 
         #endregion
 
-
+        // Работа с сущностями (добавить, изменить, удалить)
         private async Task<T> GrudEntity<T>(Task<T> task)
         {
             if (IsNowDataLoading) return default;

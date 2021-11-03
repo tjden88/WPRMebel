@@ -9,17 +9,30 @@
              xmlns:dialogs="clr-namespace:WPRMebel.WPF.ViewModels.Dialogs"
              xmlns:helpers="clr-namespace:WPR.Helpers;assembly=WPR"
              xmlns:validation="clr-namespace:WPR.MVVM.Validation;assembly=WPR"
+             FocusManager.FocusedElement="{Binding ElementName=NameText}"
              mc:Ignorable="d">
     <d:UserControl.DataContext>
         <dialogs:EditCatalogSectionDialogViewModel/>
     </d:UserControl.DataContext>
 
+
     <controls:WPRTitledCard IconSource="ViewSplitVertical" Header="{Binding HeaderText, TargetNullValue='Создать раздела каталога'}">
         <StackPanel Margin="5">
             <DockPanel>
+                <DockPanel.Style>
+                    <Style TargetType="DockPanel">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=NameText, Path=IsVisible}" Value="true">
+                                <Setter Property="FocusManager.FocusedElement" Value="{Binding ElementName=NameText}" />
+                            </DataTrigger>
+
+                        </Style.Triggers>
+                        </Style>
+                </DockPanel.Style>
                 <controls:WPRIcon  Source="PlaylistEdit" Foreground="{Binding BorderBrush, ElementName=NameText}"/>
 
                 <TextBox Margin="5,7,0,0"
+                         FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
                          Name="NameText"
                          TextWrapping="Wrap"
                          helpers:TextHelper.Hint="Название раздела" Text="{Binding SectionName, UpdateSourceTrigger=PropertyChanged}">
@@ -31,6 +44,7 @@
 
                 <TextBox Margin="5,7,0,0"
                          TextWrapping="Wrap"
+                         AcceptsReturn="True"
                          Name="DescriptionText"
                          Text="{Binding SectionDescription, UpdateSourceTrigger=PropertyChanged}"
                          helpers:TextHelper.Description="Необязательно"

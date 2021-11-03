@@ -67,6 +67,7 @@ namespace WPRMebel.WPF.ViewModels.MainPages
         private void OnShowAllCatalogCommandExecuted()
         {
             SelectedSection = null;
+            OnPropertyChanged(nameof(SelectedSectionIsNotNull));
         }
 
         #endregion
@@ -142,7 +143,8 @@ namespace WPRMebel.WPF.ViewModels.MainPages
                 return;
             }
 
-            CollectionViewSource.GetDefaultView(Sections).Refresh();
+            //CollectionViewSource.GetDefaultView(Sections).Refresh();
+            OnPropertyChanged(nameof(SelectedSection));
         }
 
         #endregion
