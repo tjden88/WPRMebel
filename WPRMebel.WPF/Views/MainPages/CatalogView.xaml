@@ -22,6 +22,15 @@
                 <StackPanel>
                     <ListBox Style="{StaticResource WPRMenuListBox}">
                         <ListBoxItem   Margin="0,-5,0,0">
+                            <ListBoxItem.Style>
+                                <Style TargetType="ListBoxItem" BasedOn="{StaticResource WPRListBoxMenuItem}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding SelectedSection}" Value="{x:Null}">
+                                            <Setter Property="IsSelected" Value="True"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ListBoxItem.Style>
                             <StackPanel Orientation="Horizontal">
                                 <cnt:WPRIcon Foreground="{DynamicResource DarkPrimaryColorBrush}" Source="ExpandAllOutline" Margin="5"/>
                                 <TextBlock Text="Весь каталог" Margin="5"/>
@@ -79,18 +88,24 @@
                     </Border>
                 </Grid>
                 <!--Таблица данных-->
-                <DataGrid x:Name="CatalogViewGrid"
-                          IsReadOnly="True"
-                          Margin="5"
-                          Grid.Row="1"
-                          BorderThickness="0"
-                          ItemsSource="{Binding}"
-                          CanUserAddRows="True"
-                          CanUserDeleteRows="True">
-                    <DataGrid.Columns>
-  
-                    </DataGrid.Columns>
-                </DataGrid>
+                <Grid>
+                    <DataGrid x:Name="CatalogViewGrid"
+                              IsReadOnly="True"
+                              Margin="5"
+                              BorderThickness="0"
+                              ItemsSource="{Binding ElementsView}"
+                              CanUserAddRows="True"
+                              CanUserDeleteRows="True">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Имя" Binding="{Binding Name}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <Border Background="{StaticResource TransparentBrush}"
+                            Visibility="{Binding IsNowDataLoading, Converter={StaticResource Bool2VisibilityConverter}}">
+                        <TextBlock Text="Загрузка данных..." Foreground="{DynamicResource PrimaryColorBrush}"
+                                   HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+                    </Border>
+                </Grid>
                 
             </DockPanel>
         </cnt:WPRCard>

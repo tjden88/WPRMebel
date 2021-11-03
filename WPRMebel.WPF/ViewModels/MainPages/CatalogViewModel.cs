@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -23,28 +25,7 @@ namespace WPRMebel.WPF.ViewModels.MainPages
             LoadDataCommand.Execute();
         }
 
-        #region ObservableCollections - Коллекции каталога
-
-        /// <summary>Разделы каталога</summary>
-        public ObservableCollection<Section> Sections { get; set; } = new();
-
-        #endregion
-
-        #region SelectedSection : Section - Выбранный раздел каталога
-
-        /// <summary>Выбранный раздел каталога</summary>
-        private Section _SelectedSection;
-
-        /// <summary>Выбранный раздел каталога</summary>
-        public Section SelectedSection
-        {
-            get => _SelectedSection;
-            set => Set(ref _SelectedSection, value);
-        }
-
-        #endregion
-
-
+        #region Commands
         #region AsyncCommand LoadDataCommand - Загрузить данные
 
         /// <summary>Загрузить данные</summary>
@@ -60,13 +41,88 @@ namespace WPRMebel.WPF.ViewModels.MainPages
         /// <summary>Логика выполнения - Загрузить данные</summary>
         private async void OnLoadDataCommandExecutedAsync(CancellationToken cancel)
         {
-            var array = await _SectionRepository.GetAllAsync(cancel);
+            Sections = await _SectionRepository.GetAllAsync(cancel);
+        }
 
-            Sections = new(array);
-            OnPropertyChanged(nameof(Sections));
+        #endregion 
+        #endregion
 
+        #region Lists
+
+        #region Sections : IEnumerable<Section> - Секции каталога
+
+        /// <summary>Секции каталога</summary>
+        private IEnumerable<Section> _Sections;
+
+        /// <summary>Секции каталога</summary>
+        public IEnumerable<Section> Sections
+        {
+            get => _Sections;
+            set => Set(ref _Sections, value);
         }
 
         #endregion
+
+        #region ElementsView : IEnumerable<CatalogElement> - Отображаемая коллекция элементов
+
+        /// <summary>Отображаемая коллекция элементов</summary>
+        private IEnumerable<CatalogElement> _ElementsView;
+
+        /// <summary>Отображаемая коллекция элементов</summary>
+        public IEnumerable<CatalogElement> ElementsView
+        {
+            get => _ElementsView;
+            set => Set(ref _ElementsView, value);
+        }
+
+        #endregion
+
+
+        #endregion
+
+        #region SelectedSection : Section - Выбранный раздел каталога
+
+        /// <summary>Выбранный раздел каталога</summary>
+        private Section _SelectedSection;
+
+        /// <summary>Выбранный раздел каталога</summary>
+        public Section SelectedSection
+        {
+            get => _SelectedSection;
+            set => IfSet(ref _SelectedSection, value)
+                .Then(LoadElements)
+            ;
+        }
+
+
+
+        #endregion
+
+        #region IsNowDataLoading : bool - Индикатор загрузки данных
+
+        /// <summary>Индикатор загрузки данных</summary>
+        private bool _IsNowDataLoading;
+
+        /// <summary>Индикатор загрузки данных</summary>
+        public bool IsNowDataLoading
+        {
+            get => _IsNowDataLoading;
+            set => Set(ref _IsNowDataLoading, value);
+        }
+
+        #endregion
+
+        private async void LoadElements(Section s)
+        {
+            IsNowDataLoading = true;
+            var query = s != null
+                ? _ElementRepository.Items
+                    .Where(e => e.Category.Section == s)
+                    .OrderBy(e => e.Name)
+                : _ElementRepository.Items;
+
+            ElementsView = await query.ToArrayAsync().ConfigureAwait(false);
+            IsNowDataLoading = false;
+        }
     }
 }
