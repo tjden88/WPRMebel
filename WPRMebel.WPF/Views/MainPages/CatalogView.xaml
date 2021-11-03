@@ -8,6 +8,7 @@
              xmlns:helpers="clr-namespace:WPR.Helpers;assembly=WPR"
              xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:cm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+             xmlns:extensions="clr-namespace:WPRMebel.WPF.Extensions"
              mc:Ignorable="d" 
              DataContext="{Binding CatalogViewModel, Source={StaticResource Locator}}"
              d:DesignHeight="450" d:DesignWidth="800">
@@ -77,6 +78,7 @@
                                 <TextBox Margin="3"
                                          MinWidth="180"
                                          VerticalAlignment="Center"
+                                         Text="{Binding ElementsFilterText, UpdateSourceTrigger=PropertyChanged}"
                                          Style="{StaticResource WPRFlatTextBox}" 
                                          helpers:TextHelper.ShowClearButton="True"
                                          helpers:TextHelper.Hint="Фильтр"/>
@@ -104,7 +106,8 @@
                 <!--Таблица данных-->
                 <Grid>
                     <Grid.Resources>
-                        <CollectionViewSource x:Key="ViewSource" Source="{Binding Categories}">
+                        <CollectionViewSource x:Key="ViewSource" Source="{Binding Elements}"
+                                              extensions:CollectionViewSourceFilter.FilterObject ="{Binding ElementsFilter}">
                             <CollectionViewSource.SortDescriptions>
                                 <cm:SortDescription PropertyName="Name"/>
                             </CollectionViewSource.SortDescriptions>
@@ -119,7 +122,7 @@
                               CanUserDeleteRows="True">
                         <DataGrid.Columns>
                             <DataGridTextColumn SortDirection="Ascending" Header="Имя" Width="*" Binding="{Binding Name}"/>
-                            <DataGridTextColumn Header="Элементов" Binding="{Binding CatalogElements.Count}"/>
+                            <DataGridTextColumn Header="Элементов" Binding="{Binding Category.Name}"/>
                         </DataGrid.Columns>
                     </DataGrid>
                     <Border Background="{StaticResource TransparentBrush}"

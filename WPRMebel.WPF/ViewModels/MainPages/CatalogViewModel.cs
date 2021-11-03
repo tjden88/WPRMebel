@@ -1,10 +1,14 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows;
+using System.Windows.Data;
 using Microsoft.EntityFrameworkCore;
 using WPR.MVVM.Commands;
 using WPR.MVVM.ViewModels;
 using WPRMebel.Domain.Base.Catalog;
 using WPRMebel.Domain.Base.Catalog.Abstract;
+using WPRMebel.WPF.Extensions;
 using WPRMebel.WpfAPI.Interfaces;
 
 namespace WPRMebel.WPF.ViewModels.MainPages
@@ -83,16 +87,16 @@ namespace WPRMebel.WPF.ViewModels.MainPages
 
         #endregion
 
-        #region ElementsView : ObservableCollection<CatalogElement> - Отображаемая коллекция элементов
+        #region Elements : ObservableCollection<CatalogElement> - Отображаемая коллекция элементов
 
         /// <summary>Отображаемая коллекция элементов</summary>
-        private ObservableCollection<CatalogElement> _ElementsView = new();
+        private ObservableCollection<CatalogElement> _Elements = new();
 
         /// <summary>Отображаемая коллекция элементов</summary>
-        public ObservableCollection<CatalogElement> ElementsView
+        public ObservableCollection<CatalogElement> Elements
         {
-            get => _ElementsView;
-            set => Set(ref _ElementsView, value);
+            get => _Elements;
+            set => Set(ref _Elements, value);
         }
 
         #endregion
@@ -150,23 +154,66 @@ namespace WPRMebel.WPF.ViewModels.MainPages
         private async void LoadCategories(Section s)
         {
             IsNowDataLoading = true;
-            //var query = s != null
-            //    ? _ElementRepository.Items
-            //        .Where(e => e.Category.Section == s)
-            //        .OrderBy(e => e.Name)
-            //    : _ElementRepository.Items;
-
-            //ElementsView = await query.ToArrayAsync().ConfigureAwait(false);
-
             var query = s != null
-                ? _CategoriesRepository.Items
-                    .Where(cat => cat.Section == s)
-                : _CategoriesRepository.Items;
+                ? _ElementRepository.Items
+                    .Where(e => e.Category.Section == s)
+                : _ElementRepository.Items;
+
+            //Elements = await query.ToArrayAsync().ConfigureAwait(false);
+
+            //var query = s != null
+            //    ? _CategoriesRepository.Items
+            //        .Where(cat => cat.Section == s)
+            //    : _CategoriesRepository.Items;
 
             var result = await query.ToArrayAsync().ConfigureAwait(true);
 
-            Categories.AddClear(result);
+            Elements.AddClear(result);
             IsNowDataLoading = false;
         }
+
+        #region ElementsFilter
+
+        #region ElementsFilterText : string - Текст для фильтрации элементов
+
+        /// <summary>Текст для фильтрации элементов</summary>
+        private string _ElementsFilterText;
+
+        /// <summary>Текст для фильтрации элементов</summary>
+        public string ElementsFilterText
+        {
+            get => _ElementsFilterText;
+            set => IfSet(ref _ElementsFilterText, value)
+                .Then(ElementsFilter.RefreshSource);
+        }
+
+        #endregion
+
+        #region ElementsFilter : CollectionViewSourceFilter - Фильтр элементов
+
+        /// <summary>Фильтр элементов</summary>
+        private CollectionViewSourceFilter _ElementsFilter;
+
+        /// <summary>Фильтр элементов</summary>
+        public CollectionViewSourceFilter ElementsFilter =>
+            _ElementsFilter ??= new CollectionViewSourceFilter(OnElementsFilter);
+
+        #endregion
+
+        private void OnElementsFilter(FilterEventArgs e)
+        {
+            var text = ElementsFilterText;
+            if (string.IsNullOrEmpty(text) || e.Item is not CatalogElement element)
+            {
+                e.Accepted = true;
+                return;
+            }
+
+            e.Accepted = element.Name.Contains(text, StringComparison.OrdinalIgnoreCase) ||
+                         element.Category.Name.Contains(text, StringComparison.OrdinalIgnoreCase);
+        }
+
+        #endregion
+
     }
 }
