@@ -190,13 +190,13 @@ namespace WPRMebel.WPF.ViewModels.MainPages
 
         public bool SelectedSectionIsNotNull => SelectedSection != null;
 
-        #region Sections : ObservableCollection<Section> - Секции каталога
+        #region Sections : RangeObservableCollection<Section> - Секции каталога
 
         /// <summary>Секции каталога</summary>
-        private ObservableCollection<Section> _Sections = new();
+        private RangeObservableCollection<Section> _Sections = new();
 
         /// <summary>Секции каталога</summary>
-        public ObservableCollection<Section> Sections
+        public RangeObservableCollection<Section> Sections
         {
             get => _Sections;
             set => Set(ref _Sections, value);
@@ -204,13 +204,13 @@ namespace WPRMebel.WPF.ViewModels.MainPages
 
         #endregion
 
-        #region Elements : ObservableCollection<CatalogElement> - Отображаемая коллекция элементов
+        #region Elements : RangeObservableCollection<CatalogElement> - Отображаемая коллекция элементов
 
         /// <summary>Отображаемая коллекция элементов</summary>
-        private ObservableCollection<CatalogElement> _Elements = new();
+        private RangeObservableCollection<CatalogElement> _Elements = new();
 
         /// <summary>Отображаемая коллекция элементов</summary>
-        public ObservableCollection<CatalogElement> Elements
+        public RangeObservableCollection<CatalogElement> Elements
         {
             get => _Elements;
             set => Set(ref _Elements, value);
@@ -262,7 +262,7 @@ namespace WPRMebel.WPF.ViewModels.MainPages
         private async void LoadCategories(Section s)
         {
             var result = await _CatalogViewer.LoadCatalogElements(s);
-            Elements.AddClear(result);
+            Elements.AddRangeClear(result);
         }
 
 

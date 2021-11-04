@@ -16,7 +16,7 @@ namespace System.Collections.ObjectModel
         public static void AddClear<T>(this ObservableCollection<T> collection, IEnumerable<T> Items)
         {
             collection.Clear();
-            collection.Items.Add(Items);
+            collection.Add(Items);
         }
 
         public static async Task AddAsync<T>(this ObservableCollection<T> collection, IEnumerable<T> Items)
