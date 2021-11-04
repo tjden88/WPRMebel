@@ -32,7 +32,6 @@
                 <controls:WPRIcon  Source="PlaylistEdit" Foreground="{Binding BorderBrush, ElementName=NameText}"/>
 
                 <TextBox Margin="5,7,0,0"
-                         FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
                          Name="NameText"
                          TextWrapping="Wrap"
                          helpers:TextHelper.Hint="Название раздела" Text="{Binding SectionName, UpdateSourceTrigger=PropertyChanged}">

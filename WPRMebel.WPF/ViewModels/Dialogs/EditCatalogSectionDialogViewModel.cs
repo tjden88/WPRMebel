@@ -55,9 +55,8 @@ namespace WPRMebel.WPF.ViewModels.Dialogs
 
         /// <summary>Текст заголовка диалога</summary>
         public string HeaderText => _CreateNewSection
-            ? "Создать" 
-            : "Изменить"
-              + " раздел каталога";
+            ? "Создать раздел каталога"
+            : "Изменить раздел каталога";
 
         #endregion
 
