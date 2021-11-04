@@ -66,24 +66,26 @@ namespace WPRMebel.WpfAPI.Catalog
         /// <summary> Загрузить все разделы </summary>
         public Task<IEnumerable<Section>> LoadSections() => LoadData(_SectionRepository.Items);
 
-        /// <summary> Загрузить категории раздела </summary>
-        public Task<IEnumerable<Category>> GetCategories(Expression<Func<Category, bool>> Predicate)
+
+        /// <summary> Загрузить категории с фильтрацией </summary>
+        public Task<IEnumerable<Category>> GetCategories([MaybeNull] Expression<Func<Category, bool>> Predicate = null)
         {
-            //var query = Section != null
-            //    ? _CategoriesRepository.Items
-            //        .Where(cat => cat.Section == Section)
-            //    : _CategoriesRepository.Items;
-            var query = _CategoriesRepository.Items.Where(Predicate);
+            var query = Predicate != null
+                ? _CategoriesRepository.Items
+                    .Where(Predicate)
+                : _CategoriesRepository.Items;
+
             return LoadData(query);
         }
 
-        /// <summary> Загрузить элементы каталога раздела </summary>
-        public Task<IEnumerable<CatalogElement>> LoadCatalogElements([MaybeNull] Section Section)
+        /// <summary> Загрузить элементы каталога с фильтрацией </summary>
+        public Task<IEnumerable<CatalogElement>> GetElements([MaybeNull] Expression<Func<CatalogElement, bool>> Predicate = null)
         {
-            var query = Section != null
+            var query = Predicate != null
                 ? _ElementRepository.Items
-                    .Where(e => e.Category.Section == Section)
+                    .Where(Predicate)
                 : _ElementRepository.Items;
+
             return LoadData(query);
         }
 

@@ -261,7 +261,9 @@ namespace WPRMebel.WPF.ViewModels.MainPages
         // Загрузить категории в зависимости от выбранного раздела
         private async void LoadCategories(Section s)
         {
-            var result = await _CatalogViewer.LoadCatalogElements(s);
+            var result = s == null 
+                ? await _CatalogViewer.GetElements() 
+                : await _CatalogViewer.GetElements(e => e.Category.Section == s);
             Elements.AddRangeClear(result);
         }
 
