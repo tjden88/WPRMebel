@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Data;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using WPR.MVVM.Commands;
 using WPR.MVVM.ViewModels;
-using WPRMebel.DB.TestSqlServer.Context;
 using WPRMebel.Domain.Base.Catalog;
 using WPRMebel.Domain.Base.Catalog.Abstract;
 using WPRMebel.WPF.Extensions;
