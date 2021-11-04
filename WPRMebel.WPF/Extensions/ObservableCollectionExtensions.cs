@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using DispatcherPriority = System.Windows.Threading.DispatcherPriority;
@@ -26,7 +25,7 @@ namespace System.Collections.ObjectModel
             {
                 foreach (var item in Items)
                     Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Loaded,
-                        (ThreadStart) delegate
+                        (Action) delegate
                         {
                             collection.Add(item);
                         });

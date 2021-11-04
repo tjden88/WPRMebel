@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using WPRMebel.Domain.Base.Catalog;
@@ -66,12 +67,13 @@ namespace WPRMebel.WpfAPI.Catalog
         public Task<IEnumerable<Section>> LoadSections() => LoadData(_SectionRepository.Items);
 
         /// <summary> Загрузить категории раздела </summary>
-        public Task<IEnumerable<Category>> LoadCategories([MaybeNull] Section Section)
+        public Task<IEnumerable<Category>> GetCategories(Expression<Func<Category, bool>> Predicate)
         {
-            var query = Section != null
-                ? _CategoriesRepository.Items
-                    .Where(cat => cat.Section == Section)
-                : _CategoriesRepository.Items;
+            //var query = Section != null
+            //    ? _CategoriesRepository.Items
+            //        .Where(cat => cat.Section == Section)
+            //    : _CategoriesRepository.Items;
+            var query = _CategoriesRepository.Items.Where(Predicate);
             return LoadData(query);
         }
 

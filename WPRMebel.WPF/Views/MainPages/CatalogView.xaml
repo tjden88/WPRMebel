@@ -15,7 +15,8 @@
     <DockPanel>
         <!--Разделы-->
         <StackPanel>
-            <cnt:WPRCard HorizontalAlignment="Left" VerticalAlignment="Top" DockPanel.Dock="Left" MinWidth="265">
+            <cnt:WPRCard HorizontalAlignment="Left" VerticalAlignment="Top" DockPanel.Dock="Left" MinWidth="265"
+                         IsHitTestVisible="{Binding IsNowDataLoading, Converter={StaticResource BoolNotConverter}}">
                 <cnt:WPRTitledCard IconSource="CircleExpand" Header="Разделы каталога" ShowMenuButton="True">
                     <cnt:WPRTitledCard.PopupMenu>
                         <Menu Style="{StaticResource WPRVerticalMenu}">

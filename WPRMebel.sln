@@ -63,6 +63,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WPR", "..\WPR\WPR\WPR.cspro
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WPRMebel.DB.TestSqlServer", "WPRMebel.DB.TestSqlServer\WPRMebel.DB.TestSqlServer.csproj", "{AAD1C184-5194-46C9-BE93-0C0642DA32E5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPRMebel.TestWpf", "Tests\WPRMebel.TestWpf\WPRMebel.TestWpf.csproj", "{B46F886E-524F-4CCB-8785-DA68EA92203B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -113,6 +115,10 @@ Global
 		{AAD1C184-5194-46C9-BE93-0C0642DA32E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AAD1C184-5194-46C9-BE93-0C0642DA32E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AAD1C184-5194-46C9-BE93-0C0642DA32E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B46F886E-524F-4CCB-8785-DA68EA92203B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B46F886E-524F-4CCB-8785-DA68EA92203B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B46F886E-524F-4CCB-8785-DA68EA92203B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B46F886E-524F-4CCB-8785-DA68EA92203B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -129,6 +135,7 @@ Global
 		{E829CDA7-CC4F-42E8-9D49-9EAA9D2317B5} = {9A9914BA-022C-4E47-85EE-F80752C3E74D}
 		{5563F3B2-E2E9-41A9-8F3C-2744E2D6B6CF} = {95A20DEA-2EE2-4F8F-95CA-466D255A636D}
 		{AAD1C184-5194-46C9-BE93-0C0642DA32E5} = {2230F2E7-7F6E-46C4-98B2-C2252E94BF15}
+		{B46F886E-524F-4CCB-8785-DA68EA92203B} = {48C9FB50-FA56-4F88-9C52-918C98BC88C9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5DB89A14-1433-4CDA-8775-AF89D987A0C0}

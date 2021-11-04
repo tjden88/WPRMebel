@@ -1,9 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Data;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using WPR.MVVM.Commands;
 using WPR.MVVM.ViewModels;
+using WPRMebel.DB.TestSqlServer.Context;
 using WPRMebel.Domain.Base.Catalog;
 using WPRMebel.Domain.Base.Catalog.Abstract;
 using WPRMebel.WPF.Extensions;
@@ -143,7 +148,7 @@ namespace WPRMebel.WPF.ViewModels.MainPages
                 return;
             }
 
-            //CollectionViewSource.GetDefaultView(Sections).Refresh();
+            CollectionViewSource.GetDefaultView(Sections).Refresh();
             OnPropertyChanged(nameof(SelectedSection));
         }
 
@@ -175,8 +180,8 @@ namespace WPRMebel.WPF.ViewModels.MainPages
                 var sIndex = Sections.IndexOf(SelectedSection);
                 Sections.Remove(SelectedSection);
                 SelectedSection = Sections.Count > 0
-                    ? sIndex > 0 
-                    ? Sections[sIndex-1] 
+                    ? sIndex > 0
+                    ? Sections[sIndex - 1]
                     : Sections[0]
                     : null;
             }
@@ -264,6 +269,7 @@ namespace WPRMebel.WPF.ViewModels.MainPages
             var result = await _CatalogViewer.LoadCatalogElements(s);
             Elements.AddClear(result);
         }
+
 
         #region ElementsFilter
 
