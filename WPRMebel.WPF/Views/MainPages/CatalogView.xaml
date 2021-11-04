@@ -13,11 +13,35 @@
              DataContext="{Binding CatalogViewModel, Source={StaticResource Locator}}"
              d:DesignHeight="450" d:DesignWidth="800">
     <DockPanel>
+        <DockPanel DockPanel.Dock="Top" Margin="10,10,10,0" LastChildFill="True">
+            <Button DockPanel.Dock="Right" Style="{StaticResource AccentWPRButton}" Margin="5" HorizontalAlignment="Left" Content="Добавить элементы" helpers:ButtonHelper.BorderRadius="14"/>
+            <Button Margin="10" Style="{StaticResource WPRToolButtonNoRipple}" VerticalAlignment="Center">
+                <Button.Content>
+                    <cnt:WPRIcon Source="Menu"></cnt:WPRIcon>
+                </Button.Content>
+            </Button>
+            <Border BorderBrush="{DynamicResource DividerColorBrush}"  Margin="5"
+                    Background="{DynamicResource BackgroundColorBrush}"
+                    CornerRadius="16"
+                    BorderThickness="1">
+                <DockPanel VerticalAlignment="Center"  Margin="5,0,5,0">
+                    <cnt:WPRIcon Source="Search" Margin="3"/>
+                    <TextBox Margin="5"
+                             HorizontalAlignment="Stretch"
+                             VerticalAlignment="Center"
+                             Style="{StaticResource WPRFlatTextBox}" 
+                             helpers:TextHelper.ShowClearButton="True"
+                             helpers:TextHelper.Hint="Поиск в каталоге"/>
+                </DockPanel>
+            </Border>
+
+        </DockPanel>
         <!--Разделы-->
         <StackPanel>
+
             <cnt:WPRCard HorizontalAlignment="Left" VerticalAlignment="Top" DockPanel.Dock="Left" MinWidth="265"
                          IsHitTestVisible="{Binding IsNowDataLoading, Converter={StaticResource BoolNotConverter}}">
-                <cnt:WPRTitledCard IconSource="CircleExpand" Header="Разделы каталога" ShowMenuButton="True">
+                <cnt:WPRTitledCard  IconSource="CircleExpand" Header="Разделы каталога" ShowMenuButton="True">
                     <cnt:WPRTitledCard.PopupMenu>
                         <Menu Style="{StaticResource WPRVerticalMenu}">
                             <MenuItem Command="{Binding CreateNewSectionCommand}" Header="Добавить" />
@@ -30,27 +54,7 @@
                         </Menu>
                     </cnt:WPRTitledCard.PopupMenu>
                     <StackPanel>
-                        <ListBox Style="{StaticResource WPRMenuListBox}">
-                            <ListBoxItem Margin="0,-8,0,-3" Name="AllCatalog">
-                                <ListBoxItem.InputBindings>
-                                    <MouseBinding MouseAction="LeftClick" Command="{Binding ShowAllCatalogCommand}"/>
-                                </ListBoxItem.InputBindings>
-                                <b:Interaction.Triggers>
-                                    <b:DataTrigger Binding="{Binding SelectedSection}" Comparison="NotEqual" Value="{x:Null}">
-                                        <b:ChangePropertyAction PropertyName="IsSelected" Value="False"/>
-                                    </b:DataTrigger>
-                                    <b:DataTrigger Binding="{Binding SelectedSection}" Value="{x:Null}">
-                                        <b:ChangePropertyAction PropertyName="IsSelected" Value="True"/>
-                                    </b:DataTrigger>
-                                </b:Interaction.Triggers>
-                                <StackPanel Orientation="Horizontal">
-                                    <cnt:WPRIcon Foreground="{DynamicResource DarkPrimaryColorBrush}" Source="ExpandAllOutline" Margin="5"/>
-                                    <TextBlock Text="Весь каталог" Margin="5"/>
-                                </StackPanel>
-                            </ListBoxItem>
-                        </ListBox>
-                        <Rectangle Height="1" Fill="{DynamicResource DividerColorBrush}"/>
-                        <ListBox Style="{StaticResource WPRMenuListBox}" ItemsSource="{Binding Sections}"
+                        <ListBox Margin="0" Style="{StaticResource WPRListBox}" ItemsSource="{Binding Sections}"
                              HorizontalContentAlignment="Stretch"
                              SelectedItem="{Binding SelectedSection}">
                             <ListBox.ItemTemplate>
