@@ -398,5 +398,25 @@ namespace WPRMebel.WPF.ViewModels.MainPages
 
         #endregion
 
+        #region SearchInCatalog
+
+        #region SearchText : string - Строка поиска в каталоге
+
+        /// <summary>Строка поиска в каталоге</summary>
+        private string _SearchText;
+
+        /// <summary>Строка поиска в каталоге</summary>
+        public string SearchText
+        {
+            get => _SearchText;
+            set => Set(ref _SearchText, value);
+        }
+
+        #endregion
+
+        
+
+        #endregion
+
     }
 }
