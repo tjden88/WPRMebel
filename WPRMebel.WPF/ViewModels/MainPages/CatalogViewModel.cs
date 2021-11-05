@@ -13,8 +13,18 @@ using WPRMebel.WpfAPI.Catalog;
 
 namespace WPRMebel.WPF.ViewModels.MainPages
 {
+    /// <summary> Изначальная фильтрация просмотра элементов каталога </summary>
+    public enum CatalogViewRootGrouping
+    {
+        None,
+        SectionFilter,
+        VendorFilter,
+        TagFilter,
+        Search
+    }
     internal class CatalogViewModel : ViewModel
     {
+
         private readonly CatalogViewer _CatalogViewer;
         private readonly IUserDialog _UserDialog;
 
@@ -184,6 +194,23 @@ namespace WPRMebel.WPF.ViewModels.MainPages
 
         #endregion
 
+        #region Command SetRootGroupingCommand : CatalogViewRootGrouping - Установить изначальный фильтр
+
+        /// <summary>Установить изначальный фильтр</summary>
+        private Command _SetRootGroupingCommand;
+
+        /// <summary>Установить изначальный фильтр</summary>
+        public Command SetRootGroupingCommand => _SetRootGroupingCommand
+            ??= new Command(OnSetRootGroupingCommandExecuted, CanSetRootGroupingCommandExecute, "Установить изначальный фильтр");
+
+        /// <summary>Проверка возможности выполнения - Установить изначальный фильтр</summary>
+        private bool CanSetRootGroupingCommandExecute(object p) => p is CatalogViewRootGrouping cg && cg != RootGrouping;
+
+        /// <summary>Проверка возможности выполнения - Установить изначальный фильтр</summary>
+        private void OnSetRootGroupingCommandExecuted(object p) => RootGrouping = (CatalogViewRootGrouping) p;
+
+        #endregion
+
         #endregion
 
         #region Lists
@@ -204,6 +231,20 @@ namespace WPRMebel.WPF.ViewModels.MainPages
 
         #endregion
 
+        #region Vendors : RangeObservableCollection<Vendor> - Поставщики
+
+        /// <summary>Поставщики</summary>
+        private RangeObservableCollection<Vendor> _Vendors;
+
+        /// <summary>Поставщики</summary>
+        public RangeObservableCollection<Vendor> Vendors
+        {
+            get => _Vendors;
+            set => Set(ref _Vendors, value);
+        }
+
+        #endregion
+
         #region Elements : RangeObservableCollection<CatalogElement> - Отображаемая коллекция элементов
 
         /// <summary>Отображаемая коллекция элементов</summary>
@@ -218,19 +259,33 @@ namespace WPRMebel.WPF.ViewModels.MainPages
 
         #endregion
 
-        #region Categories : ObservableCollection<Category> - Список отображаемых категорий
+        #region Categories : RangeObservableCollection<Category> - Список отображаемых категорий
 
         /// <summary>Список отображаемых категорий</summary>
-        private ObservableCollection<Category> _Categories = new();
+        private RangeObservableCollection<Category> _Categories = new();
 
         /// <summary>Список отображаемых категорий</summary>
-        public ObservableCollection<Category> Categories
+        public RangeObservableCollection<Category> Categories
         {
             get => _Categories;
             set => Set(ref _Categories, value);
         }
 
         #endregion
+
+        #endregion
+
+        #region RootGrouping : CatalogViewRootGrouping - Изначальный фильтр отображаемых элементов
+
+        /// <summary>Изначальный фильтр отображаемых элементов</summary>
+        private CatalogViewRootGrouping _RootGrouping = CatalogViewRootGrouping.SectionFilter;
+
+        /// <summary>Изначальный фильтр отображаемых элементов</summary>
+        public CatalogViewRootGrouping RootGrouping
+        {
+            get => _RootGrouping;
+            set => Set(ref _RootGrouping, value);
+        }
 
         #endregion
 
@@ -247,6 +302,20 @@ namespace WPRMebel.WPF.ViewModels.MainPages
                 .CallPropertyChanged(nameof(SelectedSectionIsNotNull))
                 .Then(LoadCategories)
             ;
+        }
+
+        #endregion
+
+        #region SelectedVendor : Vendor - Выбранный поставщик
+
+        /// <summary>Выбранный поставщик</summary>
+        private Vendor _SelectedVendor;
+
+        /// <summary>Выбранный поставщик</summary>
+        public Vendor SelectedVendor
+        {
+            get => _SelectedVendor;
+            set => Set(ref _SelectedVendor, value);
         }
 
         #endregion

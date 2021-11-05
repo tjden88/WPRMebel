@@ -9,6 +9,7 @@
              xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:cm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
              xmlns:extensions="clr-namespace:WPRMebel.WPF.Extensions"
+             xmlns:mainPages="clr-namespace:WPRMebel.WPF.ViewModels.MainPages"
              mc:Ignorable="d" 
              DataContext="{Binding CatalogViewModel, Source={StaticResource Locator}}"
              d:DesignHeight="450" d:DesignWidth="800">
@@ -28,12 +29,17 @@
                               CloseOnMouseButtonUp="True">
                     <cnt:WPRPopup.Content>
                         <Menu Style="{StaticResource WPRVerticalMenu}">
-                            <MenuItem Header="Просмотр по разделам">
+                            <MenuItem Header="Просмотр по разделам"
+                                      Command="{Binding SetRootGroupingCommand}"
+                                      CommandParameter="{x:Static mainPages:CatalogViewRootGrouping.SectionFilter}">
                                 <MenuItem.Icon>
                                     <cnt:WPRIcon Source="CircleExpand"/>
                                 </MenuItem.Icon>
                             </MenuItem>
-                            <MenuItem Header="Просмотр по поставщикам">
+                            <MenuItem Header="Просмотр по поставщикам"  
+                                      Command="{Binding SetRootGroupingCommand}"
+                                      CommandParameter="{x:Static mainPages:CatalogViewRootGrouping.VendorFilter}">
+
                                 <MenuItem.Icon>
                                     <cnt:WPRIcon Source="TruckOutline"/>
                                 </MenuItem.Icon>
@@ -56,76 +62,146 @@
                         <TextBox Margin="5"
                                  HorizontalAlignment="Stretch"
                                  VerticalAlignment="Center"
-                                 Style="{StaticResource WPRFlatTextBox}" 
+                                 Style="{StaticResource WPRFlatTextBox}"
                                  helpers:TextHelper.ShowClearButton="True"
-                                 helpers:TextHelper.Hint="Поиск в каталоге"/>
+                                 helpers:TextHelper.Hint="Поиск в каталоге">
+                            <TextBox.Text>
+                                <Binding Path="ElementsFilterText">
+                                    <Binding.ValidationRules>
+                                        <local:VaTest/>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </TextBox>
                     </DockPanel>
                 </Border>
 
             </DockPanel>
             <Grid HorizontalAlignment="Left" VerticalAlignment="Top" DockPanel.Dock="Left" MinWidth="290"
-                         IsHitTestVisible="{Binding IsNowDataLoading, Converter={StaticResource BoolNotConverter}}">
-                <cnt:WPRTitledCard  IconSource="CircleExpand" Header="Разделы каталога" ShowMenuButton="True">
-                    <cnt:WPRTitledCard.PopupMenu>
-                        <Menu Style="{StaticResource WPRVerticalMenu}">
-                            <MenuItem Command="{Binding CreateNewSectionCommand}"
+                  IsHitTestVisible="{Binding IsNowDataLoading, Converter={StaticResource BoolNotConverter}}">
+                <Grid.Resources>
+                    <cnt:WPRTitledCard x:Key="SectionSelector"  IconSource="CircleExpand" Header="Разделы каталога" ShowMenuButton="True">
+                        <cnt:WPRTitledCard.PopupMenu>
+                            <Menu Style="{StaticResource WPRVerticalMenu}">
+                                <MenuItem Command="{Binding CreateNewSectionCommand}"
                                       Header="Добавить">
-                                <MenuItem.Icon>
-                                    <cnt:WPRIcon Source="Add"/>
-                                </MenuItem.Icon>
-                            </MenuItem>
-                            <MenuItem Command="{Binding EditSectionCommand}"
+                                    <MenuItem.Icon>
+                                        <cnt:WPRIcon Source="Add"/>
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem Command="{Binding EditSectionCommand}"
                                       Header="Изменить"
                                       Visibility="{Binding SelectedSectionIsNotNull, Converter={StaticResource Bool2VisibilityConverter}}">
-                                <MenuItem.Icon>
-                                    <cnt:WPRIcon Source="EditOutline"/>
-                                </MenuItem.Icon>
-                            </MenuItem>
-                            <Separator/>
-                            <MenuItem Command="{Binding DeleteSectionCommand}"
+                                    <MenuItem.Icon>
+                                        <cnt:WPRIcon Source="EditOutline"/>
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <Separator/>
+                                <MenuItem Command="{Binding DeleteSectionCommand}"
                                       Header="Удалить"
                                       Visibility="{Binding SelectedSectionIsNotNull, Converter={StaticResource Bool2VisibilityConverter}}">
-                                <MenuItem.Icon>
-                                    <cnt:WPRIcon Foreground="{DynamicResource AttentionColorBrush}" Source="DeleteOutline"/>
-                                </MenuItem.Icon>
-                            </MenuItem>
-                        </Menu>
-                    </cnt:WPRTitledCard.PopupMenu>
-                    <StackPanel>
-                        <ListBox Margin="-5,0,0,0" Style="{StaticResource WPRMenuListBox}" ItemsSource="{Binding Sections}"
+                                    <MenuItem.Icon>
+                                        <cnt:WPRIcon Foreground="{DynamicResource AttentionColorBrush}" Source="DeleteOutline"/>
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                            </Menu>
+                        </cnt:WPRTitledCard.PopupMenu>
+                        <StackPanel>
+                            <ListBox Margin="-5,0,0,0" Style="{StaticResource WPRMenuListBox}" ItemsSource="{Binding Sections}"
                              HorizontalContentAlignment="Stretch"
                              SelectedItem="{Binding SelectedSection}">
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <DockPanel Background="{StaticResource TransparentBrush}"
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <DockPanel Background="{StaticResource TransparentBrush}"
                                            ToolTip="{Binding Description}">
-                                        <cnt:WPRIcon Foreground="{DynamicResource DarkPrimaryColorBrush}" Source="LayersOutline" Margin="10,5"/>
-                                        <TextBlock Text="{Binding Name}" Margin="5"/>
-                                    </DockPanel>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListBox>
-                        <Rectangle Height="1" Fill="{DynamicResource DividerColorBrush}"/>
-                    </StackPanel>
-                </cnt:WPRTitledCard>
+                                            <cnt:WPRIcon Foreground="{DynamicResource DarkPrimaryColorBrush}" Source="LayersOutline" Margin="10,5"/>
+                                            <TextBlock Text="{Binding Name}" Margin="5"/>
+                                        </DockPanel>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                            <Rectangle Height="1" Fill="{DynamicResource DividerColorBrush}"/>
+                            <DockPanel Margin="5,10,5,0" LastChildFill="False">
+                                <DockPanel.Style>
+                                    <Style TargetType="DockPanel">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding SelectedSection}" Value="{x:Null}">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DockPanel.Style>
+                                <cnt:WPRIcon VerticalAlignment="Top" Source="HelpOutline" 
+                                             Foreground="{DynamicResource SecondaryTextColorBrush}"/>
+                                <TextBlock  Margin="5,0,0,0"  TextWrapping="Wrap" FontStyle="Italic" Width="240"
+                                            Name="SectionDescriptionText"
+                                            Foreground="{DynamicResource SecondaryTextColorBrush}"
+                                            Text="{Binding SelectedSection.Description}"/>
+                            </DockPanel>
+                        </StackPanel>
+                    </cnt:WPRTitledCard>
+
+                    <cnt:WPRTitledCard x:Key="VendorSelector"  IconSource="TruckCheckOutline" Header="Поставщики" ShowMenuButton="True">
+                        <cnt:WPRTitledCard.PopupMenu>
+                            <Menu Style="{StaticResource WPRVerticalMenu}">
+                                <MenuItem Command="{Binding CreateNewSectionCommand}"
+                                      Header="Добавить">
+                                    <MenuItem.Icon>
+                                        <cnt:WPRIcon Source="Add"/>
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem Command="{Binding EditSectionCommand}"
+                                      Header="Изменить"
+                                      Visibility="{Binding SelectedSectionIsNotNull, Converter={StaticResource Bool2VisibilityConverter}}">
+                                    <MenuItem.Icon>
+                                        <cnt:WPRIcon Source="EditOutline"/>
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <Separator/>
+                                <MenuItem Command="{Binding DeleteSectionCommand}"
+                                      Header="Удалить"
+                                      Visibility="{Binding SelectedSectionIsNotNull, Converter={StaticResource Bool2VisibilityConverter}}">
+                                    <MenuItem.Icon>
+                                        <cnt:WPRIcon Foreground="{DynamicResource AttentionColorBrush}" Source="DeleteOutline"/>
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                            </Menu>
+                        </cnt:WPRTitledCard.PopupMenu>
+                        <StackPanel>
+                            <ListBox Margin="-5,0,0,0" Style="{StaticResource WPRMenuListBox}" ItemsSource="{Binding Vendors}"
+                             HorizontalContentAlignment="Stretch"
+                             SelectedItem="{Binding SelectedVendor}">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <DockPanel Background="{StaticResource TransparentBrush}"
+                                           ToolTip="{Binding Name}">
+                                            <cnt:WPRIcon Foreground="{DynamicResource DarkPrimaryColorBrush}" Source="LayersOutline" Margin="10,5"/>
+                                            <TextBlock Text="{Binding Name}" Margin="5"/>
+                                        </DockPanel>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                            <Rectangle Height="1" Fill="{DynamicResource DividerColorBrush}"/>
+                            <TextBox Text="Файлы"></TextBox>
+                        </StackPanel>
+                    </cnt:WPRTitledCard>
+
+                </Grid.Resources>
+                <ContentControl>
+                    <ContentControl.Style>
+                        <Style TargetType="ContentControl">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding RootGrouping}" Value="SectionFilter">
+                                    <Setter Property="Content" Value="{StaticResource SectionSelector}"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding RootGrouping}" Value="VendorFilter">
+                                    <Setter Property="Content" Value="{StaticResource VendorSelector}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ContentControl.Style>
+                </ContentControl>
             </Grid>
-            <DockPanel Margin="5,10,5,0" LastChildFill="False">
-                <DockPanel.Style>
-                    <Style TargetType="DockPanel">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding Text, ElementName=SectionDescriptionText}" Value="">
-                                <Setter Property="Visibility" Value="Collapsed"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </DockPanel.Style>
-                <cnt:WPRIcon VerticalAlignment="Top" Source="HelpOutline" 
-                         Foreground="{DynamicResource SecondaryTextColorBrush}"/>
-                <TextBlock  Margin="5,0,0,0"  TextWrapping="Wrap" FontStyle="Italic" Width="240"
-                            Name="SectionDescriptionText"
-                            Foreground="{DynamicResource SecondaryTextColorBrush}"
-                            Text="{Binding SelectedSection.Description}"/>
-            </DockPanel>
         </StackPanel>
         <!--Основной контент-->
         <cnt:WPRCard Margin="6,10,15,15">
