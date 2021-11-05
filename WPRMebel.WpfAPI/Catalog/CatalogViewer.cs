@@ -20,14 +20,17 @@ namespace WPRMebel.WpfAPI.Catalog
         private readonly ICatalogDbRepository<Section> _SectionRepository;
         private readonly ICatalogDbRepository<CatalogElement> _ElementRepository;
         private readonly ICatalogDbRepository<Category> _CategoriesRepository;
+        private readonly ICatalogDbRepository<Vendor> _VenorsRepository;
 
         public CatalogViewer(ICatalogDbRepository<Section> SectionRepository,
             ICatalogDbRepository<CatalogElement> ElementRepository,
-            ICatalogDbRepository<Category> CategoriesRepository)
+            ICatalogDbRepository<Category> CategoriesRepository,
+            ICatalogDbRepository<Vendor> VenorsRepository)
         {
             _SectionRepository = SectionRepository;
             _ElementRepository = ElementRepository;
             _CategoriesRepository = CategoriesRepository;
+            _VenorsRepository = VenorsRepository;
         }
 
         public Action<bool> IsNowDataLoadingChanged { get; set; }
@@ -65,6 +68,9 @@ namespace WPRMebel.WpfAPI.Catalog
 
         /// <summary> Загрузить все разделы </summary>
         public Task<IEnumerable<Section>> LoadSections() => LoadData(_SectionRepository.Items);
+
+        /// <summary> Загрузить всех поставщиков </summary>
+        public Task<IEnumerable<Vendor>> LoadVendors() => LoadData(_VenorsRepository.Items.OrderBy( v => v.Name));
 
 
         /// <summary> Загрузить категории с фильтрацией </summary>

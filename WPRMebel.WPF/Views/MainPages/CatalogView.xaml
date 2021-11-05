@@ -25,6 +25,7 @@
                         <cnt:WPRIcon Source="Menu"/>
                     </ToggleButton.Content>
                 </ToggleButton>
+
                 <cnt:WPRPopup Name="CatalogViewModePopup"
                               CloseOnMouseButtonUp="True">
                     <cnt:WPRPopup.Content>
@@ -65,18 +66,11 @@
                                  Style="{StaticResource WPRFlatTextBox}"
                                  helpers:TextHelper.ShowClearButton="True"
                                  helpers:TextHelper.Hint="Поиск в каталоге">
-                            <TextBox.Text>
-                                <Binding Path="ElementsFilterText">
-                                    <Binding.ValidationRules>
-                                        <local:VaTest/>
-                                    </Binding.ValidationRules>
-                                </Binding>
-                            </TextBox.Text>
                         </TextBox>
                     </DockPanel>
                 </Border>
-
             </DockPanel>
+
             <Grid HorizontalAlignment="Left" VerticalAlignment="Top" DockPanel.Dock="Left" MinWidth="290"
                   IsHitTestVisible="{Binding IsNowDataLoading, Converter={StaticResource BoolNotConverter}}">
                 <Grid.Resources>
@@ -90,16 +84,14 @@
                                     </MenuItem.Icon>
                                 </MenuItem>
                                 <MenuItem Command="{Binding EditSectionCommand}"
-                                      Header="Изменить"
-                                      Visibility="{Binding SelectedSectionIsNotNull, Converter={StaticResource Bool2VisibilityConverter}}">
+                                      Header="Изменить">
                                     <MenuItem.Icon>
                                         <cnt:WPRIcon Source="EditOutline"/>
                                     </MenuItem.Icon>
                                 </MenuItem>
                                 <Separator/>
                                 <MenuItem Command="{Binding DeleteSectionCommand}"
-                                      Header="Удалить"
-                                      Visibility="{Binding SelectedSectionIsNotNull, Converter={StaticResource Bool2VisibilityConverter}}">
+                                      Header="Удалить">
                                     <MenuItem.Icon>
                                         <cnt:WPRIcon Foreground="{DynamicResource AttentionColorBrush}" Source="DeleteOutline"/>
                                     </MenuItem.Icon>
@@ -151,16 +143,14 @@
                                     </MenuItem.Icon>
                                 </MenuItem>
                                 <MenuItem Command="{Binding EditSectionCommand}"
-                                      Header="Изменить"
-                                      Visibility="{Binding SelectedSectionIsNotNull, Converter={StaticResource Bool2VisibilityConverter}}">
+                                      Header="Изменить">
                                     <MenuItem.Icon>
                                         <cnt:WPRIcon Source="EditOutline"/>
                                     </MenuItem.Icon>
                                 </MenuItem>
                                 <Separator/>
                                 <MenuItem Command="{Binding DeleteSectionCommand}"
-                                      Header="Удалить"
-                                      Visibility="{Binding SelectedSectionIsNotNull, Converter={StaticResource Bool2VisibilityConverter}}">
+                                      Header="Удалить">
                                     <MenuItem.Icon>
                                         <cnt:WPRIcon Foreground="{DynamicResource AttentionColorBrush}" Source="DeleteOutline"/>
                                     </MenuItem.Icon>
@@ -202,82 +192,116 @@
                     </ContentControl.Style>
                 </ContentControl>
             </Grid>
+
         </StackPanel>
         <!--Основной контент-->
-        <cnt:WPRCard Margin="6,10,15,15">
-            <DockPanel>
-                <!--Меню-->
-                <Grid Margin="2" DockPanel.Dock="Top">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    <ToolBar>
-                        <Border BorderBrush="{DynamicResource DividerColorBrush}" HorizontalAlignment="Left" Margin="5"
+        <Grid>
+
+            <Border BorderBrush="{DynamicResource DividerColorBrush}" BorderThickness="1">
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Setter Property="Visibility" Value="Collapsed"></Setter>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Elements.Count}" Value="0">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <cnt:WPRIcon Source="ScatterPlotOutline" IconSize="46" HorizontalAlignment="Center" VerticalAlignment="Center" 
+                         Foreground="{DynamicResource PrimaryColorBrush}"/>
+                    <TextBlock Text="Выберите, что отбразить" 
+                       HorizontalAlignment="Center" VerticalAlignment="Center"
+                       Foreground="{DynamicResource PrimaryColorBrush}" FontSize="26"/>
+                </StackPanel>
+            </Border>
+
+            <Grid>
+                <Grid.Style>
+                    <Style TargetType="Grid">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Elements.Count}" Value="0">
+                                <Setter Property="Visibility" Value="Hidden"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Style>
+                <cnt:WPRCard Margin="15">
+                <DockPanel>
+                    <!--Меню-->
+                    <Grid Margin="2" DockPanel.Dock="Top">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <ToolBar>
+                            <Border BorderBrush="{DynamicResource DividerColorBrush}" HorizontalAlignment="Left" Margin="5"
                                 Background="{DynamicResource BackgroundColorBrush}"
                         CornerRadius="15"
                         BorderThickness="1">
-                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center"  Margin="5,0,5,0">
-                                <cnt:WPRIcon Source="Filter" Margin="3"/>
-                                <TextBox Margin="3"
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center"  Margin="5,0,5,0">
+                                    <cnt:WPRIcon Source="Filter" Margin="3"/>
+                                    <TextBox Margin="3"
                                          MinWidth="180"
                                          VerticalAlignment="Center"
                                          Text="{Binding ElementsFilterText, UpdateSourceTrigger=PropertyChanged}"
                                          Style="{StaticResource WPRFlatTextBox}" 
                                          helpers:TextHelper.ShowClearButton="True"
                                          helpers:TextHelper.Hint="Фильтр"/>
-                            </StackPanel>
-                        </Border>
-                        <Separator/>
-                        <Button Style="{StaticResource MenuButton}" ToolTip="Создать копию">
-                            <cnt:WPRIcon Source="ContentCopy"/>
-                        </Button>
-                        <Button Style="{StaticResource MenuButton}" ToolTip="Удалить элемент">
-                            <cnt:WPRIcon Source="Delete"/>
-                        </Button>
-                    </ToolBar>
-                    <Border Background="{DynamicResource MenuBodyBrush}" Grid.Column="1" BorderThickness="0">
-                        <ToggleButton x:Name="EditModeToggle"
+                                </StackPanel>
+                            </Border>
+                            <Separator/>
+                            <Button Style="{StaticResource MenuButton}" ToolTip="Создать копию">
+                                <cnt:WPRIcon Source="ContentCopy"/>
+                            </Button>
+                            <Button Style="{StaticResource MenuButton}" ToolTip="Удалить элемент">
+                                <cnt:WPRIcon Source="Delete"/>
+                            </Button>
+                        </ToolBar>
+                        <Border Background="{DynamicResource MenuBodyBrush}" Grid.Column="1" BorderThickness="0">
+                            <ToggleButton x:Name="EditModeToggle"
                                       IsChecked="{Binding ElementName=CatalogViewGrid, Path=IsReadOnly, Mode=TwoWay, Converter={StaticResource BoolNotConverter}}"
                                       helpers:RippleHelper.FeedbackBrush ="{DynamicResource LightPrimaryColorBrush}">
-                            <StackPanel Orientation="Horizontal">
-                                <cnt:WPRIcon Source="FileDocumentEditOutline" Margin="5"/>
-                                <TextBlock Text="Режим редактирования"  Margin="5"/>
-                            </StackPanel>
-                        </ToggleButton>
-                    </Border>
-                </Grid>
-                <!--Таблица данных-->
-                <Grid>
-                    <Grid.Resources>
-                        <CollectionViewSource x:Key="ViewSource" Source="{Binding Elements}"
+                                <StackPanel Orientation="Horizontal">
+                                    <cnt:WPRIcon Source="FileDocumentEditOutline" Margin="5"/>
+                                    <TextBlock Text="Режим редактирования"  Margin="5"/>
+                                </StackPanel>
+                            </ToggleButton>
+                        </Border>
+                    </Grid>
+                    <!--Таблица данных-->
+                    <Grid>
+                        <Grid.Resources>
+                            <CollectionViewSource x:Key="ViewSource" Source="{Binding Elements}"
                                               extensions:CollectionViewSourceFilter.FilterObject ="{Binding ElementsFilter}">
-                            <CollectionViewSource.SortDescriptions>
-                                <cm:SortDescription PropertyName="Name"/>
-                            </CollectionViewSource.SortDescriptions>
-                        </CollectionViewSource>
-                    </Grid.Resources>
-                    <DataGrid x:Name="CatalogViewGrid"
+                                <CollectionViewSource.SortDescriptions>
+                                    <cm:SortDescription PropertyName="Name"/>
+                                </CollectionViewSource.SortDescriptions>
+                            </CollectionViewSource>
+                        </Grid.Resources>
+                        <DataGrid x:Name="CatalogViewGrid"
                               IsReadOnly="True"
                               Margin="5"
                               BorderThickness="0"
                               ItemsSource="{Binding Source={StaticResource ViewSource}}"
                               CanUserAddRows="True"
                               CanUserDeleteRows="True">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn SortDirection="Ascending" Header="Имя" Width="*" Binding="{Binding Name}"/>
-                            <DataGridTextColumn Header="Элементов" Binding="{Binding Category.Name}"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                    <Border Background="{StaticResource TransparentBrush}"
+                            <DataGrid.Columns>
+                                <DataGridTextColumn SortDirection="Ascending" Header="Имя" Width="*" Binding="{Binding Name}"/>
+                                <DataGridTextColumn Header="Элементов" Binding="{Binding Category.Name}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <Border Background="{StaticResource TransparentBrush}"
                             Visibility="{Binding IsNowDataLoading, Converter={StaticResource Bool2VisibilityConverter}}">
-                        <TextBlock Text="Загрузка данных..." Foreground="{DynamicResource PrimaryColorBrush}"
+                            <TextBlock Text="Загрузка данных..." Foreground="{DynamicResource PrimaryColorBrush}"
                                    HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
-                    </Border>
-                </Grid>
+                        </Border>
+                    </Grid>
 
-            </DockPanel>
-        </cnt:WPRCard>
-
+                </DockPanel>
+            </cnt:WPRCard>
+            </Grid>
+        </Grid>
     </DockPanel>
 </UserControl>

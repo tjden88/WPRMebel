@@ -1,7 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Windows;
-using DispatcherPriority = System.Windows.Threading.DispatcherPriority;
 
 namespace System.Collections.ObjectModel
 {
@@ -19,17 +16,17 @@ namespace System.Collections.ObjectModel
             collection.Add(Items);
         }
 
-        public static async Task AddAsync<T>(this ObservableCollection<T> collection, IEnumerable<T> Items)
-        {
-            await Task.Run(() =>
-            {
-                foreach (var item in Items)
-                    Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Loaded,
-                        (Action) delegate
-                        {
-                            collection.Add(item);
-                        });
-            });
-        }
+        //public static async Task AddAsync<T>(this ObservableCollection<T> collection, IEnumerable<T> Items)
+        //{
+        //    await Task.Run(() =>
+        //    {
+        //        foreach (var item in Items)
+        //            Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Loaded,
+        //                (Action) delegate
+        //                {
+        //                    collection.Add(item);
+        //                });
+        //    });
+        //}
     }
 }

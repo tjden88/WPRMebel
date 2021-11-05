@@ -34,53 +34,11 @@ namespace WPRMebel.WPF.ViewModels.MainPages
             _CatalogViewer.IsNowDataLoadingChanged += _ => OnPropertyChanged(nameof(IsNowDataLoading));
 
             _UserDialog = UserDialog;
-            LoadDataCommand.Execute();
+            LoadStartData();
         }
 
         #region Commands
 
-        #region Command LoadDataCommand - Загрузить данные
-
-        /// <summary>Загрузить данные</summary>
-        private Command _LoadDataCommand;
-
-        /// <summary>Загрузить данные</summary>
-        public Command LoadDataCommand => _LoadDataCommand
-            ??= new Command(OnLoadDataCommandExecutedAsync, CanLoadDataCommandExecute, "Загрузить данные");
-
-        /// <summary>Проверка возможности выполнения - Загрузить данные</summary>
-        private bool CanLoadDataCommandExecute() => true;
-
-        /// <summary>Логика выполнения - Загрузить данные</summary>
-        private async void OnLoadDataCommandExecutedAsync()
-        {
-            Sections.AddClear(await _CatalogViewer.LoadSections());
-            //Sections.AddClear(await _SectionRepository.GetAllAsync());
-            //LoadCategories(SelectedSection);
-        }
-
-        #endregion
-
-        #region Command ShowAllCatalogCommand - Показать весь каталог
-
-        /// <summary>Показать весь каталог</summary>
-        private Command _ShowAllCatalogCommand;
-
-        /// <summary>Показать весь каталог</summary>
-        public Command ShowAllCatalogCommand => _ShowAllCatalogCommand
-            ??= new Command(OnShowAllCatalogCommandExecuted, CanShowAllCatalogCommandExecute, "Показать весь каталог");
-
-        /// <summary>Проверка возможности выполнения - Показать весь каталог</summary>
-        private bool CanShowAllCatalogCommandExecute() => true;
-
-        /// <summary>Логика выполнения - Показать весь каталог</summary>
-        private void OnShowAllCatalogCommandExecuted()
-        {
-            SelectedSection = null;
-            OnPropertyChanged(nameof(SelectedSectionIsNotNull));
-        }
-
-        #endregion
 
         #region Command CreateNewSectionCommand - Создать секцию каталога
 
@@ -126,7 +84,7 @@ namespace WPRMebel.WPF.ViewModels.MainPages
             ??= new Command(OnEditSectionCommandExecuted, CanEditSectionCommandExecute, "Редактировать секцию");
 
         /// <summary>Проверка возможности выполнения - Редактировать секцию</summary>
-        private bool CanEditSectionCommandExecute() => SelectedSectionIsNotNull;
+        private bool CanEditSectionCommandExecute() => SelectedSection != null;
 
         /// <summary>Логика выполнения - Редактировать секцию</summary>
         private async void OnEditSectionCommandExecuted()
@@ -215,15 +173,13 @@ namespace WPRMebel.WPF.ViewModels.MainPages
 
         #region Lists
 
-        public bool SelectedSectionIsNotNull => SelectedSection != null;
-
-        #region Sections : RangeObservableCollection<Section> - Секции каталога
+        #region Sections : ObservableCollection<Section> - Секции каталога
 
         /// <summary>Секции каталога</summary>
-        private RangeObservableCollection<Section> _Sections = new();
+        private ObservableCollection<Section> _Sections = new();
 
         /// <summary>Секции каталога</summary>
-        public RangeObservableCollection<Section> Sections
+        public ObservableCollection<Section> Sections
         {
             get => _Sections;
             set => Set(ref _Sections, value);
@@ -231,13 +187,13 @@ namespace WPRMebel.WPF.ViewModels.MainPages
 
         #endregion
 
-        #region Vendors : RangeObservableCollection<Vendor> - Поставщики
+        #region Vendors : ObservableCollection<Vendor> - Поставщики
 
         /// <summary>Поставщики</summary>
-        private RangeObservableCollection<Vendor> _Vendors;
+        private ObservableCollection<Vendor> _Vendors = new();
 
         /// <summary>Поставщики</summary>
-        public RangeObservableCollection<Vendor> Vendors
+        public ObservableCollection<Vendor> Vendors
         {
             get => _Vendors;
             set => Set(ref _Vendors, value);
@@ -245,13 +201,13 @@ namespace WPRMebel.WPF.ViewModels.MainPages
 
         #endregion
 
-        #region Elements : RangeObservableCollection<CatalogElement> - Отображаемая коллекция элементов
+        #region Elements : ObservableCollection<CatalogElement> - Отображаемая коллекция элементов
 
         /// <summary>Отображаемая коллекция элементов</summary>
-        private RangeObservableCollection<CatalogElement> _Elements = new();
+        private ObservableCollection<CatalogElement> _Elements = new();
 
         /// <summary>Отображаемая коллекция элементов</summary>
-        public RangeObservableCollection<CatalogElement> Elements
+        public ObservableCollection<CatalogElement> Elements
         {
             get => _Elements;
             set => Set(ref _Elements, value);
@@ -259,13 +215,13 @@ namespace WPRMebel.WPF.ViewModels.MainPages
 
         #endregion
 
-        #region Categories : RangeObservableCollection<Category> - Список отображаемых категорий
+        #region Categories : ObservableCollection<Category> - Список отображаемых категорий
 
         /// <summary>Список отображаемых категорий</summary>
-        private RangeObservableCollection<Category> _Categories = new();
+        private ObservableCollection<Category> _Categories = new();
 
         /// <summary>Список отображаемых категорий</summary>
-        public RangeObservableCollection<Category> Categories
+        public ObservableCollection<Category> Categories
         {
             get => _Categories;
             set => Set(ref _Categories, value);
@@ -284,7 +240,13 @@ namespace WPRMebel.WPF.ViewModels.MainPages
         public CatalogViewRootGrouping RootGrouping
         {
             get => _RootGrouping;
-            set => Set(ref _RootGrouping, value);
+            set => IfSet(ref _RootGrouping, value)
+                .Then(gr =>
+                {
+                    if (gr == CatalogViewRootGrouping.SectionFilter) LoadCategories(SelectedSection);
+                    if (gr == CatalogViewRootGrouping.VendorFilter) LoadCategories(SelectedVendor);
+                })
+            ;
         }
 
         #endregion
@@ -292,14 +254,13 @@ namespace WPRMebel.WPF.ViewModels.MainPages
         #region SelectedSection : Section - Выбранный раздел каталога
 
         /// <summary>Выбранный раздел каталога</summary>
-        private Section _SelectedSection = new();
+        private Section _SelectedSection;
 
         /// <summary>Выбранный раздел каталога</summary>
         public Section SelectedSection
         {
             get => _SelectedSection;
             set => IfSet(ref _SelectedSection, value)
-                .CallPropertyChanged(nameof(SelectedSectionIsNotNull))
                 .Then(LoadCategories)
             ;
         }
@@ -315,7 +276,9 @@ namespace WPRMebel.WPF.ViewModels.MainPages
         public Vendor SelectedVendor
         {
             get => _SelectedVendor;
-            set => Set(ref _SelectedVendor, value);
+            set => IfSet(ref _SelectedVendor, value)
+                .Then(LoadCategories)
+            ;
         }
 
         #endregion
@@ -327,13 +290,25 @@ namespace WPRMebel.WPF.ViewModels.MainPages
         #endregion
 
 
-        // Загрузить категории в зависимости от выбранного раздела
+        private async void LoadStartData()
+        {
+            Sections.AddClear(await _CatalogViewer.LoadSections());
+            Vendors.AddClear(await _CatalogViewer.LoadVendors());
+        }
+
+        // Загрузить категории в зависимости от выбранного раздела или поставщика
         private async void LoadCategories(Section s)
         {
-            var result = s == null 
-                ? await _CatalogViewer.GetElements() 
-                : await _CatalogViewer.GetElements(e => e.Category.Section == s);
-            Elements.AddRangeClear(result);
+            if( s == null) return;
+            var result = await _CatalogViewer.GetElements(e => e.Category.Section == s);
+            //Elements.AddRangeClear(result);
+            Elements.AddClear(result);
+        }
+        private async void LoadCategories(Vendor v)
+        {
+            if (v == null) return;
+            var result = await _CatalogViewer.GetElements(e => e.Category.Vendor == v);
+            Elements.AddClear(result);
         }
 
 
