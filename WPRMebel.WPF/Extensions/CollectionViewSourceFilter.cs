@@ -12,8 +12,8 @@ namespace WPRMebel.WPF.Extensions
     {
         private readonly Action<FilterEventArgs> _OnFilterAction;
         private readonly DispatcherTimer _DelayTimer = new(DispatcherPriority.Background);
-
         private CollectionViewSource _CollectionViewSource;
+
 
         /// <summary> Установить задержку перед вызовом обновления View </summary>
         public int DelayBeforeRefresh
@@ -32,6 +32,7 @@ namespace WPRMebel.WPF.Extensions
             _DelayTimer.Tick += DelayTimerElapsed;
         }
 
+
         /// <summary> Обновить представление коллекции </summary>
         public void RefreshSource()
         {
@@ -44,8 +45,10 @@ namespace WPRMebel.WPF.Extensions
             _DelayTimer.Start();
         }
 
+
         /// <summary> Обновить представление коллекции без установленной задержки</summary>
         public void RefreshSourceNow() => _CollectionViewSource?.View.Refresh();
+
 
         private void DelayTimerElapsed(object Sender, EventArgs EventArgs)
         {
@@ -53,8 +56,10 @@ namespace WPRMebel.WPF.Extensions
             _DelayTimer.Stop();
         }
 
+
         private void DoFilter(object S, FilterEventArgs e) => _OnFilterAction?.Invoke(e);
 
+        #region AttachedProp : FilterObject
 
         private static void FilterObjectOnChanged(DependencyObject D, DependencyPropertyChangedEventArgs E)
         {
@@ -73,8 +78,6 @@ namespace WPRMebel.WPF.Extensions
                 cvs.Filter += newValue.DoFilter;
             }
         }
-
-        #region AttachedProp : FilterObject
 
         /// <summary>
         /// Установить объект CollectionViewSourceFilter для фильтрации данных.

@@ -33,6 +33,7 @@ namespace WPRMebel.WpfAPI.Catalog
             _VenorsRepository = VenorsRepository;
         }
 
+        /// <summary> Происходит при изменении статуса запроса к БД </summary>
         public Action<bool> IsNowDataLoadingChanged { get; set; }
 
         #region IsNowDataLoading : bool - Выполняется запрос к БД

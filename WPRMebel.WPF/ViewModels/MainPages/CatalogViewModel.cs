@@ -32,7 +32,6 @@ namespace WPRMebel.WPF.ViewModels.MainPages
         {
             _CatalogViewer = CatalogViewer;
             _CatalogViewer.IsNowDataLoadingChanged += _ => OnPropertyChanged(nameof(IsNowDataLoading));
-
             _UserDialog = UserDialog;
             LoadStartData();
         }
