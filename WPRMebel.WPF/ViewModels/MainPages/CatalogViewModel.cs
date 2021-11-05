@@ -37,6 +37,7 @@ namespace WPRMebel.WPF.ViewModels.MainPages
             LoadStartData();
         }
 
+
         #region Load
         private async void LoadStartData()
         {
@@ -50,19 +51,22 @@ namespace WPRMebel.WPF.ViewModels.MainPages
         }
 
 
-
         // Загрузить элементы и категории в зависимости от выбранного раздела или поставщика
         private async void LoadElements(Section s)
         {
             if (s == null) return;
-            Categories.AddClear( await _CatalogViewer.GetCategories( c => c.Section == s));
+            var cat = await _CatalogViewer.GetCategories(c => c.Section == s);
+
+            CategoriesNames.AddClear(cat.Select( c => c.Name).OrderBy(str => str));
             var result = await _CatalogViewer.GetElements(e => e.Category.Section == s);
             Elements.AddClear(result);
         }
         private async void LoadElements(Vendor v)
         {
             if (v == null) return;
-            Categories.AddClear(await _CatalogViewer.GetCategories(c => c.Vendor == v));
+            var cat = await _CatalogViewer.GetCategories(c => c.Vendor == v);
+
+            CategoriesNames.AddClear(cat.Select(c => c.Name).OrderBy(str => str));
             var result = await _CatalogViewer.GetElements(e => e.Category.Vendor == v);
             Elements.AddClear(result);
         }
@@ -247,16 +251,16 @@ namespace WPRMebel.WPF.ViewModels.MainPages
 
         #endregion
 
-        #region Categories : ObservableCollection<Category> - Список отображаемых категорий
+        #region CategoriesNames : ObservableCollection<string> - Список отображаемых категорий
 
         /// <summary>Список отображаемых категорий</summary>
-        private ObservableCollection<Category> _Categories = new();
+        private ObservableCollection<string> _CategoriesNames = new();
 
         /// <summary>Список отображаемых категорий</summary>
-        public ObservableCollection<Category> Categories
+        public ObservableCollection<string> CategoriesNames
         {
-            get => _Categories;
-            set => Set(ref _Categories, value);
+            get => _CategoriesNames;
+            set => Set(ref _CategoriesNames, value);
         }
 
         #endregion
@@ -297,16 +301,18 @@ namespace WPRMebel.WPF.ViewModels.MainPages
 
         #endregion
 
-        #region SelectedCategory : Category - Выбранная категория
+        #region SelectedCategoryName : string - Выбранная категория
 
         /// <summary>Выбранная категория</summary>
-        private Category _SelectedCategory;
+        private string _SelectedCategoryName;
 
         /// <summary>Выбранная категория</summary>
-        public Category SelectedCategory
+        public string SelectedCategoryName
         {
-            get => _SelectedCategory;
-            set => Set(ref _SelectedCategory, value);
+            get => _SelectedCategoryName;
+            set => IfSet(ref _SelectedCategoryName, value)
+                .Then(ElementsFilter.RefreshSourceNow)
+                ;
         }
 
         #endregion
@@ -333,14 +339,11 @@ namespace WPRMebel.WPF.ViewModels.MainPages
 
         #endregion
 
-
         #region IsNowDataLoading : bool - Индикатор загрузки данных
         /// <summary>Индикатор загрузки данных</summary>
         public bool IsNowDataLoading => _CatalogViewer.IsNowDataLoading;
 
         #endregion
-
-
 
         #region ElementsFilter
 
@@ -372,8 +375,18 @@ namespace WPRMebel.WPF.ViewModels.MainPages
 
         private void OnElementsFilter(FilterEventArgs e)
         {
-            var text = ElementsFilterText;
-            if (string.IsNullOrEmpty(text) || e.Item is not CatalogElement element)
+            if (e.Item is not CatalogElement element) return;
+
+            // Категории
+            var catName = SelectedCategoryName;
+            if (catName != null && element.Category.Name != catName)
+            {
+                e.Accepted = false;
+                return;
+            }
+
+            var text = ElementsFilterText?.Trim();
+            if (string.IsNullOrEmpty(text))
             {
                 e.Accepted = true;
                 return;

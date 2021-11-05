@@ -318,6 +318,9 @@
                             <ToolBar>
 
                                 <!--Фильтр-->
+                                <ToolBar.Resources>
+                                        <TextBlock x:Key="Item" Text="Все категории" Foreground="{DynamicResource PrimaryColorBrush}"/>
+                                </ToolBar.Resources>
                                 <Border BorderBrush="{DynamicResource DividerColorBrush}" HorizontalAlignment="Left" Margin="5"
                                         Background="{DynamicResource BackgroundColorBrush}"
                                         CornerRadius="15"
@@ -339,24 +342,21 @@
                                 </Border>
 
                                 <!--Фильтр категорий-->
-                                <ComboBox Width="150" SelectedItem="{Binding SelectedCategory, TargetNullValue={Binding ElementName=ComboBoxItem}}">
-                                    <ComboBox.ItemTemplateSelector>
+                                <ComboBox BorderBrush="{DynamicResource PrimaryColorBrush}" Width="150" IsSynchronizedWithCurrentItem="True" SelectedItem="{Binding SelectedCategoryName, TargetNullValue={StaticResource Item},
+                                    FallbackValue={StaticResource Item}}">
+                                    <!--<ComboBox.ItemTemplateSelector>
                                         <DataTemplateSelector></DataTemplateSelector>
-                                    </ComboBox.ItemTemplateSelector>
-                                    <ComboBox.ItemTemplate>
+                                    </ComboBox.ItemTemplateSelector>-->
+                                    <!--<ComboBox.ItemTemplate>
                                         <DataTemplate DataType="{x:Type catalog:Category}">
                                             <TextBlock Text="{Binding Name}"/>
                                         </DataTemplate>
-                                    </ComboBox.ItemTemplate>
+                                    </ComboBox.ItemTemplate-->
                                     <ComboBox.ItemsSource>
                                         <CompositeCollection>
-                                            <!--<ComboBoxItem IsSelected="True" Name="ComboBoxItem">
-                                                <ComboBoxItem.Content>
-                                                    <TextBlock Text="Все категории" FontWeight="Bold"/>
-                                                </ComboBoxItem.Content>
-                                            </ComboBoxItem>-->
-                                            <catalog:Category Name="Все категории"/>
-                                            <CollectionContainer Collection="{Binding CatalogViewModel.Categories, Source={StaticResource Locator}}"/>
+                                            <StaticResource ResourceKey="Item"></StaticResource>
+                                            <!--<catalog:Category Name="Все категории"/>-->
+                                            <CollectionContainer Collection="{Binding CatalogViewModel.CategoriesNames, Source={StaticResource Locator}}"/>
                                         </CompositeCollection>
                                     </ComboBox.ItemsSource>
                                 </ComboBox>

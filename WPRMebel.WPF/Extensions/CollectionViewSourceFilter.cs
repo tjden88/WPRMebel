@@ -43,6 +43,10 @@ namespace WPRMebel.WPF.Extensions
             _DelayTimer.Stop();
             _DelayTimer.Start();
         }
+
+        /// <summary> Обновить представление коллекции без установленной задержки</summary>
+        public void RefreshSourceNow() => _CollectionViewSource?.View.Refresh();
+
         private void DelayTimerElapsed(object Sender, EventArgs EventArgs)
         {
             _CollectionViewSource?.View.Refresh();
