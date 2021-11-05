@@ -227,10 +227,12 @@
                         </Style.Triggers>
                     </Style>
                 </Grid.Style>
+
                 <cnt:WPRCard Margin="15">
-                <DockPanel>
-                    <!--Меню-->
-                    <Grid Margin="2" DockPanel.Dock="Top">
+
+                    <DockPanel>
+                        <!--Меню-->
+                        <Grid Margin="2" DockPanel.Dock="Top">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
@@ -275,11 +277,15 @@
                         <Grid.Resources>
                             <CollectionViewSource x:Key="ViewSource" Source="{Binding Elements}"
                                               extensions:CollectionViewSourceFilter.FilterObject ="{Binding ElementsFilter}">
+                                <CollectionViewSource.GroupDescriptions>
+                                        <PropertyGroupDescription PropertyName="Category"/>
+                                </CollectionViewSource.GroupDescriptions>
                                 <CollectionViewSource.SortDescriptions>
                                     <cm:SortDescription PropertyName="Name"/>
                                 </CollectionViewSource.SortDescriptions>
                             </CollectionViewSource>
                         </Grid.Resources>
+
                         <DataGrid x:Name="CatalogViewGrid"
                               IsReadOnly="True"
                               Margin="5"
@@ -287,16 +293,43 @@
                               ItemsSource="{Binding Source={StaticResource ViewSource}}"
                               CanUserAddRows="True"
                               CanUserDeleteRows="True">
+                            <DataGrid.GroupStyle>
+                                <GroupStyle>
+                                    <GroupStyle.ContainerStyle>
+                                        <Style TargetType="{x:Type GroupItem}">
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="{x:Type GroupItem}">
+                                                        <Expander IsExpanded="False">
+                                                            <Expander.Header>
+                                                                <StackPanel Orientation="Horizontal">
+                                                                    <!--<TextBlock Text="{Binding Path = Name}" FontWeight="Bold"/>-->
+                                                                    <TextBlock Text=" (Элементов: "/>
+                                                                    <TextBlock Text="{Binding ItemCount}" />
+                                                                    <TextBlock Text=")"/>
+                                                                </StackPanel>
+                                                            </Expander.Header>
+                                                            <ItemsPresenter />
+                                                        </Expander>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </GroupStyle.ContainerStyle>
+                                </GroupStyle>
+                            </DataGrid.GroupStyle>
                             <DataGrid.Columns>
                                 <DataGridTextColumn SortDirection="Ascending" Header="Имя" Width="*" Binding="{Binding Name}"/>
                                 <DataGridTextColumn Header="Элементов" Binding="{Binding Category.Name}"/>
                             </DataGrid.Columns>
                         </DataGrid>
+
                         <Border Background="{StaticResource TransparentBrush}"
                             Visibility="{Binding IsNowDataLoading, Converter={StaticResource Bool2VisibilityConverter}}">
                             <TextBlock Text="Загрузка данных..." Foreground="{DynamicResource PrimaryColorBrush}"
                                    HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
                         </Border>
+
                     </Grid>
 
                 </DockPanel>

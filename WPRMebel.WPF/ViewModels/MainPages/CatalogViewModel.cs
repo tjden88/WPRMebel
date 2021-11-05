@@ -37,6 +37,30 @@ namespace WPRMebel.WPF.ViewModels.MainPages
             LoadStartData();
         }
 
+        #region Load
+        private async void LoadStartData()
+        {
+            Sections.AddClear(await _CatalogViewer.LoadSections());
+            Vendors.AddClear(await _CatalogViewer.LoadVendors());
+        }
+
+        // Загрузить категории в зависимости от выбранного раздела или поставщика
+        private async void LoadCategories(Section s)
+        {
+            if (s == null) return;
+            var result = await _CatalogViewer.GetElements(e => e.Category.Section == s);
+            //Elements.AddRangeClear(result);
+            Elements.AddClear(result);
+        }
+        private async void LoadCategories(Vendor v)
+        {
+            if (v == null) return;
+            var result = await _CatalogViewer.GetElements(e => e.Category.Vendor == v);
+            Elements.AddClear(result);
+        }
+
+        #endregion
+
         #region Commands
 
 
@@ -289,27 +313,6 @@ namespace WPRMebel.WPF.ViewModels.MainPages
 
         #endregion
 
-
-        private async void LoadStartData()
-        {
-            Sections.AddClear(await _CatalogViewer.LoadSections());
-            Vendors.AddClear(await _CatalogViewer.LoadVendors());
-        }
-
-        // Загрузить категории в зависимости от выбранного раздела или поставщика
-        private async void LoadCategories(Section s)
-        {
-            if( s == null) return;
-            var result = await _CatalogViewer.GetElements(e => e.Category.Section == s);
-            //Elements.AddRangeClear(result);
-            Elements.AddClear(result);
-        }
-        private async void LoadCategories(Vendor v)
-        {
-            if (v == null) return;
-            var result = await _CatalogViewer.GetElements(e => e.Category.Vendor == v);
-            Elements.AddClear(result);
-        }
 
 
         #region ElementsFilter
