@@ -42,19 +42,27 @@ namespace WPRMebel.WPF.ViewModels.MainPages
         {
             Sections.AddClear(await _CatalogViewer.LoadSections());
             Vendors.AddClear(await _CatalogViewer.LoadVendors());
+
+            if (IsDesignMode)
+            {
+                Elements.Add(new Fitting(){Id=1, Name = "Test"});
+            }
         }
 
-        // Загрузить категории в зависимости от выбранного раздела или поставщика
-        private async void LoadCategories(Section s)
+
+
+        // Загрузить элементы и категории в зависимости от выбранного раздела или поставщика
+        private async void LoadElements(Section s)
         {
             if (s == null) return;
+            Categories.AddClear( await _CatalogViewer.GetCategories( c => c.Section == s));
             var result = await _CatalogViewer.GetElements(e => e.Category.Section == s);
-            //Elements.AddRangeClear(result);
             Elements.AddClear(result);
         }
-        private async void LoadCategories(Vendor v)
+        private async void LoadElements(Vendor v)
         {
             if (v == null) return;
+            Categories.AddClear(await _CatalogViewer.GetCategories(c => c.Vendor == v));
             var result = await _CatalogViewer.GetElements(e => e.Category.Vendor == v);
             Elements.AddClear(result);
         }
@@ -255,25 +263,7 @@ namespace WPRMebel.WPF.ViewModels.MainPages
 
         #endregion
 
-        #region RootGrouping : CatalogViewRootGrouping - Изначальный фильтр отображаемых элементов
-
-        /// <summary>Изначальный фильтр отображаемых элементов</summary>
-        private CatalogViewRootGrouping _RootGrouping = CatalogViewRootGrouping.SectionFilter;
-
-        /// <summary>Изначальный фильтр отображаемых элементов</summary>
-        public CatalogViewRootGrouping RootGrouping
-        {
-            get => _RootGrouping;
-            set => IfSet(ref _RootGrouping, value)
-                .Then(gr =>
-                {
-                    if (gr == CatalogViewRootGrouping.SectionFilter) LoadCategories(SelectedSection);
-                    if (gr == CatalogViewRootGrouping.VendorFilter) LoadCategories(SelectedVendor);
-                })
-            ;
-        }
-
-        #endregion
+        #region SelectedItems
 
         #region SelectedSection : Section - Выбранный раздел каталога
 
@@ -285,7 +275,7 @@ namespace WPRMebel.WPF.ViewModels.MainPages
         {
             get => _SelectedSection;
             set => IfSet(ref _SelectedSection, value)
-                .Then(LoadCategories)
+                .Then(LoadElements)
             ;
         }
 
@@ -301,11 +291,48 @@ namespace WPRMebel.WPF.ViewModels.MainPages
         {
             get => _SelectedVendor;
             set => IfSet(ref _SelectedVendor, value)
-                .Then(LoadCategories)
+                .Then(LoadElements)
             ;
         }
 
         #endregion
+
+        #region SelectedCategory : Category - Выбранная категория
+
+        /// <summary>Выбранная категория</summary>
+        private Category _SelectedCategory;
+
+        /// <summary>Выбранная категория</summary>
+        public Category SelectedCategory
+        {
+            get => _SelectedCategory;
+            set => Set(ref _SelectedCategory, value);
+        }
+
+        #endregion
+
+        #endregion
+
+        #region RootGrouping : CatalogViewRootGrouping - Изначальный фильтр отображаемых элементов
+
+        /// <summary>Изначальный фильтр отображаемых элементов</summary>
+        private CatalogViewRootGrouping _RootGrouping = CatalogViewRootGrouping.SectionFilter;
+
+        /// <summary>Изначальный фильтр отображаемых элементов</summary>
+        public CatalogViewRootGrouping RootGrouping
+        {
+            get => _RootGrouping;
+            set => IfSet(ref _RootGrouping, value)
+                .Then(gr =>
+                {
+                    if (gr == CatalogViewRootGrouping.SectionFilter) LoadElements(SelectedSection);
+                    if (gr == CatalogViewRootGrouping.VendorFilter) LoadElements(SelectedVendor);
+                })
+            ;
+        }
+
+        #endregion
+
 
         #region IsNowDataLoading : bool - Индикатор загрузки данных
         /// <summary>Индикатор загрузки данных</summary>
