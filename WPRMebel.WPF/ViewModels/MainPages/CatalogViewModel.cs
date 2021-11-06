@@ -18,11 +18,19 @@ namespace WPRMebel.WPF.ViewModels.MainPages
     /// <summary> Изначальная фильтрация просмотра элементов каталога </summary>
     public enum CatalogViewRootGrouping
     {
-        None,
         SectionFilter,
         VendorFilter,
-        TagFilter,
-        Search
+        TagFilter
+    }
+
+    /// <summary> Типы элементов каталога </summary>
+    public enum ElementTypes
+    {
+        All,
+        Sheet,
+        Running,
+        Fitting,
+        Service
     }
     internal class CatalogViewModel : ViewModel
     {
@@ -45,11 +53,7 @@ namespace WPRMebel.WPF.ViewModels.MainPages
             Sections.AddClear(await _CatalogViewer.LoadSections());
             Vendors.AddClear(await _CatalogViewer.LoadVendors());
 
-            if (IsDesignMode)
-            {
-                Sections.Clear();
-                Elements.Add(new Fitting() {Id = 1, Name = "Test"});
-            }
+            if (IsDesignMode) Elements.Add(new Fitting() {Id = 1, Name = "Test"});
         }
 
 
@@ -375,6 +379,22 @@ namespace WPRMebel.WPF.ViewModels.MainPages
 
         #endregion
 
+        #region ElementsTypeFilter : ElementTypes - Фильтрация элементов каталога по типу
+
+        /// <summary>Фильтрация элементов каталога по типу</summary>
+        private ElementTypes _ElementsTypeFilter;
+
+        /// <summary>Фильтрация элементов каталога по типу</summary>
+        public ElementTypes ElementsTypeFilter
+        {
+            get => _ElementsTypeFilter;
+            set => IfSet(ref _ElementsTypeFilter, value)
+                .Then(ElementsFilter.RefreshSourceNow);
+
+        }
+
+        #endregion
+
         private void OnElementsFilter(FilterEventArgs e)
         {
             if (e.Item is not CatalogElement element) return;
@@ -385,6 +405,34 @@ namespace WPRMebel.WPF.ViewModels.MainPages
             {
                 e.Accepted = false;
                 return;
+            }
+
+            // Типы
+            if (ElementsTypeFilter != ElementTypes.All)
+            {
+                var typeFilterResult = false;
+
+                switch (ElementsTypeFilter)
+                {
+                    case ElementTypes.Sheet:
+                        typeFilterResult = element is SheetMaterial;
+                        break;
+                    case ElementTypes.Running:
+                        typeFilterResult = element is RunningMaterial;
+                        break;
+                    case ElementTypes.Fitting:
+                        typeFilterResult = element is Fitting;
+                        break;
+                    case ElementTypes.Service:
+                        typeFilterResult = element is Service;
+                        break;
+                }
+
+                if (!typeFilterResult)
+                {
+                    e.Accepted = false;
+                    return;
+                }
             }
 
             var text = ElementsFilterText?.Trim();
@@ -444,7 +492,6 @@ namespace WPRMebel.WPF.ViewModels.MainPages
         }
 
         #endregion
-        
 
         #endregion
 

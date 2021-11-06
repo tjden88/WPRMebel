@@ -10,7 +10,7 @@
              xmlns:mainPages="clr-namespace:WPRMebel.WPF.ViewModels.MainPages"
              mc:Ignorable="d" 
              DataContext="{Binding CatalogViewModel, Source={StaticResource Locator}}"
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="1000">
     <DockPanel>
 
         <!--Левая колонка-->
@@ -261,7 +261,7 @@
             <Border BorderBrush="{DynamicResource DividerColorBrush}" BorderThickness="1">
                 <Border.Style>
                     <Style TargetType="Border">
-                        <Setter Property="Visibility" Value="Collapsed"></Setter>
+                        <Setter Property="Visibility" Value="Collapsed"/>
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding Elements.Count}" Value="0">
                                 <Setter Property="Visibility" Value="Visible"/>
@@ -296,11 +296,16 @@
 
                 <!--Выбор типа элемента-->
                 <TabControl HorizontalAlignment="Left" Foreground="{DynamicResource PrimaryTextColorBrush}" Margin="10,15,0,0">
-                    <TabItem Header="Все элементы"></TabItem>
-                    <TabItem Header="Площадной материал"></TabItem>
-                    <TabItem Header="Погонный материал"></TabItem>
-                    <TabItem Header="Фурнитура"></TabItem>
-                    <TabItem Header="Услуги"></TabItem>
+                    <TabItem Header="Все элементы" IsSelected="{Binding ElementsTypeFilter, Converter={StaticResource EnumToBoolConverter}, 
+                        ConverterParameter={x:Static mainPages:ElementTypes.All}}"/>
+                    <TabItem Header="Площадной материал" IsSelected="{Binding ElementsTypeFilter, Converter={StaticResource EnumToBoolConverter}, 
+                        ConverterParameter={x:Static mainPages:ElementTypes.Sheet}}"/>
+                    <TabItem Header="Погонный материал" IsSelected="{Binding ElementsTypeFilter, Converter={StaticResource EnumToBoolConverter}, 
+                        ConverterParameter={x:Static mainPages:ElementTypes.Running}}"/>
+                    <TabItem Header="Фурнитура" IsSelected="{Binding ElementsTypeFilter, Converter={StaticResource EnumToBoolConverter}, 
+                        ConverterParameter={x:Static mainPages:ElementTypes.Fitting}}"/>
+                    <TabItem Header="Услуги" IsSelected="{Binding ElementsTypeFilter, Converter={StaticResource EnumToBoolConverter}, 
+                        ConverterParameter={x:Static mainPages:ElementTypes.Service}}"/>
                 </TabControl>
 
                 <!--Список элементов-->

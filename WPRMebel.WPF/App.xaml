@@ -2,10 +2,12 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:services="clr-namespace:WPRMebel.WPF.Services"
+             xmlns:catalog="clr-namespace:WPRMebel.WpfAPI.Catalog;assembly=WPRMebel.WpfAPI"
              StartupUri="Views/Windows/MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
             <services:ViewModelLocator x:Key="Locator"/>
+            <catalog:CatalogElementsInfoLocator x:Key="CatalogLocator"/>
 
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source = "pack://application:,,,/WPR;component/Styles.xaml"/>
