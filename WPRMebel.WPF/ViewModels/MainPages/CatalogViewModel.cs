@@ -2,9 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Data;
-using Microsoft.EntityFrameworkCore;
 using WPR.MVVM.Commands;
-using WPR.MVVM.Validation;
 using WPR.MVVM.ViewModels;
 using WPRMebel.Domain.Base.Catalog;
 using WPRMebel.Domain.Base.Catalog.Abstract;

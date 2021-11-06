@@ -14,7 +14,7 @@
     <DockPanel>
 
         <!--Левая колонка-->
-        <DockPanel>
+        <DockPanel Width="320">
 
             <!--поиск-->
             <DockPanel DockPanel.Dock="Top" Margin="10,10,10,0" LastChildFill="True" >
@@ -79,7 +79,7 @@
             <!--Фильтр по разделам, поставщикам и т.д.-->
             <ScrollViewer>
 
-                <Grid HorizontalAlignment="Left" VerticalAlignment="Top" DockPanel.Dock="Left" MinWidth="290"
+                <Grid VerticalAlignment="Top" 
                       IsHitTestVisible="{Binding IsNowDataLoading, Converter={StaticResource BoolNotConverter}}">
 
                     <Grid.Resources>
@@ -112,7 +112,7 @@
 
                             <StackPanel>
 
-                                <ListBox Margin="-5,0,0,0" Style="{StaticResource WPRMenuListBox}" ItemsSource="{Binding Sections}"
+                                <ListBox Style="{StaticResource WPRMenuListBox}" ItemsSource="{Binding Sections}"
                                          HorizontalContentAlignment="Stretch"
                                          SelectedItem="{Binding SelectedSection}">
                                     <ListBox.ItemTemplate>
@@ -142,7 +142,7 @@
                                     <cnt:WPRIcon VerticalAlignment="Top" Source="HelpOutline" 
                                              Foreground="{DynamicResource SecondaryTextColorBrush}"/>
 
-                                    <TextBlock  Margin="5,0,0,0"  TextWrapping="Wrap" FontStyle="Italic" Width="240"
+                                    <TextBlock  Margin="5,0,0,0"  TextWrapping="Wrap" FontStyle="Italic"
                                             Name="SectionDescriptionText"
                                             Foreground="{DynamicResource SecondaryTextColorBrush}"
                                             Text="{Binding SelectedSection.Description}"/>
@@ -183,7 +183,7 @@
 
                             <StackPanel>
 
-                                <ListBox Margin="-5,0,0,0" Style="{StaticResource WPRMenuListBox}" ItemsSource="{Binding Vendors}"
+                                <ListBox Style="{StaticResource WPRMenuListBox}" ItemsSource="{Binding Vendors}"
                                          HorizontalContentAlignment="Stretch"
                                          SelectedItem="{Binding SelectedVendor}">
 
@@ -278,6 +278,7 @@
                 </StackPanel>
             </Border>
 
+            <!--Основной контент-->
             <Grid>
                 <Grid.Style>
                     <Style TargetType="Grid">
