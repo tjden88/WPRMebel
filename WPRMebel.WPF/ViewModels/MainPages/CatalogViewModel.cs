@@ -41,6 +41,12 @@ namespace WPRMebel.WPF.ViewModels.MainPages
             _CatalogViewer.IsNowDataLoadingChanged += _ => OnPropertyChanged(nameof(IsNowDataLoading));
             _UserDialog = UserDialog;
             LoadStartData();
+            if (IsDesignMode)
+            {
+                Elements.Add(new Fitting { Id = 1, Name = "Test" });
+                FirstTimeDataLoaded = true;
+            }
+
         }
 
         #region Load
@@ -51,7 +57,6 @@ namespace WPRMebel.WPF.ViewModels.MainPages
             Vendors.AddRangeClear(await _CatalogViewer.LoadVendors().ConfigureAwait(false));
             IsNowDataLoading = false;
 
-            if (IsDesignMode) Elements.Add(new Fitting { Id = 1, Name = "Test" });
         }
 
 
@@ -312,6 +317,22 @@ namespace WPRMebel.WPF.ViewModels.MainPages
         #endregion
 
         #region SelectedItems
+
+        #region SelectedElement : CatalogElement - Выбранный элемент
+
+        /// <summary>Выбранный элемент</summary>
+        private CatalogElement _SelectedElement;
+
+        /// <summary>Выбранный элемент</summary>
+        public CatalogElement SelectedElement
+        {
+            get => _SelectedElement;
+            set => Set(ref _SelectedElement, value);
+        }
+
+        #endregion
+
+        
 
         #region SelectedSection : Section - Выбранный раздел каталога
 

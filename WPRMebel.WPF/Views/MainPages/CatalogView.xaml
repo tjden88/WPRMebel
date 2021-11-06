@@ -9,6 +9,8 @@
              xmlns:extensions="clr-namespace:WPRMebel.WPF.Extensions"
              xmlns:mainPages="clr-namespace:WPRMebel.WPF.ViewModels.MainPages"
              xmlns:converters="clr-namespace:WPRMebel.WPF.Infrastructure.Converters"
+             xmlns:abstract="clr-namespace:WPRMebel.Domain.Base.Catalog.Abstract;assembly=WPRMebel.Domain.Base"
+             xmlns:catalog="clr-namespace:WPRMebel.Domain.Base.Catalog;assembly=WPRMebel.Domain.Base"
              mc:Ignorable="d" 
              DataContext="{Binding CatalogViewModel, Source={StaticResource Locator}}"
              d:DesignHeight="450" d:DesignWidth="1000">
@@ -369,6 +371,11 @@
 
                         <!--Таблица данных-->
                         <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
                             <Grid.Resources>
                                 <CollectionViewSource x:Key="ViewSource" Source="{Binding Elements}"
                                                   extensions:CollectionViewSourceFilter.FilterObject ="{Binding ElementsFilter}">
@@ -385,6 +392,7 @@
                                       VirtualizingStackPanel.IsVirtualizingWhenGrouping="True"
                                       IsReadOnly="True"
                                       Margin="5"
+                                      RowDetailsVisibilityMode="VisibleWhenSelected"
                                       BorderThickness="0"
                                       ItemsSource="{Binding Source={StaticResource ViewSource}}"
                                       CanUserAddRows="True"
@@ -420,16 +428,40 @@
                                     <DataGridTextColumn SortDirection="Ascending" Header="Имя" Width="*" Binding="{Binding Name}"/>
                                     <DataGridTextColumn Header="Цена" MinWidth="100" Binding="{Binding TotalPrice, StringFormat='{}{0:c}'}"/>
                                 </DataGrid.Columns>
+                                <!--<DataGrid.RowDetailsTemplate>
+                                    <DataTemplate DataType="abstract:CatalogElement">
+                                        <Expander Focusable="False" Header="Состав комплекта" Margin="10,0">
+                                            <Expander.Content>
+                                                <cnt:WPRCard>
+                                                    <ListBox Focusable="False" ItemsSource="{Binding ChildCatalogElements}">
+                                                        <ListBox.ItemTemplate>
+                                                            <DataTemplate DataType="catalog:ChildCatalogElement">
+                                                                <DockPanel>
+                                                                    <TextBlock Text="{Binding CatalogElement.Name}"></TextBlock>
+                                                                    <TextBlock Text="{Binding Quantity}" Margin="5,0"></TextBlock>
+                                                                </DockPanel>
+                                                            </DataTemplate>
+                                                        </ListBox.ItemTemplate>
+                                                    </ListBox>
+                                                </cnt:WPRCard>
+                                            </Expander.Content>
+                                        </Expander>
+                                    </DataTemplate>
+                                </DataGrid.RowDetailsTemplate>-->
                             </DataGrid>
 
                             <!--Индикатор загрузки-->
-                            <Border Background="{StaticResource BackgroundColorBrush}"
-                                Visibility="{Binding IsNowDataLoading, Converter={StaticResource Bool2VisibilityConverter}}">
+                            <Border Grid.Column="0" Background="{StaticResource BackgroundColorBrush}"
+                                    Visibility="{Binding IsNowDataLoading, Converter={StaticResource Bool2VisibilityConverter}}">
                                 <TextBlock Text="Загрузка данных..." Foreground="{DynamicResource PrimaryColorBrush}"
                                        HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
                             </Border>
 
-                        </Grid>
+                            <GridSplitter Grid.Column="1" HorizontalAlignment="Center"
+                                          IsHitTestVisible="{Binding SelectedElement, Converter={StaticResource ValueIsNotNullConverter}}"/>
+                            <Rectangle Grid.Column="1" Width="1" Fill="{DynamicResource DividerColorBrush}"/>
+
+                       </Grid>
 
                 </DockPanel>
             </cnt:WPRCard>
