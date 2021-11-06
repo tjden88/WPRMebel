@@ -58,11 +58,11 @@ namespace WPRMebel.WPF.ViewModels.MainPages
         private async void LoadElements(Section s)
         {
             if (s == null) return;
-            var cat = await _CatalogViewer.GetCategories(c => c.Section == s);
+            var cat = await _CatalogViewer.GetCategories(c => c.Section == s).ConfigureAwait(false);
 
-            CategoriesNames.AddClear(cat.Select( c => c.Name).OrderBy(str => str));
-            var result = await _CatalogViewer.GetElements(e => e.Category.Section == s);
-            Elements.AddClear(result);
+            //CategoriesNames.AddClear(cat.Select( c => c.Name).OrderBy(str => str));
+            var result = await _CatalogViewer.GetElements(e => e.Category.Section == s).ConfigureAwait(false);
+            Elements.AddRangeClear(result);
         }
         private async void LoadElements(Vendor v)
         {
@@ -71,7 +71,7 @@ namespace WPRMebel.WPF.ViewModels.MainPages
 
             CategoriesNames.AddClear(cat.Select(c => c.Name).OrderBy(str => str));
             var result = await _CatalogViewer.GetElements(e => e.Category.Vendor == v);
-            Elements.AddClear(result);
+            Elements.AddRangeClear(result);
         }
 
         #endregion
@@ -243,10 +243,10 @@ namespace WPRMebel.WPF.ViewModels.MainPages
         #region Elements : ObservableCollection<CatalogElement> - Отображаемая коллекция элементов
 
         /// <summary>Отображаемая коллекция элементов</summary>
-        private ObservableCollection<CatalogElement> _Elements = new();
+        private RangeObservableCollection<CatalogElement> _Elements = new();
 
         /// <summary>Отображаемая коллекция элементов</summary>
-        public ObservableCollection<CatalogElement> Elements
+        public RangeObservableCollection<CatalogElement> Elements
         {
             get => _Elements;
             set => Set(ref _Elements, value);
