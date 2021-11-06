@@ -58,9 +58,9 @@ namespace WPRMebel.WpfAPI.Catalog
         #region LoadData
 
         // Потокобезопасный метод загрузки данных из БД
-        private async Task<IEnumerable<T>> LoadData<T>(IQueryable<T> query) where T : IEntity
+        private async Task<T[]> LoadData<T>(IQueryable<T> query) where T : IEntity
         {
-            if (IsNowDataLoading) return Enumerable.Empty<T>();
+            if (IsNowDataLoading) return Array.Empty<T>();
             IsNowDataLoading = true;
             var result = await query.ToArrayAsync();
             IsNowDataLoading = false;
@@ -68,14 +68,14 @@ namespace WPRMebel.WpfAPI.Catalog
         }
 
         /// <summary> Загрузить все разделы </summary>
-        public Task<IEnumerable<Section>> LoadSections() => LoadData(_SectionRepository.Items);
+        public Task<Section[]> LoadSections() => LoadData(_SectionRepository.Items);
 
         /// <summary> Загрузить всех поставщиков </summary>
-        public Task<IEnumerable<Vendor>> LoadVendors() => LoadData(_VenorsRepository.Items.OrderBy( v => v.Name));
+        public Task<Vendor[]> LoadVendors() => LoadData(_VenorsRepository.Items.OrderBy( v => v.Name));
 
 
         /// <summary> Загрузить категории с фильтрацией </summary>
-        public Task<IEnumerable<Category>> GetCategories([MaybeNull] Expression<Func<Category, bool>> Predicate = null)
+        public Task<Category[]> GetCategories([MaybeNull] Expression<Func<Category, bool>> Predicate = null)
         {
             var query = Predicate != null
                 ? _CategoriesRepository.Items
@@ -86,7 +86,7 @@ namespace WPRMebel.WpfAPI.Catalog
         }
 
         /// <summary> Загрузить элементы каталога с фильтрацией </summary>
-        public Task<IEnumerable<CatalogElement>> GetElements([MaybeNull] Expression<Func<CatalogElement, bool>> Predicate = null)
+        public Task<CatalogElement[]> GetElements([MaybeNull] Expression<Func<CatalogElement, bool>> Predicate = null)
         {
             var query = Predicate != null
                 ? _ElementRepository.Items
@@ -123,5 +123,14 @@ namespace WPRMebel.WpfAPI.Catalog
         public Task<bool> DeleteSection(Section DeletedSection) => GrudEntity(_SectionRepository.DeleteAsync(DeletedSection));
 
         #endregion
+
+        public Task<CatalogElement[]> SearchElements(string SearchPattern)
+        {
+            var query = _ElementRepository.Items
+                .Where(e => EF.Functions
+                    .Like(e.Name, $"%{SearchPattern}%"));
+
+            return LoadData(query);
+        }
     }
 }

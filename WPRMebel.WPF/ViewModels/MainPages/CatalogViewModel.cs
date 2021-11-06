@@ -2,7 +2,9 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Data;
+using Microsoft.EntityFrameworkCore;
 using WPR.MVVM.Commands;
+using WPR.MVVM.Validation;
 using WPR.MVVM.ViewModels;
 using WPRMebel.Domain.Base.Catalog;
 using WPRMebel.Domain.Base.Catalog.Abstract;
@@ -45,7 +47,8 @@ namespace WPRMebel.WPF.ViewModels.MainPages
 
             if (IsDesignMode)
             {
-                Elements.Add(new Fitting(){Id=1, Name = "Test"});
+                Sections.Clear();
+                Elements.Add(new Fitting() {Id = 1, Name = "Test"});
             }
         }
 
@@ -414,6 +417,33 @@ namespace WPRMebel.WPF.ViewModels.MainPages
 
         #endregion
 
+        #region Command SearchInCatalogCommand - Найти в каталоге
+
+        /// <summary>Найти в каталоге</summary>
+        private Command _SearchInCatalogCommand;
+
+        /// <summary>Найти в каталоге</summary>
+        public Command SearchInCatalogCommand => _SearchInCatalogCommand
+            ??= new Command(OnSearchInCatalogCommandExecuted, CanSearchInCatalogCommandExecute, "Найти в каталоге");
+
+        /// <summary>Проверка возможности выполнения - Найти в каталоге</summary>
+        private bool CanSearchInCatalogCommandExecute() => !string.IsNullOrWhiteSpace(SearchText);
+
+        /// <summary>Логика выполнения - Найти в каталоге</summary>
+        private async void OnSearchInCatalogCommandExecuted()
+        {
+            var searchText = SearchText.Trim();
+            SelectedSection = null;
+            SelectedVendor = null;
+
+           var elements = await _CatalogViewer.SearchElements(searchText);
+           CategoriesNames.AddClear( elements.Select(e => e.Category.Name).Distinct());
+
+            Elements.AddClear(elements);
+            SearchText = string.Empty;
+        }
+
+        #endregion
         
 
         #endregion

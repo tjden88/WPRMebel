@@ -2,15 +2,12 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:WPRMebel.WPF.Views.MainPages"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:cnt="clr-namespace:WPR.Controls;assembly=WPR"
              xmlns:helpers="clr-namespace:WPR.Helpers;assembly=WPR"
-             xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:cm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
              xmlns:extensions="clr-namespace:WPRMebel.WPF.Extensions"
              xmlns:mainPages="clr-namespace:WPRMebel.WPF.ViewModels.MainPages"
-             xmlns:catalog="clr-namespace:WPRMebel.Domain.Base.Catalog;assembly=WPRMebel.Domain.Base"
              mc:Ignorable="d" 
              DataContext="{Binding CatalogViewModel, Source={StaticResource Locator}}"
              d:DesignHeight="450" d:DesignWidth="800">
@@ -69,7 +66,11 @@
                                  VerticalAlignment="Center"
                                  Style="{StaticResource WPRFlatTextBox}"
                                  helpers:TextHelper.ShowClearButton="True"
+                                     Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
                                  helpers:TextHelper.Hint="Поиск в каталоге">
+                                <TextBox.InputBindings>
+                                    <KeyBinding Key="Enter" Command="{Binding SearchInCatalogCommand}"/>
+                                </TextBox.InputBindings>
                             </TextBox>
                         </DockPanel>
                     </Border>
@@ -344,18 +345,9 @@
                                 <!--Фильтр категорий-->
                                 <ComboBox BorderBrush="{DynamicResource PrimaryColorBrush}" Width="150" IsSynchronizedWithCurrentItem="True" SelectedItem="{Binding SelectedCategoryName, TargetNullValue={StaticResource Item},
                                     FallbackValue={StaticResource Item}}">
-                                    <!--<ComboBox.ItemTemplateSelector>
-                                        <DataTemplateSelector></DataTemplateSelector>
-                                    </ComboBox.ItemTemplateSelector>-->
-                                    <!--<ComboBox.ItemTemplate>
-                                        <DataTemplate DataType="{x:Type catalog:Category}">
-                                            <TextBlock Text="{Binding Name}"/>
-                                        </DataTemplate>
-                                    </ComboBox.ItemTemplate-->
                                     <ComboBox.ItemsSource>
                                         <CompositeCollection>
-                                            <StaticResource ResourceKey="Item"></StaticResource>
-                                            <!--<catalog:Category Name="Все категории"/>-->
+                                            <StaticResource ResourceKey="Item"/>
                                             <CollectionContainer Collection="{Binding CatalogViewModel.CategoriesNames, Source={StaticResource Locator}}"/>
                                         </CompositeCollection>
                                     </ComboBox.ItemsSource>
