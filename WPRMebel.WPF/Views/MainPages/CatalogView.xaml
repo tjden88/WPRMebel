@@ -443,7 +443,7 @@
 
                             <!--Индикатор загрузки-->
                             <Border Background="{StaticResource BackgroundColorBrush}"
-                                Visibility="{Binding IsNowDataLoading, Converter={StaticResource Bool2VisibilityConverter}}">
+                                Visibility="{Binding Elements.CollectionNowUpdatind, Converter={StaticResource Bool2VisibilityConverter}}">
                                 <TextBlock Text="Загрузка данных..." Foreground="{DynamicResource PrimaryColorBrush}"
                                        HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
                             </Border>

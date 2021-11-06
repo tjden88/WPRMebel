@@ -14,6 +14,25 @@ namespace WPRMebel.WPF.Extensions
     {
         private readonly SynchronizationContext _SynchronizationContext = SynchronizationContext.Current;
 
+        #region CollectionNowUpdatind : bool - Коллекция обновляется в данный момент
+
+        /// <summary>Коллекция обновляется в данный момент</summary>
+        private bool _CollectionNowUpdatind;
+
+        /// <summary>Коллекция обновляется в данный момент</summary>
+        public bool CollectionNowUpdatind
+        {
+            get => _CollectionNowUpdatind;
+            private set
+            {
+                if(_CollectionNowUpdatind == value) return;
+                _CollectionNowUpdatind= value;
+                RaisePropertyChanged(new PropertyChangedEventArgs(nameof(CollectionNowUpdatind)));
+            }
+        }
+
+        #endregion
+
         private bool _SuppressNotification;
 
         /// <summary>
@@ -22,9 +41,10 @@ namespace WPRMebel.WPF.Extensions
         /// <param name="items">Коллекция новых элементов</param>
         public void AddRangeClear(IEnumerable<T> items)
         {
-            _SuppressNotification = true;
+            CollectionNowUpdatind = true;
             ClearItems();
             AddRange(items);
+            CollectionNowUpdatind = false;
         }
 
         /// <summary>
@@ -35,11 +55,13 @@ namespace WPRMebel.WPF.Extensions
         {
             if (items != null)
             {
+                CollectionNowUpdatind = true;
                 _SuppressNotification = true;
                 foreach (var item in items) Add(item);
                 _SuppressNotification = false;
 
                 OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+                CollectionNowUpdatind = false;
             }
         }
 
@@ -47,11 +69,13 @@ namespace WPRMebel.WPF.Extensions
         {
             if (collection != null)
             {
+                CollectionNowUpdatind = true;
                 _SuppressNotification = true;
                 foreach (var item in collection) Remove(item);
                 _SuppressNotification = false;
 
                 OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+                CollectionNowUpdatind = false;
             }
         }
         protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
