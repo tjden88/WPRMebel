@@ -44,7 +44,6 @@ namespace WPRMebel.WPF.ViewModels.MainPages
             LoadStartData();
         }
 
-
         #region Load
         private async void LoadStartData()
         {

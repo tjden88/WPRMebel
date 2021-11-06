@@ -8,6 +8,7 @@
              xmlns:cm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
              xmlns:extensions="clr-namespace:WPRMebel.WPF.Extensions"
              xmlns:mainPages="clr-namespace:WPRMebel.WPF.ViewModels.MainPages"
+             xmlns:converters="clr-namespace:WPRMebel.WPF.Infrastructure.Converters"
              mc:Ignorable="d" 
              DataContext="{Binding CatalogViewModel, Source={StaticResource Locator}}"
              d:DesignHeight="450" d:DesignWidth="1000">
@@ -390,6 +391,9 @@
                             <Grid.Resources>
                                 <CollectionViewSource x:Key="ViewSource" Source="{Binding Elements}"
                                                   extensions:CollectionViewSourceFilter.FilterObject ="{Binding ElementsFilter}">
+                                    <CollectionViewSource.GroupDescriptions>
+                                        <PropertyGroupDescription PropertyName="Name" Converter="{converters:FirstLetterGroupingConverter}"/>
+                                    </CollectionViewSource.GroupDescriptions>
                                     <CollectionViewSource.SortDescriptions>
                                         <cm:SortDescription PropertyName="Name"/>
                                     </CollectionViewSource.SortDescriptions>
@@ -397,15 +401,43 @@
                             </Grid.Resources>
 
                             <DataGrid x:Name="CatalogViewGrid"
+                                      VirtualizingStackPanel.IsVirtualizingWhenGrouping="True"
                                       IsReadOnly="True"
                                       Margin="5"
                                       BorderThickness="0"
                                       ItemsSource="{Binding Source={StaticResource ViewSource}}"
                                       CanUserAddRows="True"
                                       CanUserDeleteRows="True">
+                                <DataGrid.GroupStyle>
+                                    <GroupStyle>
+                                        <GroupStyle.Panel>
+                                            <ItemsPanelTemplate>
+                                                <DataGridRowsPresenter/>
+                                            </ItemsPanelTemplate>
+                                        </GroupStyle.Panel>
+                                        <GroupStyle.ContainerStyle>
+                                            <Style TargetType="{x:Type GroupItem}">
+                                                <Setter Property="Margin" Value="0,0,0,5"/>
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="{x:Type GroupItem}">
+                                                                    <VirtualizingStackPanel HorizontalAlignment="Stretch">
+                                                                <Border Background="{DynamicResource MenuBodyBrush}">
+                                                                            <TextBlock FontWeight="Bold" Foreground="{DynamicResource SecondaryTextColorBrush}" Margin="10,2,0,2" Text="{Binding Path=Name}" />
+                                                                </Border>
+                                                                        <ItemsPresenter HorizontalAlignment="Stretch" />
+                                                            </VirtualizingStackPanel>
+                                                           
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </GroupStyle.ContainerStyle>
+                                    </GroupStyle>
+                                </DataGrid.GroupStyle>
                                 <DataGrid.Columns>
                                     <DataGridTextColumn SortDirection="Ascending" Header="Имя" Width="*" Binding="{Binding Name}"/>
-                                    <DataGridTextColumn Header="Элементов" Binding="{Binding Category.Name}"/>
+                                    <DataGridTextColumn Header="Цена" MinWidth="100" Binding="{Binding TotalPrice, StringFormat='{}{0:c}'}"/>
                                 </DataGrid.Columns>
                             </DataGrid>
 
