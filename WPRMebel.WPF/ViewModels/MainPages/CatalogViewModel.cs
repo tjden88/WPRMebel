@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Data;
 using WPR.MVVM.Commands;
@@ -47,10 +46,12 @@ namespace WPRMebel.WPF.ViewModels.MainPages
         #region Load
         private async void LoadStartData()
         {
-            Sections.AddClear(await _CatalogViewer.LoadSections());
-            Vendors.AddClear(await _CatalogViewer.LoadVendors());
+            IsNowDataLoading = true;
+            Sections.AddRangeClear(await _CatalogViewer.LoadSections().ConfigureAwait(false));
+            Vendors.AddRangeClear(await _CatalogViewer.LoadVendors().ConfigureAwait(false));
+            IsNowDataLoading = false;
 
-            if (IsDesignMode) Elements.Add(new Fitting() {Id = 1, Name = "Test"});
+            if (IsDesignMode) Elements.Add(new Fitting { Id = 1, Name = "Test" });
         }
 
 
@@ -58,20 +59,60 @@ namespace WPRMebel.WPF.ViewModels.MainPages
         private async void LoadElements(Section s)
         {
             if (s == null) return;
-            var cat = await _CatalogViewer.GetCategories(c => c.Section == s).ConfigureAwait(false);
+            FirstTimeDataLoaded = true;
+            IsNowDataLoading = true;
 
-            //CategoriesNames.AddClear(cat.Select( c => c.Name).OrderBy(str => str));
+            var cat = await _CatalogViewer.GetCategories(c => c.Section == s).ConfigureAwait(false);
+            CategoriesNames.AddRangeClear(cat.Select(c => c.Name).OrderBy(str => str));
+
             var result = await _CatalogViewer.GetElements(e => e.Category.Section == s).ConfigureAwait(false);
             Elements.AddRangeClear(result);
+
+            IsNowDataLoading = false;
         }
+
+
         private async void LoadElements(Vendor v)
         {
             if (v == null) return;
-            var cat = await _CatalogViewer.GetCategories(c => c.Vendor == v);
+            FirstTimeDataLoaded = true;
+            IsNowDataLoading = true;
 
-            CategoriesNames.AddClear(cat.Select(c => c.Name).OrderBy(str => str));
-            var result = await _CatalogViewer.GetElements(e => e.Category.Vendor == v);
+            var cat = await _CatalogViewer.GetCategories(c => c.Vendor == v).ConfigureAwait(false);
+            CategoriesNames.AddRangeClear(cat.Select(c => c.Name).OrderBy(str => str));
+
+            var result = await _CatalogViewer.GetElements(e => e.Category.Vendor == v).ConfigureAwait(false);
             Elements.AddRangeClear(result);
+
+            IsNowDataLoading = false;
+        }
+
+        #endregion
+
+        #region IsNowDataLoading : bool - Загрузка данных
+
+        /// <summary>Загрузка данных</summary>
+        private bool _IsNowDataLoading;
+
+        /// <summary>Загрузка данных</summary>
+        public bool IsNowDataLoading
+        {
+            get => _IsNowDataLoading;
+            set => Set(ref _IsNowDataLoading, value);
+        }
+
+        #endregion
+
+        #region FirstTimeDataLoaded : bool - Данные загружены в первый раз
+
+        /// <summary>Данные загружены в первый раз</summary>
+        private bool _FirstTimeDataLoaded;
+
+        /// <summary>Данные загружены в первый раз</summary>
+        public bool FirstTimeDataLoaded
+        {
+            get => _FirstTimeDataLoaded;
+            set => Set(ref _FirstTimeDataLoaded, value);
         }
 
         #endregion
@@ -204,7 +245,7 @@ namespace WPRMebel.WPF.ViewModels.MainPages
         private bool CanSetRootGroupingCommandExecute(object p) => p is CatalogViewRootGrouping cg && cg != RootGrouping;
 
         /// <summary>Проверка возможности выполнения - Установить изначальный фильтр</summary>
-        private void OnSetRootGroupingCommandExecuted(object p) => RootGrouping = (CatalogViewRootGrouping) p;
+        private void OnSetRootGroupingCommandExecuted(object p) => RootGrouping = (CatalogViewRootGrouping)p;
 
         #endregion
 
@@ -212,13 +253,13 @@ namespace WPRMebel.WPF.ViewModels.MainPages
 
         #region Lists
 
-        #region Sections : ObservableCollection<Section> - Секции каталога
+        #region Sections : RangeObservableCollection<Section> - Секции каталога
 
         /// <summary>Секции каталога</summary>
-        private ObservableCollection<Section> _Sections = new();
+        private RangeObservableCollection<Section> _Sections = new();
 
         /// <summary>Секции каталога</summary>
-        public ObservableCollection<Section> Sections
+        public RangeObservableCollection<Section> Sections
         {
             get => _Sections;
             set => Set(ref _Sections, value);
@@ -226,13 +267,13 @@ namespace WPRMebel.WPF.ViewModels.MainPages
 
         #endregion
 
-        #region Vendors : ObservableCollection<Vendor> - Поставщики
+        #region Vendors : RangeObservableCollection<Vendor> - Поставщики
 
         /// <summary>Поставщики</summary>
-        private ObservableCollection<Vendor> _Vendors = new();
+        private RangeObservableCollection<Vendor> _Vendors = new();
 
         /// <summary>Поставщики</summary>
-        public ObservableCollection<Vendor> Vendors
+        public RangeObservableCollection<Vendor> Vendors
         {
             get => _Vendors;
             set => Set(ref _Vendors, value);
@@ -240,7 +281,7 @@ namespace WPRMebel.WPF.ViewModels.MainPages
 
         #endregion
 
-        #region Elements : ObservableCollection<CatalogElement> - Отображаемая коллекция элементов
+        #region Elements : RangeObservableCollection<CatalogElement> - Отображаемая коллекция элементов
 
         /// <summary>Отображаемая коллекция элементов</summary>
         private RangeObservableCollection<CatalogElement> _Elements = new();
@@ -254,13 +295,13 @@ namespace WPRMebel.WPF.ViewModels.MainPages
 
         #endregion
 
-        #region CategoriesNames : ObservableCollection<string> - Список отображаемых категорий
+        #region CategoriesNames : RangeObservableCollection<string> - Список отображаемых категорий
 
         /// <summary>Список отображаемых категорий</summary>
-        private ObservableCollection<string> _CategoriesNames = new();
+        private RangeObservableCollection<string> _CategoriesNames = new();
 
         /// <summary>Список отображаемых категорий</summary>
-        public ObservableCollection<string> CategoriesNames
+        public RangeObservableCollection<string> CategoriesNames
         {
             get => _CategoriesNames;
             set => Set(ref _CategoriesNames, value);
@@ -339,12 +380,6 @@ namespace WPRMebel.WPF.ViewModels.MainPages
                 })
             ;
         }
-
-        #endregion
-
-        #region IsNowDataLoading : bool - Индикатор загрузки данных
-        /// <summary>Индикатор загрузки данных</summary>
-        public bool IsNowDataLoading => _CatalogViewer.IsNowDataLoading;
 
         #endregion
 
@@ -477,15 +512,21 @@ namespace WPRMebel.WPF.ViewModels.MainPages
         /// <summary>Логика выполнения - Найти в каталоге</summary>
         private async void OnSearchInCatalogCommandExecuted()
         {
+            FirstTimeDataLoaded = true;
+            IsNowDataLoading = true;
+
             var searchText = SearchText.Trim();
             SelectedSection = null;
             SelectedVendor = null;
 
-           var elements = await _CatalogViewer.SearchElements(searchText);
-           CategoriesNames.AddClear( elements.Select(e => e.Category.Name).Distinct());
+            var elements = await _CatalogViewer.SearchElements(searchText).ConfigureAwait(false);
 
-            Elements.AddClear(elements);
+            CategoriesNames.AddRangeClear(elements.Select(e => e.Category.Name).Distinct());
+            Elements.AddRangeClear(elements);
+
             SearchText = string.Empty;
+
+            IsNowDataLoading = false;
         }
 
         #endregion

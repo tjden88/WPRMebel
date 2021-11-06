@@ -12,7 +12,8 @@
              mc:Ignorable="d" 
              DataContext="{Binding CatalogViewModel, Source={StaticResource Locator}}"
              d:DesignHeight="450" d:DesignWidth="1000">
-    <DockPanel>
+
+    <DockPanel IsHitTestVisible="{Binding IsNowDataLoading, Converter={StaticResource BoolNotConverter}}">
 
         <!--Левая колонка-->
         <DockPanel Width="320">
@@ -80,8 +81,7 @@
             <!--Фильтр по разделам, поставщикам и т.д.-->
             <ScrollViewer>
 
-                <Grid VerticalAlignment="Top" 
-                      IsHitTestVisible="{Binding IsNowDataLoading, Converter={StaticResource BoolNotConverter}}">
+                <Grid VerticalAlignment="Top" >
 
                     <Grid.Resources>
 
@@ -259,17 +259,8 @@
         <Grid>
 
             <!--Фон - заглушка-->
-            <Border BorderBrush="{DynamicResource DividerColorBrush}" BorderThickness="1">
-                <Border.Style>
-                    <Style TargetType="Border">
-                        <Setter Property="Visibility" Value="Collapsed"/>
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding Elements.Count}" Value="0">
-                                <Setter Property="Visibility" Value="Visible"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </Border.Style>
+            <Border BorderBrush="{DynamicResource DividerColorBrush}" BorderThickness="1"
+                    Visibility="{Binding FirstTimeDataLoaded, Converter={StaticResource Bool2VisibilityConverter}, ConverterParameter=!}">
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                     <cnt:WPRIcon Source="ScatterPlotOutline" IconSize="46" HorizontalAlignment="Center" VerticalAlignment="Center" 
                          Foreground="{DynamicResource PrimaryColorBrush}"/>
@@ -280,17 +271,7 @@
             </Border>
 
             <!--Основной контент-->
-            <Grid>
-                <Grid.Style>
-                    <Style TargetType="Grid">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding Elements.Count}" Value="0">
-                                <Setter Property="Visibility" Value="Hidden"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </Grid.Style>
-
+            <Grid Visibility="{Binding FirstTimeDataLoaded, Converter={StaticResource Bool2VisibilityConverter}}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition />
@@ -443,7 +424,7 @@
 
                             <!--Индикатор загрузки-->
                             <Border Background="{StaticResource BackgroundColorBrush}"
-                                Visibility="{Binding Elements.CollectionNowUpdatind, Converter={StaticResource Bool2VisibilityConverter}}">
+                                Visibility="{Binding IsNowDataLoading, Converter={StaticResource Bool2VisibilityConverter}}">
                                 <TextBlock Text="Загрузка данных..." Foreground="{DynamicResource PrimaryColorBrush}"
                                        HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
                             </Border>

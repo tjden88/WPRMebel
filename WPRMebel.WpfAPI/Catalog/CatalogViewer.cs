@@ -90,6 +90,7 @@ namespace WPRMebel.WpfAPI.Catalog
         {
             var query = Predicate != null
                 ? _ElementRepository.Items
+                    .Include(e => e.ChildCatalogElements)
                     .Where(Predicate)
                 : _ElementRepository.Items;
 
@@ -127,6 +128,7 @@ namespace WPRMebel.WpfAPI.Catalog
         public Task<CatalogElement[]> SearchElements(string SearchPattern)
         {
             var query = _ElementRepository.Items
+                .Include(e => e.ChildCatalogElements)
                 .Where(e => EF.Functions
                     .Like(e.Name, $"%{SearchPattern}%"));
 
