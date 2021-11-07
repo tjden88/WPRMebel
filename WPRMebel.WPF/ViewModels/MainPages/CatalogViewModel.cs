@@ -45,6 +45,7 @@ namespace WPRMebel.WPF.ViewModels.MainPages
             {
                 Elements.Add(new Fitting { Id = 1, Name = "Test" });
                 FirstTimeDataLoaded = true;
+                SelectedElement = Elements[0];
             }
 
         }

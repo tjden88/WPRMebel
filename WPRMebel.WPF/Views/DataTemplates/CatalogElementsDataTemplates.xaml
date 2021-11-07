@@ -1,0 +1,8 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:abstract="clr-namespace:WPRMebel.Domain.Base.Catalog.Abstract;assembly=WPRMebel.Domain.Base">
+    
+    <DataTemplate DataType="{x:Type abstract:CatalogElement}">
+        <Border Background="Aqua" Width="200"/>
+    </DataTemplate>
+</ResourceDictionary>

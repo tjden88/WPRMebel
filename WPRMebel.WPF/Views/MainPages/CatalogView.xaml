@@ -372,9 +372,20 @@
                         <!--Таблица данных-->
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
+                                <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition>
+                                    <ColumnDefinition.Style>
+                                            <Style TargetType="ColumnDefinition">
+                                                <Setter Property="Width" Value="Auto"></Setter>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding SelectedElement}" Value="{x:Null}">
+                                                        <Setter Property="Width" Value="0"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                    </ColumnDefinition.Style>
+                                </ColumnDefinition>
                             </Grid.ColumnDefinitions>
                             <Grid.Resources>
                                 <CollectionViewSource x:Key="ViewSource" Source="{Binding Elements}"
@@ -394,6 +405,7 @@
                                       Margin="5"
                                       RowDetailsVisibilityMode="VisibleWhenSelected"
                                       BorderThickness="0"
+                                      SelectedItem="{Binding SelectedElement}"
                                       ItemsSource="{Binding Source={StaticResource ViewSource}}"
                                       CanUserAddRows="True"
                                       CanUserDeleteRows="True">
@@ -459,9 +471,13 @@
 
                             <GridSplitter Grid.Column="1" HorizontalAlignment="Center"
                                           IsHitTestVisible="{Binding SelectedElement, Converter={StaticResource ValueIsNotNullConverter}}"/>
+
                             <Rectangle Grid.Column="1" Width="1" Fill="{DynamicResource DividerColorBrush}"/>
 
-                       </Grid>
+                            <ContentControl Grid.Column="2" Content="{Binding SelectedElement}">
+                            </ContentControl>
+
+                        </Grid>
 
                 </DockPanel>
             </cnt:WPRCard>
