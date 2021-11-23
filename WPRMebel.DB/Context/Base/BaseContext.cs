@@ -21,7 +21,6 @@ namespace WPRMebel.DB.Context.Base
         {
             optionsBuilder
                 .LogTo(message => Debug.WriteLine(message), Microsoft.Extensions.Logging.LogLevel.Information)
-                .UseLazyLoadingProxies()
                 ;
             Configure(optionsBuilder);
         }

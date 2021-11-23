@@ -12,6 +12,7 @@
              xmlns:abstract="clr-namespace:WPRMebel.Domain.Base.Catalog.Abstract;assembly=WPRMebel.Domain.Base"
              xmlns:catalog="clr-namespace:WPRMebel.Domain.Base.Catalog;assembly=WPRMebel.Domain.Base"
              mc:Ignorable="d" 
+             Background="{DynamicResource BackgroundColorBrush}"
              DataContext="{Binding CatalogViewModel, Source={StaticResource Locator}}"
              d:DesignHeight="450" d:DesignWidth="1000">
 
@@ -258,124 +259,122 @@
         </DockPanel>
 
         <!--Основной контент-->
-        <Grid>
+        <Border BorderBrush="{DynamicResource DividerColorBrush}" BorderThickness="1">
+            <Grid>
 
-            <!--Фон - заглушка-->
-            <Border BorderBrush="{DynamicResource DividerColorBrush}" BorderThickness="1"
-                    Visibility="{Binding FirstTimeDataLoaded, Converter={StaticResource Bool2VisibilityConverter}, ConverterParameter=!}">
-                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <cnt:WPRIcon Source="ScatterPlotOutline" IconSize="46" HorizontalAlignment="Center" VerticalAlignment="Center" 
+                <!--Фон - заглушка-->
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center"
+                            Visibility="{Binding FirstTimeDataLoaded, Converter={StaticResource Bool2VisibilityConverter}, ConverterParameter=!}">
+                        <cnt:WPRIcon Source="ScatterPlotOutline" IconSize="46" HorizontalAlignment="Center" VerticalAlignment="Center" 
                          Foreground="{DynamicResource PrimaryColorBrush}"/>
-                    <TextBlock Text="Выберите, что отбразить" 
+                        <TextBlock Text="Выберите, что отбразить" 
                        HorizontalAlignment="Center" VerticalAlignment="Center"
                        Foreground="{DynamicResource PrimaryColorBrush}" FontSize="26"/>
-                </StackPanel>
-            </Border>
+                    </StackPanel>
 
-            <!--Основной контент-->
-            <Grid Visibility="{Binding FirstTimeDataLoaded, Converter={StaticResource Bool2VisibilityConverter}}">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition />
-                </Grid.RowDefinitions>
+                <!--Основной контент-->
+                <Grid Visibility="{Binding FirstTimeDataLoaded, Converter={StaticResource Bool2VisibilityConverter}}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
 
-                <!--Выбор типа элемента-->
-                <TabControl HorizontalAlignment="Left" Foreground="{DynamicResource PrimaryTextColorBrush}" Margin="10,15,0,0">
-                    <TabItem Header="Все элементы" IsSelected="{Binding ElementsTypeFilter, Converter={StaticResource EnumToBoolConverter}, 
-                        ConverterParameter={x:Static mainPages:ElementTypes.All}}"/>
-                    <TabItem Header="Площадной материал" IsSelected="{Binding ElementsTypeFilter, Converter={StaticResource EnumToBoolConverter}, 
-                        ConverterParameter={x:Static mainPages:ElementTypes.Sheet}}"/>
-                    <TabItem Header="Погонный материал" IsSelected="{Binding ElementsTypeFilter, Converter={StaticResource EnumToBoolConverter}, 
-                        ConverterParameter={x:Static mainPages:ElementTypes.Running}}"/>
-                    <TabItem Header="Фурнитура" IsSelected="{Binding ElementsTypeFilter, Converter={StaticResource EnumToBoolConverter}, 
-                        ConverterParameter={x:Static mainPages:ElementTypes.Fitting}}"/>
-                    <TabItem Header="Услуги" IsSelected="{Binding ElementsTypeFilter, Converter={StaticResource EnumToBoolConverter}, 
-                        ConverterParameter={x:Static mainPages:ElementTypes.Service}}"/>
-                </TabControl>
+                    <!--Меню-->
+                    <Grid Margin="2" DockPanel.Dock="Top">
 
-                <!--Список элементов-->
-                <cnt:WPRCard Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
 
-                    <DockPanel>
+                        <ToolBar>
 
-                        <!--Меню-->
-                        <Grid Margin="2" DockPanel.Dock="Top">
-
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-
-                            <ToolBar>
-
-                                <!--Фильтр-->
-                                <ToolBar.Resources>
-                                        <TextBlock x:Key="Item" Text="Все категории" Foreground="{DynamicResource PrimaryColorBrush}"/>
-                                </ToolBar.Resources>
-                                <Border BorderBrush="{DynamicResource DividerColorBrush}" HorizontalAlignment="Left" Margin="5"
+                            <!--Фильтр-->
+                            <ToolBar.Resources>
+                                <TextBlock x:Key="Item" Text="Все категории" Foreground="{DynamicResource PrimaryColorBrush}"/>
+                            </ToolBar.Resources>
+                            <Border BorderBrush="{DynamicResource DividerColorBrush}" HorizontalAlignment="Left" Margin="5"
                                         Background="{DynamicResource BackgroundColorBrush}"
                                         CornerRadius="15"
                                         BorderThickness="1">
 
-                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center"  Margin="5,0,5,0">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center"  Margin="5,0,5,0">
 
-                                        <cnt:WPRIcon Source="Filter" Margin="3"/>
+                                    <cnt:WPRIcon Source="Filter" Margin="3"/>
 
-                                        <TextBox Margin="3"
+                                    <TextBox Margin="3"
                                                  MinWidth="140"
                                                  VerticalAlignment="Center"
                                                  Text="{Binding ElementsFilterText, UpdateSourceTrigger=PropertyChanged}"
                                                  Style="{StaticResource WPRFlatTextBox}" 
                                                  helpers:TextHelper.ShowClearButton="True"
                                                  helpers:TextHelper.Hint="Фильтр"/>
-                                    </StackPanel>
-
-                                </Border>
-
-                                <!--Фильтр категорий-->
-                                <ComboBox BorderBrush="{DynamicResource PrimaryColorBrush}" Width="150" IsSynchronizedWithCurrentItem="True" SelectedItem="{Binding SelectedCategoryName, TargetNullValue={StaticResource Item},
-                                    FallbackValue={StaticResource Item}}">
-                                    <ComboBox.ItemsSource>
-                                        <CompositeCollection>
-                                            <StaticResource ResourceKey="Item"/>
-                                            <CollectionContainer Collection="{Binding CatalogViewModel.CategoriesNames, Source={StaticResource Locator}}"/>
-                                        </CompositeCollection>
-                                    </ComboBox.ItemsSource>
-                                </ComboBox>
-
-                                <Separator/>
-
-                                <Button Style="{StaticResource MenuButton}" ToolTip="Создать копию">
-                                    <cnt:WPRIcon Source="ContentCopy"/>
-                                </Button>
-
-                                <Button Style="{StaticResource MenuButton}" ToolTip="Удалить элемент">
-                                    <cnt:WPRIcon Source="Delete"/>
-                                </Button>
-
-                            </ToolBar>
-
-                            <!--Кнопка редактирования-->
-                            <Border Background="{DynamicResource MenuBodyBrush}" Grid.Column="1" BorderThickness="0">
-
-                                <ToggleButton x:Name="EditModeToggle"
-                                              IsChecked="{Binding ElementName=CatalogViewGrid, Path=IsReadOnly, Mode=TwoWay, Converter={StaticResource BoolNotConverter}}"
-                                              helpers:RippleHelper.FeedbackBrush ="{DynamicResource LightPrimaryColorBrush}">
-                                    <cnt:WPRIconText IconSource="FolderEditOutline" Text="Режим редактирования" />
-
-                                </ToggleButton>
+                                </StackPanel>
 
                             </Border>
 
-                        </Grid>
+                            <!--Фильтр категорий-->
+                            <ComboBox BorderBrush="{DynamicResource PrimaryColorBrush}" Width="150" IsSynchronizedWithCurrentItem="True" SelectedItem="{Binding SelectedCategoryName, TargetNullValue={StaticResource Item},
+                                    FallbackValue={StaticResource Item}}">
+                                <ComboBox.ItemsSource>
+                                    <CompositeCollection>
+                                        <StaticResource ResourceKey="Item"/>
+                                        <CollectionContainer Collection="{Binding CatalogViewModel.CategoriesNames, Source={StaticResource Locator}}"/>
+                                    </CompositeCollection>
+                                </ComboBox.ItemsSource>
+                            </ComboBox>
+
+                            <Separator/>
+
+                            <Button Style="{StaticResource MenuButton}" ToolTip="Создать копию">
+                                <cnt:WPRIcon Source="ContentCopy"/>
+                            </Button>
+
+                            <Button Style="{StaticResource MenuButton}" ToolTip="Удалить элемент">
+                                <cnt:WPRIcon Source="Delete"/>
+                            </Button>
+
+                        </ToolBar>
+
+                        <!--Кнопка редактирования-->
+                        <Border Background="{DynamicResource MenuBodyBrush}" Grid.Column="1" BorderThickness="0">
+
+                            <ToggleButton x:Name="EditModeToggle"
+                                              IsChecked="{Binding ElementName=CatalogViewGrid, Path=IsReadOnly, Mode=TwoWay, Converter={StaticResource BoolNotConverter}}"
+                                              helpers:RippleHelper.FeedbackBrush ="{DynamicResource LightPrimaryColorBrush}">
+                                <cnt:WPRIconText IconSource="FolderEditOutline" Text="Режим редактирования" />
+
+                            </ToggleButton>
+
+                        </Border>
+
+                    </Grid>
+
+                    <!--Выбор типа элемента-->
+                    <!--<TabControl Grid.Row="1" HorizontalAlignment="Left" Foreground="{DynamicResource PrimaryTextColorBrush}">
+                        <TabItem Header="Все элементы" IsSelected="{Binding ElementsTypeFilter, Converter={StaticResource EnumToBoolConverter}, 
+                        ConverterParameter={x:Static mainPages:ElementTypes.All}}"/>
+                        <TabItem Header="Площадной материал" IsSelected="{Binding ElementsTypeFilter, Converter={StaticResource EnumToBoolConverter}, 
+                        ConverterParameter={x:Static mainPages:ElementTypes.Sheet}}"/>
+                        <TabItem Header="Погонный материал" IsSelected="{Binding ElementsTypeFilter, Converter={StaticResource EnumToBoolConverter}, 
+                        ConverterParameter={x:Static mainPages:ElementTypes.Running}}"/>
+                        <TabItem Header="Фурнитура" IsSelected="{Binding ElementsTypeFilter, Converter={StaticResource EnumToBoolConverter}, 
+                        ConverterParameter={x:Static mainPages:ElementTypes.Fitting}}"/>
+                        <TabItem Header="Услуги" IsSelected="{Binding ElementsTypeFilter, Converter={StaticResource EnumToBoolConverter}, 
+                        ConverterParameter={x:Static mainPages:ElementTypes.Service}}"/>
+                    </TabControl>-->
+
+                    <!--Список элементов-->
+                    <DockPanel Grid.Row="2">
 
                         <!--Таблица данных-->
                         <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition>
-                                    <ColumnDefinition.Style>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition>
+                                        <ColumnDefinition.Style>
                                             <Style TargetType="ColumnDefinition">
                                                 <Setter Property="Width" Value="Auto"></Setter>
                                                 <Style.Triggers>
@@ -384,22 +383,22 @@
                                                     </DataTrigger>
                                                 </Style.Triggers>
                                             </Style>
-                                    </ColumnDefinition.Style>
-                                </ColumnDefinition>
-                            </Grid.ColumnDefinitions>
-                            <Grid.Resources>
-                                <CollectionViewSource x:Key="ViewSource" Source="{Binding Elements}"
+                                        </ColumnDefinition.Style>
+                                    </ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <Grid.Resources>
+                                    <CollectionViewSource x:Key="ViewSource" Source="{Binding Elements}"
                                                   extensions:CollectionViewSourceFilter.FilterObject ="{Binding ElementsFilter}">
-                                    <CollectionViewSource.GroupDescriptions>
-                                        <PropertyGroupDescription PropertyName="Name" Converter="{converters:FirstLetterGroupingConverter}"/>
-                                    </CollectionViewSource.GroupDescriptions>
-                                    <CollectionViewSource.SortDescriptions>
-                                        <cm:SortDescription PropertyName="Name"/>
-                                    </CollectionViewSource.SortDescriptions>
-                                </CollectionViewSource>
-                            </Grid.Resources>
+                                        <CollectionViewSource.GroupDescriptions>
+                                            <PropertyGroupDescription PropertyName="Name" Converter="{converters:FirstLetterGroupingConverter}"/>
+                                        </CollectionViewSource.GroupDescriptions>
+                                        <CollectionViewSource.SortDescriptions>
+                                            <cm:SortDescription PropertyName="Name"/>
+                                        </CollectionViewSource.SortDescriptions>
+                                    </CollectionViewSource>
+                                </Grid.Resources>
 
-                            <DataGrid x:Name="CatalogViewGrid"
+                                <DataGrid x:Name="CatalogViewGrid"
                                       VirtualizingPanel.IsVirtualizingWhenGrouping="True"
                                       IsReadOnly="True"
                                       Margin="5"
@@ -409,45 +408,45 @@
                                       ItemsSource="{Binding Source={StaticResource ViewSource}}"
                                       CanUserAddRows="True"
                                       CanUserDeleteRows="True">
-                                <DataGrid.GroupStyle>
-                                    <GroupStyle>
-                                        <GroupStyle.Panel>
-                                            <ItemsPanelTemplate>
-                                                <DataGridRowsPresenter/>
-                                            </ItemsPanelTemplate>
-                                        </GroupStyle.Panel>
-                                        <GroupStyle.ContainerStyle>
-                                            <Style TargetType="{x:Type GroupItem}">
-                                                <Setter Property="Margin" Value="0,0,0,5"/>
-                                                <Setter Property="Template">
-                                                    <Setter.Value>
-                                                        <ControlTemplate TargetType="{x:Type GroupItem}">
-                                                            <VirtualizingStackPanel HorizontalAlignment="Stretch">
-                                                                <Border Background="{DynamicResource MenuBodyBrush}">
-                                                                            <DockPanel LastChildFill="False">
-                                                                                <TextBlock FontWeight="Bold" Foreground="{DynamicResource SecondaryTextColorBrush}"
+                                    <DataGrid.GroupStyle>
+                                        <GroupStyle>
+                                            <GroupStyle.Panel>
+                                                <ItemsPanelTemplate>
+                                                    <DataGridRowsPresenter/>
+                                                </ItemsPanelTemplate>
+                                            </GroupStyle.Panel>
+                                            <GroupStyle.ContainerStyle>
+                                                <Style TargetType="{x:Type GroupItem}">
+                                                    <Setter Property="Margin" Value="0,0,0,5"/>
+                                                    <Setter Property="Template">
+                                                        <Setter.Value>
+                                                            <ControlTemplate TargetType="{x:Type GroupItem}">
+                                                                <VirtualizingStackPanel HorizontalAlignment="Stretch">
+                                                                    <Border Background="{DynamicResource MenuBodyBrush}">
+                                                                        <DockPanel LastChildFill="False">
+                                                                            <TextBlock FontWeight="Bold" Foreground="{DynamicResource SecondaryTextColorBrush}"
                                                                                     Margin="10,3,0,3" Text="{Binding Path=Name}" />
-                                                                                <TextBlock DockPanel.Dock="Right" Text="{Binding Items.Count, StringFormat=Всего: {0}}"
+                                                                            <TextBlock DockPanel.Dock="Right" Text="{Binding Items.Count, StringFormat=Всего: {0}}"
                                                                                     VerticalAlignment="Center"
                                                                                     Margin="0,3,15,3"
                                                                                     Foreground="{DynamicResource SecondaryTextColorBrush}"/>
-                                                                    </DockPanel>
-                                                                </Border>
-                                                                        <ItemsPresenter HorizontalAlignment="Stretch" />
-                                                            </VirtualizingStackPanel>
-                                                           
-                                                        </ControlTemplate>
-                                                    </Setter.Value>
-                                                </Setter>
-                                            </Style>
-                                        </GroupStyle.ContainerStyle>
-                                    </GroupStyle>
-                                </DataGrid.GroupStyle>
-                                <DataGrid.Columns>
-                                    <DataGridTextColumn SortDirection="Ascending" Header="Имя" Width="*" Binding="{Binding Name}"/>
-                                    <DataGridTextColumn Header="Цена" MinWidth="100" Binding="{Binding TotalPrice, StringFormat='{}{0:c}'}"/>
-                                </DataGrid.Columns>
-                                <!--<DataGrid.RowDetailsTemplate>
+                                                                        </DockPanel>
+                                                                    </Border>
+                                                                    <ItemsPresenter HorizontalAlignment="Stretch" />
+                                                                </VirtualizingStackPanel>
+
+                                                            </ControlTemplate>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Style>
+                                            </GroupStyle.ContainerStyle>
+                                        </GroupStyle>
+                                    </DataGrid.GroupStyle>
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn SortDirection="Ascending" Header="Имя" Width="*" Binding="{Binding Name}"/>
+                                        <DataGridTextColumn Header="Цена" MinWidth="100" Binding="{Binding TotalPrice, StringFormat='{}{0:c}'}"/>
+                                    </DataGrid.Columns>
+                                    <!--<DataGrid.RowDetailsTemplate>
                                     <DataTemplate DataType="abstract:CatalogElement">
                                         <Expander Focusable="False" Header="Состав комплекта" Margin="10,0">
                                             <Expander.Content>
@@ -467,28 +466,28 @@
                                         </Expander>
                                     </DataTemplate>
                                 </DataGrid.RowDetailsTemplate>-->
-                            </DataGrid>
+                                </DataGrid>
 
-                            <!--Индикатор загрузки-->
-                            <Border Grid.Column="0" Background="{StaticResource BackgroundColorBrush}"
+                                <!--Индикатор загрузки-->
+                                <Border Grid.Column="0" Background="{StaticResource BackgroundColorBrush}"
                                     Visibility="{Binding IsNowDataLoading, Converter={StaticResource Bool2VisibilityConverter}}">
-                                <TextBlock Text="Загрузка данных..." Foreground="{DynamicResource PrimaryColorBrush}"
+                                    <TextBlock Text="Загрузка данных..." Foreground="{DynamicResource PrimaryColorBrush}"
                                        HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
-                            </Border>
+                                </Border>
 
-                            <GridSplitter Grid.Column="1" HorizontalAlignment="Center"
+                                <GridSplitter Grid.Column="1" HorizontalAlignment="Center"
                                           IsHitTestVisible="{Binding SelectedElement, Converter={StaticResource ValueIsNotNullConverter}}"/>
 
-                            <Rectangle Grid.Column="1" Width="1" Fill="{DynamicResource DividerColorBrush}"/>
+                                <Rectangle Grid.Column="1" Width="1" Fill="{DynamicResource DividerColorBrush}"/>
 
-                            <ContentControl Grid.Column="2" Content="{Binding SelectedElement}">
-                            </ContentControl>
+                                <ContentControl Grid.Column="2" Content="{Binding SelectedElement}">
+                                </ContentControl>
 
-                        </Grid>
+                            </Grid>
 
-                </DockPanel>
-            </cnt:WPRCard>
+                    </DockPanel>
+                </Grid>
             </Grid>
-        </Grid>
+        </Border>
     </DockPanel>
 </UserControl>

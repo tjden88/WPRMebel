@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
@@ -129,6 +128,7 @@ namespace WPRMebel.WpfAPI.Catalog
         {
             var query = _ElementRepository.Items
                 .Include(e => e.ChildCatalogElements)
+                .Include(e => e.Category)
                 .Where(e => EF.Functions
                     .Like(e.Name, $"%{SearchPattern}%"));
 
