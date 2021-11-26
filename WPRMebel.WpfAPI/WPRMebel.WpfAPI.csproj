@@ -1,11 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\WPRMebel.DB.TestSqlServer\WPRMebel.DB.TestSqlServer.csproj" />
+    <ProjectReference Include="..\WPRMebel.DB.SqLite\WPRMebel.DB.SqLite.csproj" />
     <ProjectReference Include="..\WPRMebel.Domain\WPRMebel.Domain.csproj" />
     <ProjectReference Include="..\WPRMebel.Interfaces\WPRMebel.Interfaces.csproj" />
   </ItemGroup>

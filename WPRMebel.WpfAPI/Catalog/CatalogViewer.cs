@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
@@ -74,23 +73,13 @@ namespace WPRMebel.WpfAPI.Catalog
         public Task<Vendor[]> LoadVendors() => LoadData(_VenorsRepository.Items.OrderBy( v => v.Name));
 
 
-        /// <summary> Загрузить категории с фильтрацией </summary>
-        public Task<Category[]> GetCategories([MaybeNull] Expression<Func<Category, bool>> Predicate = null)
-        {
-            var query = Predicate != null
-                ? _CategoriesRepository.Items
-                    .Where(Predicate)
-                : _CategoriesRepository.Items;
-
-            return LoadData(query);
-        }
-
         /// <summary> Загрузить элементы каталога с фильтрацией </summary>
         public Task<CatalogElement[]> GetElements([MaybeNull] Expression<Func<CatalogElement, bool>> Predicate = null)
         {
             var query = Predicate != null
                 ? _ElementRepository.Items
                     .Include(e => e.ChildCatalogElements)
+                    .Include(e => e.Category)
                     .Where(Predicate)
                 : _ElementRepository.Items;
 
@@ -100,7 +89,7 @@ namespace WPRMebel.WpfAPI.Catalog
         #endregion
 
         // Работа с сущностями (добавить, изменить, удалить)
-        private async Task<T> GrudEntity<T>(Task<T> task)
+        private async Task<T> CrudEntity<T>(Task<T> task)
         {
             if (IsNowDataLoading) return default;
             try
@@ -119,9 +108,9 @@ namespace WPRMebel.WpfAPI.Catalog
 
         #region Sections
 
-        public Task<Section> AddSection(Section NewSection) => GrudEntity(_SectionRepository.AddAsync(NewSection));
-        public Task<bool> UpdateSection(Section ChangedSection) => GrudEntity(_SectionRepository.UpdateAsync(ChangedSection));
-        public Task<bool> DeleteSection(Section DeletedSection) => GrudEntity(_SectionRepository.DeleteAsync(DeletedSection));
+        public Task<Section> AddSection(Section NewSection) => CrudEntity(_SectionRepository.AddAsync(NewSection));
+        public Task<bool> UpdateSection(Section ChangedSection) => CrudEntity(_SectionRepository.UpdateAsync(ChangedSection));
+        public Task<bool> DeleteSection(Section DeletedSection) => CrudEntity(_SectionRepository.DeleteAsync(DeletedSection));
 
         #endregion
 
@@ -129,6 +118,7 @@ namespace WPRMebel.WpfAPI.Catalog
         {
             var query = _ElementRepository.Items
                 .Include(e => e.ChildCatalogElements)
+                .Include(e => e.Category)
                 .Where(e => EF.Functions
                     .Like(e.Name, $"%{SearchPattern}%"));
 

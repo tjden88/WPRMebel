@@ -11,15 +11,18 @@ namespace WPRMebel.DB.TestSqlServer.Context
 {
     public class CatalogDbContext : CatalogContextBase
     {
+
         protected override void Configure(DbContextOptionsBuilder optionsBuilder)
         {
             if (Connection.CatalogDbPath is null) 
                 throw new ArgumentNullException(nameof(Connection.CatalogDbPath), "Имя БД каталога не указано");
             optionsBuilder.UseSqlServer(@$"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog={Connection.CatalogDbPath}");
-        }
+       }
 
         public override async Task InitializeStartData(CancellationToken Cancel = default)
         {
+            await Database.MigrateAsync(Cancel).ConfigureAwait(false);
+
             await base.InitializeStartData(Cancel).ConfigureAwait(false);
 
 #if DEBUG
