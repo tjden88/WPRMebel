@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using WPRMebel.DB.Repositories;
-using WPRMebel.DB.TestSqlServer.Context;
+using WPRMebel.DB.SqLite.Context;
 using WPRMebel.Domain.Base.Catalog.Abstract;
 using WPRMebel.WpfAPI.Interfaces;
 

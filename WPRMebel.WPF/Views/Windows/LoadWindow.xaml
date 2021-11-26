@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         WindowStyle="None"
         WindowStartupLocation="CenterScreen"
-        Title="LoadWindow" Height="200" Width="500">
+        Title="LoadWindow" Height="200" Width="500" ShowInTaskbar="False" ResizeMode="NoResize">
     <d:Window.DataContext >
         <local:LoadWindow/>
     </d:Window.DataContext>

@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using WPRMebel.DB.TestSqlServer.Context;
+using WPRMebel.DB.SqLite.Context;
 using WPRMebel.WpfAPI.Catalog;
 using WPRMebel.WpfAPI.Interfaces;
 

@@ -5,7 +5,7 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Markup;
 using Microsoft.Extensions.DependencyInjection;
-using WPRMebel.DB.TestSqlServer.Context;
+using WPRMebel.DB.SqLite.Context;
 using WPRMebel.WPF.Services;
 using WPRMebel.WPF.Views.Windows;
 using WPRMebel.WpfAPI.Services;

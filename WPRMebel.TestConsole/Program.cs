@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using WPRMebel.DB.TestSqlServer.Context;
+using WPRMebel.DB.SqLite.Context;
 
 namespace WPRMebel.TestConsole
 {

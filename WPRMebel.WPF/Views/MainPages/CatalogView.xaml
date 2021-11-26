@@ -9,8 +9,6 @@
              xmlns:extensions="clr-namespace:WPRMebel.WPF.Extensions"
              xmlns:mainPages="clr-namespace:WPRMebel.WPF.ViewModels.MainPages"
              xmlns:converters="clr-namespace:WPRMebel.WPF.Infrastructure.Converters"
-             xmlns:abstract="clr-namespace:WPRMebel.Domain.Base.Catalog.Abstract;assembly=WPRMebel.Domain.Base"
-             xmlns:catalog="clr-namespace:WPRMebel.Domain.Base.Catalog;assembly=WPRMebel.Domain.Base"
              mc:Ignorable="d" 
              Background="{DynamicResource BackgroundColorBrush}"
              DataContext="{Binding CatalogViewModel, Source={StaticResource Locator}}"
