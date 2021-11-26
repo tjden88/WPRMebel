@@ -31,7 +31,7 @@ namespace WPRMebel.WPF
 
             using (var scope = Services.CreateScope())
             {
-               await scope.ServiceProvider.GetRequiredService<CatalogDbContext>().InitializeStartData().ConfigureAwait(true);
+               await scope.ServiceProvider.GetRequiredService<CatalogDbContext>().InitializeStartData();
             }
 
 
