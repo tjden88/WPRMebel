@@ -10,7 +10,6 @@ namespace WPRMebel.WpfAPI.Services
     {
         /// <summary> Зарегистрировать сервисы </summary>
         public static IServiceCollection AddApiServices(this IServiceCollection Services) => Services
-            .AddScoped(typeof(DbRepository<>))
             .AddScoped(typeof(ICatalogDbRepository<>), typeof(CatalogDbRepository<>))
             .AddScoped<CatalogViewer>()
         ;

@@ -68,11 +68,9 @@ namespace WPRMebel.WPF.ViewModels.MainPages
             FirstTimeDataLoaded = true;
             IsNowDataLoading = true;
 
-            var cat = await _CatalogViewer.GetCategories(c => c.Section == s).ConfigureAwait(false);
-            CategoriesNames.AddRangeClear(cat.Select(c => c.Name).OrderBy(str => str));
-
             var result = await _CatalogViewer.GetElements(e => e.Category.Section == s).ConfigureAwait(false);
             Elements.AddRangeClear(result);
+            LoadCategoriesFromElementsCollection();
 
             IsNowDataLoading = false;
         }
@@ -84,14 +82,19 @@ namespace WPRMebel.WPF.ViewModels.MainPages
             FirstTimeDataLoaded = true;
             IsNowDataLoading = true;
 
-            var cat = await _CatalogViewer.GetCategories(c => c.Vendor == v).ConfigureAwait(false);
-            CategoriesNames.AddRangeClear(cat.Select(c => c.Name).OrderBy(str => str));
-
             var result = await _CatalogViewer.GetElements(e => e.Category.Vendor == v).ConfigureAwait(false);
             Elements.AddRangeClear(result);
+            LoadCategoriesFromElementsCollection();
 
             IsNowDataLoading = false;
         }
+
+        private void LoadCategoriesFromElementsCollection() => 
+            CategoriesNames
+                .AddRangeClear(Elements
+                    .Select(e => e.Category.Name)
+                    .Distinct()
+                    .OrderBy(c => c));
 
         #endregion
 
@@ -250,7 +253,7 @@ namespace WPRMebel.WPF.ViewModels.MainPages
         /// <summary>Проверка возможности выполнения - Установить изначальный фильтр</summary>
         private bool CanSetRootGroupingCommandExecute(object p) => p is CatalogViewRootGrouping cg && cg != RootGrouping;
 
-        /// <summary>Проверка возможности выполнения - Установить изначальный фильтр</summary>
+        /// <summary>Установить изначальный фильтр</summary>
         private void OnSetRootGroupingCommandExecuted(object p) => RootGrouping = (CatalogViewRootGrouping)p;
 
         #endregion
@@ -543,8 +546,8 @@ namespace WPRMebel.WPF.ViewModels.MainPages
 
             var elements = await _CatalogViewer.SearchElements(searchText).ConfigureAwait(false);
 
-            CategoriesNames.AddRangeClear(elements.Select(e => e.Category.Name).Distinct());
             Elements.AddRangeClear(elements);
+            LoadCategoriesFromElementsCollection();
 
             SearchText = string.Empty;
 
