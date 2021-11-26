@@ -12,14 +12,21 @@ namespace WPRMebel.DB.SqLite.Context
     /// <summary>
     /// Контекст БД каталога SQLite
     /// </summary>
-    public class CatalogDbContext : CatalogContextBase
+    public sealed class CatalogDbContext : CatalogContextBase
     {
-
+        public CatalogDbContext()
+        {
+            var connection = Database.GetDbConnection();
+            connection.Open();
+            using var command = connection.CreateCommand();
+            command.CommandText = "PRAGMA journal_mode=DELETE;";
+            command.ExecuteNonQuery();
+        }
         protected override void Configure(DbContextOptionsBuilder optionsBuilder)
         {
             if (Connection.CatalogDbPath is null)
                 throw new ArgumentNullException(nameof(Connection.CatalogDbPath), "Имя БД каталога не указано");
-            optionsBuilder.UseSqlite($"Data Source={Connection.CatalogDbPath};");
+            optionsBuilder.UseSqlite($"Data Source={Connection.CatalogDbPath}");
         }
 
         public override async Task InitializeStartData(CancellationToken Cancel = default)
@@ -104,7 +111,6 @@ namespace WPRMebel.DB.SqLite.Context
                     });
                 }
             }
-
 
             await Vendors.AddRangeAsync(vendors, Cancel).ConfigureAwait(false);
             await Categories.AddRangeAsync(categories, Cancel).ConfigureAwait(false);
