@@ -9,13 +9,8 @@ using WPRMebel.Domain.Base.Catalog;
 
 namespace WPRMebel.DB.TestSqlServer.Context
 {
-    public sealed class CatalogDbContext : CatalogContextBase
+    public class CatalogDbContext : CatalogContextBase
     {
-        public CatalogDbContext()
-        {
-            //TODO переместить в экран-заставку
-            InitializeStartData().Wait();
-        }
 
         protected override void Configure(DbContextOptionsBuilder optionsBuilder)
         {

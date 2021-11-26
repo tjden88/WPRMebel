@@ -5,21 +5,41 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Markup;
 using Microsoft.Extensions.DependencyInjection;
+using WPRMebel.DB.TestSqlServer.Context;
 using WPRMebel.WPF.Services;
+using WPRMebel.WPF.Views.Windows;
 using WPRMebel.WpfAPI.Services;
 
 namespace WPRMebel.WPF
 {
     public partial class App
     {
-        protected override void OnStartup(StartupEventArgs e)
+        protected override async void OnStartup(StartupEventArgs e)
         {
-            Thread.CurrentThread.CurrentCulture = new CultureInfo("ru-RU");
+             // Загрузка начальных данных
+            LoadWindow loadWindow = new();
+            loadWindow.Show();
+
+           Thread.CurrentThread.CurrentCulture = new CultureInfo("ru-RU");
             Thread.CurrentThread.CurrentUICulture = new CultureInfo("ru-RU");
             FrameworkElement.LanguageProperty.OverrideMetadata(typeof(FrameworkElement), new FrameworkPropertyMetadata(
                 XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.IetfLanguageTag)));
 
             base.OnStartup(e);
+
+            loadWindow.SetMessage("Загрузка баз данных...");
+
+            using (var scope = Services.CreateScope())
+            {
+               await scope.ServiceProvider.GetRequiredService<CatalogDbContext>().InitializeStartData().ConfigureAwait(true);
+            }
+
+
+            loadWindow.SetMessage("Загрузка главного окна...");
+
+            MainWindow mainWindow = new();
+            loadWindow.Close();
+            mainWindow.Show();
         }
 
         public static Window ActiveWindow => Current.Windows.Cast<Window>().FirstOrDefault(w => w.IsActive);

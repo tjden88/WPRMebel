@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using WPRMebel.DB.Repositories;
 using WPRMebel.DB.TestSqlServer.Context;
 using WPRMebel.WpfAPI.Catalog;
 using WPRMebel.WpfAPI.Interfaces;
