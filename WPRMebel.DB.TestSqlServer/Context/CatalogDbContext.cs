@@ -9,17 +9,25 @@ using WPRMebel.Domain.Base.Catalog;
 
 namespace WPRMebel.DB.TestSqlServer.Context
 {
-    public class CatalogDbContext : CatalogContextBase
+    public sealed class CatalogDbContext : CatalogContextBase
     {
+        public CatalogDbContext()
+        {
+            //TODO переместить в экран-заставку
+            InitializeStartData().Wait();
+        }
+
         protected override void Configure(DbContextOptionsBuilder optionsBuilder)
         {
             if (Connection.CatalogDbPath is null) 
                 throw new ArgumentNullException(nameof(Connection.CatalogDbPath), "Имя БД каталога не указано");
             optionsBuilder.UseSqlServer(@$"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog={Connection.CatalogDbPath}");
-        }
+       }
 
         public override async Task InitializeStartData(CancellationToken Cancel = default)
         {
+            await Database.MigrateAsync(Cancel).ConfigureAwait(false);
+
             await base.InitializeStartData(Cancel).ConfigureAwait(false);
 
 #if DEBUG
