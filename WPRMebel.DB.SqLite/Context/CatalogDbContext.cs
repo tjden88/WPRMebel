@@ -26,6 +26,7 @@ namespace WPRMebel.DB.SqLite.Context
         {
             if (Connection.CatalogDbPath is null)
                 throw new ArgumentNullException(nameof(Connection.CatalogDbPath), "Имя БД каталога не указано");
+
             optionsBuilder.UseSqlite($"Data Source={Connection.CatalogDbPath}");
         }
 
@@ -61,7 +62,7 @@ namespace WPRMebel.DB.SqLite.Context
             }
 
             var elements = new Collection<Fitting>(); // Элементы
-            for (var i = 0; i < 1000; i++)
+            for (var i = 0; i < 10000; i++)
             {
                 elements.Add(new Fitting()
                 {

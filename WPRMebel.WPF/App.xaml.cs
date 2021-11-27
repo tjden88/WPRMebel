@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Markup;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,17 +30,18 @@ namespace WPRMebel.WPF
 
             loadWindow.SetMessage("Загрузка баз данных...");
 
-            using (var scope = Services.CreateScope())
+            await Task.Run(async () =>
             {
-               await scope.ServiceProvider.GetRequiredService<CatalogDbContext>().InitializeStartData();
-            }
+                using var scope = Services.CreateScope();
+                await scope.ServiceProvider.GetRequiredService<CatalogDbContext>().InitializeStartData();
+            });
 
 
             loadWindow.SetMessage("Загрузка главного окна...");
 
             MainWindow mainWindow = new();
-            loadWindow.Close();
             mainWindow.Show();
+            loadWindow.Close();
         }
 
         public static Window ActiveWindow => Current.Windows.Cast<Window>().FirstOrDefault(w => w.IsActive);
