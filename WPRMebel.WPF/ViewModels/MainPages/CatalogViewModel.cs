@@ -13,6 +13,9 @@ using WPRMebel.WpfAPI.Catalog;
 
 namespace WPRMebel.WPF.ViewModels.MainPages
 {
+
+    // TODO: при начальной загрузке выгрузить исмена и цены ВСЕХ элементов. Создать модель для этого 
+
     /// <summary> Изначальная фильтрация просмотра элементов каталога </summary>
     public enum CatalogViewRootGrouping
     {
