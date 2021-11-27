@@ -10,8 +10,6 @@ namespace WPRMebel.WpfAPI.Interfaces
     public interface ICatalogDbRepository<T> : IRepository<T> where T : IEntity
     {
         IQueryable<T> Items { get; }
-
-        void StartTransaction();
-        void CommitTransaction();
+        bool AutoSaveChanges { get; set; }
     }
 }

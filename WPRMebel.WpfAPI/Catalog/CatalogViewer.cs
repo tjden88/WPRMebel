@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
@@ -32,49 +33,17 @@ namespace WPRMebel.WpfAPI.Catalog
             _VenorsRepository = VenorsRepository;
         }
 
-        /// <summary> Происходит при изменении статуса запроса к БД </summary>
-        public Action<bool> IsNowDataLoadingChanged { get; set; }
-
-        #region IsNowDataLoading : bool - Выполняется запрос к БД
-
-        /// <summary>Выполняется запрос к БД</summary>
-        private bool _IsNowDataLoading;
-
-        /// <summary>Выполняется запрос к БД</summary>
-        public bool IsNowDataLoading
-        {
-            get => _IsNowDataLoading;
-            set
-            {
-                if (Equals(value, _IsNowDataLoading)) return;
-                _IsNowDataLoading = value;
-                IsNowDataLoadingChanged?.Invoke(value);
-            }
-        }
-
-        #endregion
-
         #region LoadData
 
-        // Потокобезопасный метод загрузки данных из БД
-        private async Task<T[]> LoadData<T>(IQueryable<T> query) where T : IEntity
-        {
-            if (IsNowDataLoading) return Array.Empty<T>();
-            IsNowDataLoading = true;
-            var result = await query.ToArrayAsync();
-            IsNowDataLoading = false;
-            return result;
-        }
-
         /// <summary> Загрузить все разделы </summary>
-        public Task<Section[]> LoadSections() => LoadData(_SectionRepository.Items);
+        public IEnumerable<Section> LoadSections() => _SectionRepository.GetAll();
 
         /// <summary> Загрузить всех поставщиков </summary>
-        public Task<Vendor[]> LoadVendors() => LoadData(_VenorsRepository.Items.OrderBy( v => v.Name));
+        public IEnumerable<Vendor> LoadVendors() => _VenorsRepository.GetAll().OrderBy( v => v.Name);
 
 
         /// <summary> Загрузить элементы каталога с фильтрацией </summary>
-        public Task<CatalogElement[]> GetElements([MaybeNull] Expression<Func<CatalogElement, bool>> Predicate = null)
+        public IEnumerable<CatalogElement> GetElements([MaybeNull] Expression<Func<CatalogElement, bool>> Predicate = null)
         {
             var query = Predicate != null
                 ? _ElementRepository.Items
@@ -83,38 +52,20 @@ namespace WPRMebel.WpfAPI.Catalog
                     .Where(Predicate)
                 : _ElementRepository.Items;
 
-            return LoadData(query);
+            return query;
         }
 
         #endregion
-
-        // Работа с сущностями (добавить, изменить, удалить)
-        private async Task<T> CrudEntity<T>(Task<T> task)
-        {
-            if (IsNowDataLoading) return default;
-            try
-            {
-                IsNowDataLoading = true;
-                var result = await task;
-                IsNowDataLoading = false;
-                return result;
-            }
-            catch (Exception)
-            {
-                IsNowDataLoading = false;
-                return default;
-            }
-        }
 
         #region Sections
 
-        public Task<Section> AddSection(Section NewSection) => CrudEntity(_SectionRepository.AddAsync(NewSection));
-        public Task<bool> UpdateSection(Section ChangedSection) => CrudEntity(_SectionRepository.UpdateAsync(ChangedSection));
-        public Task<bool> DeleteSection(Section DeletedSection) => CrudEntity(_SectionRepository.DeleteAsync(DeletedSection));
+        public Section AddSection(Section NewSection) => _SectionRepository.Add(NewSection);
+        public bool UpdateSection(Section ChangedSection) => _SectionRepository.Update(ChangedSection);
+        public bool DeleteSection(Section DeletedSection) => _SectionRepository.Delete(DeletedSection);
 
         #endregion
 
-        public Task<CatalogElement[]> SearchElements(string SearchPattern)
+        public IEnumerable<CatalogElement> SearchElements(string SearchPattern)
         {
             var query = _ElementRepository.Items
                 .Include(e => e.ChildCatalogElements)
@@ -122,7 +73,7 @@ namespace WPRMebel.WpfAPI.Catalog
                 .Where(e => EF.Functions
                     .Like(e.Name, $"%{SearchPattern}%"));
 
-            return LoadData(query);
+            return query;
         }
     }
 }
