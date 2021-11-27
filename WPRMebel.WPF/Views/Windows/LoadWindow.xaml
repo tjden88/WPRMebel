@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:WPRMebel.WPF.Views.Windows"
         mc:Ignorable="d"
         WindowStyle="None"
+        Cursor="AppStarting"
         WindowStartupLocation="CenterScreen"
         Title="LoadWindow" Height="200" Width="500" ShowInTaskbar="False" ResizeMode="NoResize">
     <d:Window.DataContext >

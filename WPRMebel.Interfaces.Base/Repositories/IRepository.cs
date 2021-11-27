@@ -13,73 +13,66 @@ namespace WPRMebel.Interfaces.Base.Repositories
     public interface IRepository<TEntity> where TEntity : IEntity
     {
         /// <summary> Коллекция сущностей </summary>
-        Task<IEnumerable<TEntity>> GetAllAsync(CancellationToken Cancel = default);
+        IEnumerable<TEntity> GetAll();
 
 
         /// <summary> Получить количество сущностей </summary>
-        Task<int> GetCountAsync(CancellationToken Cancel = default);
+        int GetCount();
 
 
         /// <summary>
         /// Существует ли сущность в репозитории
         /// </summary>
         /// <param name="id">идентификатор сущности</param>
-        /// <param name="Cancel">Токен отмены</param>
         /// <returns>Истина, если сущность есть в репозитории</returns>
-        Task<bool> ExistAsync(int id, CancellationToken Cancel = default);
+        bool Exist(int id);
 
 
         /// <summary>
         /// Существует ли сущность в репозитории
         /// </summary>
         /// <param name="item">Искомая сущность</param>
-        /// <param name="Cancel">Токен отмены</param>
         /// <returns>Истина, если сущность есть в репозитории</returns>
-        Task<bool> ExistAsync(TEntity item, CancellationToken Cancel = default);
+        bool Exist(TEntity item);
 
 
         /// <summary>
         /// Получить сущность по идентификатору
         /// </summary>
         /// <param name="id">Id сущности</param>
-        /// <param name="Cancel">Токен отмены</param>
         /// <returns>null, если сущность не найдена</returns>
-        Task<TEntity> GetByIdAsync(int id, CancellationToken Cancel = default);
+        TEntity GetById(int id);
 
 
         /// <summary>
         /// Добавить сущность в репозиторий
         /// </summary>
         /// <param name="item">Добавляемая сущность</param>
-        /// <param name="Cancel">Токен отмены</param>
         /// <returns>Добавленная сущность, или null, если добавить не удалось</returns>
-        Task<TEntity> AddAsync(TEntity item, CancellationToken Cancel = default);
+        TEntity Add(TEntity item);
 
 
         /// <summary>
         /// Обновить сущность в репозитории
         /// </summary>
         /// <param name="item">Изменяемая сущность</param>
-        /// <param name="Cancel">Токен отмены</param>
         /// <returns>Истина, если удалось обновить</returns>
-        Task<bool> UpdateAsync(TEntity item, CancellationToken Cancel = default);
+        bool Update(TEntity item);
 
 
         /// <summary>
         /// Удалить сущность из репозитория
         /// </summary>
         /// <param name="item">Удаляемая сущность</param>
-        /// <param name="Cancel">Токен отмены</param>
         /// <returns>Истина, если удалось удалить</returns>
-        Task<bool> DeleteAsync(TEntity item, CancellationToken Cancel = default);
+        bool Delete(TEntity item);
 
 
         /// <summary>
         /// Удалить сущность из репозитория
         /// </summary>
         /// <param name="id">Id удаляемой сущности</param>
-        /// <param name="Cancel">Токен отмены</param>
         /// <returns>Истина, если удалось удалить</returns>
-        Task<bool> DeleteAsync(int id, CancellationToken Cancel = default);
+        bool Delete(int id);
     }
 }

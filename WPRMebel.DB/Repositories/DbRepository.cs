@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using WPRMebel.Domain.Base.Catalog.Abstract;
 using WPRMebel.Interfaces.Base.Repositories;
@@ -17,92 +15,67 @@ namespace WPRMebel.DB.Repositories
     {
         private readonly DbContext _ContextBase; // Контекст БД
 
-        /// <summary> Набор данных БД </summary>
-        protected DbSet<T> Set { get; }
-
         public DbRepository(DbContext ContextBase)
         {
             _ContextBase = ContextBase;
-            Set = _ContextBase.Set<T>();
         }
 
          /// <summary> Переопределяемое свойство, с которым работают методы репозитория </summary>
-       protected virtual IQueryable<T> Items => Set;
+       protected virtual IQueryable<T> Items => _ContextBase.Set<T>();
 
         #region Transaction
 
-        /// <summary> Режим транзакуии </summary>
-        public bool TransactionMode { get; set; }
-
-        /// <summary> Начать транзакцию БД </summary>
-        public void BeginTransaction() => TransactionMode = true;
-
-        /// <summary> Завершить транзакцию БД </summary>
-        public async Task CommitTransaction(CancellationToken Cancel = default)
-        {
-            if (!TransactionMode) return;
-            await _ContextBase.SaveChangesAsync(Cancel).ConfigureAwait(false);
-            TransactionMode = false;
-        }
+        /// <summary> Сохранять изменения в БД при каждом обращении </summary>
+        public bool AutoSaveChanges { get; set; } = true;
 
         #endregion
 
         #region IRepository
-        public virtual async  Task<IEnumerable<T>> GetAllAsync(CancellationToken Cancel = default) => await Items.ToArrayAsync(Cancel).ConfigureAwait(false);
+        public IEnumerable<T> GetAll() => Items;
+        public int GetCount() => Items.Count();
 
-        public async Task<int> GetCountAsync(CancellationToken Cancel = default) => await Items.CountAsync(Cancel).ConfigureAwait(false);
+        public bool Exist(int id) => Items.Any(item => item.Id == id);
 
+        public bool Exist(T item) => Exist(item.Id);
 
-        public async Task<bool> ExistAsync(int id, CancellationToken Cancel = default) => await Items.AnyAsync(item => item.Id == id, Cancel).ConfigureAwait(false);
+        public T GetById(int id) => Items.SingleOrDefault(item => item.Id == id);
 
-
-        public async Task<bool> ExistAsync(T item, CancellationToken Cancel = default) => await ExistAsync(item.Id, Cancel);
-
-
-        public async Task<T> GetByIdAsync(int id, CancellationToken Cancel = default) => await Items.SingleOrDefaultAsync(i => i.Id == id, Cancel).ConfigureAwait(false);
-
-
-        public async Task<T> AddAsync(T item, CancellationToken Cancel = default)
+        public T Add(T item)
         {
             if (item == null) throw new ArgumentNullException(nameof(item));
 
             _ContextBase.Entry(item).State = EntityState.Added;
-            if (!TransactionMode) await _ContextBase.SaveChangesAsync(Cancel).ConfigureAwait(false);
+            if (!AutoSaveChanges) _ContextBase.SaveChanges();
             return item;
         }
 
-
-        public async Task<bool> UpdateAsync(T item, CancellationToken Cancel = default)
+        public bool Update(T item)
         {
             if (item == null) throw new ArgumentNullException(nameof(item));
 
             _ContextBase.Entry(item).State = EntityState.Modified;
-            if (!TransactionMode) return await _ContextBase.SaveChangesAsync(Cancel).ConfigureAwait(false) > 0;
+            if (!AutoSaveChanges) return  _ContextBase.SaveChanges() > 0;
             return true;
         }
 
-
-        public async Task<bool> DeleteAsync(T item, CancellationToken Cancel = default)
+        public bool Delete(T item)
         {
             if (item == null) throw new ArgumentNullException(nameof(item));
 
-            if (!await ExistAsync(item.Id, Cancel).ConfigureAwait(false)) return false;
+            if (!Exist(item.Id)) return false;
 
             _ContextBase.Entry(item).State = EntityState.Deleted;
-            if (!TransactionMode) return await _ContextBase.SaveChangesAsync(Cancel).ConfigureAwait(false) > 0;
+            if (!AutoSaveChanges) return _ContextBase.SaveChanges() > 0;
             return true;
         }
 
-
-        public async Task<bool> DeleteAsync(int id, CancellationToken Cancel = default)
+        public bool Delete(int id)
         {
-            var item = Set.Local
-                           .FirstOrDefault(i => i.Id == id) ?? await Set
-                           .Select(i => new T { Id = i.Id })
-                           .FirstOrDefaultAsync(i => i.Id == id, Cancel)
-                           .ConfigureAwait(false);
+            var item = Items
+                .Select(i => new T { Id = i.Id })
+                .FirstOrDefault(i => i.Id == id);
 
-            return item != null && await DeleteAsync(item, Cancel).ConfigureAwait(false);
+            return item != null && Delete(item);
         }
 
         #endregion

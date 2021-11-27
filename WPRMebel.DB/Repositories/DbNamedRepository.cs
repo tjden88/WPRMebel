@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using WPRMebel.DB.Context;
 using WPRMebel.Domain.Base.Catalog.Abstract;
 using WPRMebel.Interfaces.Base.Repositories;
@@ -20,27 +17,21 @@ namespace WPRMebel.DB.Repositories
         {
         }
 
-
-        public async Task<T> GetByNameAsync(string name, CancellationToken Cancel = default)
+        public T GetByName(string name)
         {
             if (name == null) throw new ArgumentNullException(nameof(name));
-            return await Items.FirstOrDefaultAsync(i => i.Name == name, Cancel).ConfigureAwait(false);
+            return Items.FirstOrDefault(i => i.Name == name);
         }
 
+        public bool Exist(string name) => Items.Any(i => i.Name == name);
 
-        public async Task<bool> ExistAsync(string name, CancellationToken Cancel = default) => 
-            await Items.AnyAsync(i => i.Name == name, Cancel).ConfigureAwait(false);
-
-
-        public async Task<bool> DeleteAsync(string name, CancellationToken Cancel = default)
+        public bool Delete(string name)
         {
-            var item = Set.Local
-                .FirstOrDefault(i => i.Name == name) ?? await Set
-                .Select(i=> new T {Id = i.Id, Name = i.Name})
-                .FirstOrDefaultAsync(i => i.Name == name, Cancel)
-                .ConfigureAwait(false);
+            var item = Items
+                .Select(i => new T { Id = i.Id, Name = i.Name })
+                .FirstOrDefault(i => i.Name == name);
 
-            return item != null && await DeleteAsync(item, Cancel).ConfigureAwait(false);
+            return item != null && Delete(item);
         }
     }
 }
