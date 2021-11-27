@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Data;
 using WPR.MVVM.Commands;
 using WPR.MVVM.ViewModels;
@@ -38,7 +39,6 @@ namespace WPRMebel.WPF.ViewModels.MainPages
         public CatalogViewModel(CatalogViewer CatalogViewer, IUserDialog UserDialog)
         {
             _CatalogViewer = CatalogViewer;
-            _CatalogViewer.IsNowDataLoadingChanged += _ => OnPropertyChanged(nameof(IsNowDataLoading));
             _UserDialog = UserDialog;
             LoadStartData();
             if (IsDesignMode)
@@ -54,21 +54,23 @@ namespace WPRMebel.WPF.ViewModels.MainPages
         private async void LoadStartData()
         {
             IsNowDataLoading = true;
-            Sections.AddRangeClear(await _CatalogViewer.LoadSections().ConfigureAwait(false));
-            Vendors.AddRangeClear(await _CatalogViewer.LoadVendors().ConfigureAwait(false));
+            await Task.Run(() =>
+            {
+                Sections.AddRangeClear(_CatalogViewer.LoadSections());
+                Vendors.AddRangeClear(_CatalogViewer.LoadVendors());
+            });
             IsNowDataLoading = false;
-
         }
 
 
         // Загрузить элементы и категории в зависимости от выбранного раздела или поставщика
-        private async void LoadElements(Section s)
+        private void LoadElements(Section s)
         {
             if (s == null) return;
             FirstTimeDataLoaded = true;
             IsNowDataLoading = true;
 
-            var result = await _CatalogViewer.GetElements(e => e.Category.Section == s).ConfigureAwait(false);
+            var result = _CatalogViewer.GetElements(e => e.Category.Section == s);
             Elements.AddRangeClear(result);
             LoadCategoriesFromElementsCollection();
 
@@ -76,20 +78,20 @@ namespace WPRMebel.WPF.ViewModels.MainPages
         }
 
 
-        private async void LoadElements(Vendor v)
+        private void LoadElements(Vendor v)
         {
             if (v == null) return;
             FirstTimeDataLoaded = true;
             IsNowDataLoading = true;
 
-            var result = await _CatalogViewer.GetElements(e => e.Category.Vendor == v).ConfigureAwait(false);
+            var result = _CatalogViewer.GetElements(e => e.Category.Vendor == v);
             Elements.AddRangeClear(result);
             LoadCategoriesFromElementsCollection();
 
             IsNowDataLoading = false;
         }
 
-        private void LoadCategoriesFromElementsCollection() => 
+        private void LoadCategoriesFromElementsCollection() =>
             CategoriesNames
                 .AddRangeClear(Elements
                     .Select(e => e.Category.Name)
@@ -152,7 +154,7 @@ namespace WPRMebel.WPF.ViewModels.MainPages
                 Name = dialog.SectionName?.Trim(),
                 Description = dialog.SectionDescription?.Trim()
             };
-            var returned = await _CatalogViewer.AddSection(newSection);
+            var returned = _CatalogViewer.AddSection(newSection);
             if (returned == null)
             {
                 await _UserDialog.InformationAsync("Ошибка добавления раздела");
@@ -192,7 +194,7 @@ namespace WPRMebel.WPF.ViewModels.MainPages
             SelectedSection.Name = dialog.SectionName?.Trim();
             SelectedSection.Description = dialog.SectionDescription?.Trim();
 
-            var returned = await _CatalogViewer.UpdateSection(SelectedSection);
+            var returned = _CatalogViewer.UpdateSection(SelectedSection);
 
             if (!returned)
             {
@@ -222,7 +224,7 @@ namespace WPRMebel.WPF.ViewModels.MainPages
                                                 "Также будут удалены все связанные категории и элементы каталога в них!\n" +
                                                 "Это действие отменить нельзя.", "Внимание!"))
             {
-                var result = await _CatalogViewer.DeleteSection(SelectedSection);
+                var result = _CatalogViewer.DeleteSection(SelectedSection);
                 if (!result)
                 {
                     await _UserDialog.InformationAsync("Ошибка удаления раздела");
@@ -336,7 +338,7 @@ namespace WPRMebel.WPF.ViewModels.MainPages
 
         #endregion
 
-        
+
 
         #region SelectedSection : Section - Выбранный раздел каталога
 
@@ -535,7 +537,7 @@ namespace WPRMebel.WPF.ViewModels.MainPages
         private bool CanSearchInCatalogCommandExecute() => !string.IsNullOrWhiteSpace(SearchText);
 
         /// <summary>Логика выполнения - Найти в каталоге</summary>
-        private async void OnSearchInCatalogCommandExecuted()
+        private void OnSearchInCatalogCommandExecuted()
         {
             FirstTimeDataLoaded = true;
             IsNowDataLoading = true;
@@ -544,7 +546,7 @@ namespace WPRMebel.WPF.ViewModels.MainPages
             SelectedSection = null;
             SelectedVendor = null;
 
-            var elements = await _CatalogViewer.SearchElements(searchText).ConfigureAwait(false);
+            var elements = _CatalogViewer.SearchElements(searchText);
 
             Elements.AddRangeClear(elements);
             LoadCategoriesFromElementsCollection();
