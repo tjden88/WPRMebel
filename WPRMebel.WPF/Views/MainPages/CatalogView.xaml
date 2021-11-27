@@ -398,6 +398,8 @@
 
                                 <DataGrid x:Name="CatalogViewGrid"
                                       VirtualizingPanel.IsVirtualizingWhenGrouping="True"
+                                      EnableRowVirtualization="True"
+                                      VirtualizingPanel.VirtualizationMode="Recycling"
                                       IsReadOnly="True"
                                       Margin="5"
                                       RowDetailsVisibilityMode="VisibleWhenSelected"
